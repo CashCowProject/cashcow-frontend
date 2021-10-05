@@ -38,7 +38,7 @@ const Label = styled.label`
 `
 
 const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenIds, onSuccess, onDismiss }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isloading, setisloading] = useState(false)
   const [value, setValue] = useState('')
   const [error, setError] = useState(null)
   const TranslateString = useI18n()
@@ -56,7 +56,7 @@ const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenIds, onSu
           .transferFrom(account, value, tokenIds[0])
           .send({ from: account })
           .on('sending', () => {
-            setIsLoading(true)
+            setisloading(true)
           })
           .on('receipt', () => {
             onDismiss()
@@ -65,7 +65,7 @@ const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenIds, onSu
           .on('error', () => {
             console.error(error)
             setError('Unable to transfer NFT')
-            setIsLoading(false)
+            setisloading(false)
           })
       }
     } catch (err) {
@@ -99,14 +99,14 @@ const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenIds, onSu
           value={value}
           onChange={handleChange}
           isWarning={error}
-          disabled={isLoading}
+          disabled={isloading}
         />
       </ModalContent>
       <Actions>
         <Button fullWidth variant="secondary" onClick={onDismiss}>
           {TranslateString(462, 'Cancel')}
         </Button>
-        <Button fullWidth onClick={handleConfirm} disabled={!account || isLoading || !value}>
+        <Button fullWidth onClick={handleConfirm} disabled={!account || isloading || !value}>
           {TranslateString(464, 'Confirm')}
         </Button>
       </Actions>

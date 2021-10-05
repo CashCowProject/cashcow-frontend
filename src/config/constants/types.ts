@@ -26,6 +26,8 @@ export enum QuoteToken {
   'BUSD' = 'BUSD',
   'TWT' = 'TWT',
   'UST' = 'UST',
+  'MILK' = 'MILK',
+  'COW' = 'COW',
 }
 
 export enum PoolCategory {
@@ -44,6 +46,7 @@ export interface FarmConfig {
   lpSymbol: string
   lpAddresses: Address
   tokenSymbol: string
+  decimals?: number
   tokenAddresses: Address
   quoteTokenSymbol: QuoteToken
   quoteTokenAdresses: Address

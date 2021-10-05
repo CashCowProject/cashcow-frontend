@@ -78,7 +78,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
     releaseBlockNumber,
   } = ifo
   const [state, setState] = useState({
-    isLoading: true,
+    isloading: true,
     status: null,
     blocksRemaining: 0,
     secondsUntilStart: 0,
@@ -120,7 +120,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
           : ((currentBlock - releaseBlockNumber) / (startBlockNum - releaseBlockNumber)) * 100
 
       setState({
-        isLoading: false,
+        isloading: false,
         secondsUntilEnd: blocksRemaining * BSC_BLOCK_TIME,
         secondsUntilStart: (startBlockNum - currentBlock) * BSC_BLOCK_TIME,
         raisingAmount: new BigNumber(raisingAmount),
@@ -145,7 +145,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
         <IfoCardHeader ifoId={id} name={name} subTitle={subTitle} />
         <IfoCardProgress progress={state.progress} />
         <IfoCardTime
-          isLoading={state.isLoading}
+          isloading={state.isloading}
           status={state.status}
           secondsUntilStart={state.secondsUntilStart}
           secondsUntilEnd={state.secondsUntilEnd}

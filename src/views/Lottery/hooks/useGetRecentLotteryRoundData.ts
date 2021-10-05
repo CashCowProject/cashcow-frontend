@@ -3,14 +3,14 @@ import PastLotteryDataContext from 'contexts/PastLotteryDataContext'
 import getLotteryRoundData, { DataResponse } from 'utils/getLotteryRoundData'
 
 type GetRecentLotteryRoundDataReturn = {
-  isLoading: boolean
+  isloading: boolean
   data: DataResponse
   mostRecentLotteryNumber: number
   error: any
 }
 
 const useGetRecentLotteryRoundData = (): GetRecentLotteryRoundDataReturn => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isloading, setisloading] = useState(true)
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const { mostRecentLotteryNumber } = useContext(PastLotteryDataContext)
@@ -18,23 +18,23 @@ const useGetRecentLotteryRoundData = (): GetRecentLotteryRoundDataReturn => {
   useEffect(() => {
     const fetchRecentLotteryData = async () => {
       try {
-        setIsLoading(true)
+        setisloading(true)
 
         const roundData = await getLotteryRoundData(mostRecentLotteryNumber)
         setData(roundData)
       } catch (err) {
         setError(err)
       } finally {
-        setIsLoading(false)
+        setisloading(false)
       }
     }
 
     if (mostRecentLotteryNumber > 0) {
       fetchRecentLotteryData()
     }
-  }, [mostRecentLotteryNumber, setData, setIsLoading, setError])
+  }, [mostRecentLotteryNumber, setData, setisloading, setError])
 
-  return { isLoading, data, mostRecentLotteryNumber, error }
+  return { isloading, data, mostRecentLotteryNumber, error }
 }
 
 export default useGetRecentLotteryRoundData

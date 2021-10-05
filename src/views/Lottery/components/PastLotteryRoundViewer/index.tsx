@@ -25,22 +25,22 @@ const PastLotteryRoundViewer = () => {
     roundData: null,
     error: { message: null, type: null },
     isInitialized: false,
-    isLoading: true,
+    isloading: true,
   })
   const { data: initialLotteryData, mostRecentLotteryNumber } = useGetRecentLotteryRoundData()
   const TranslateString = useI18n()
-  const { roundData, error, isInitialized, isLoading } = state
+  const { roundData, error, isInitialized, isloading } = state
 
   useEffect(() => {
     if (initialLotteryData) {
-      setState((prevState) => ({ ...prevState, isLoading: false, isInitialized: true, roundData: initialLotteryData }))
+      setState((prevState) => ({ ...prevState, isloading: false, isInitialized: true, roundData: initialLotteryData }))
     }
   }, [initialLotteryData, setState])
 
   const handleSubmit = async (lotteryNumber: number) => {
     setState((prevState) => ({
       ...prevState,
-      isLoading: true,
+      isloading: true,
     }))
 
     getLotteryRoundData(lotteryNumber)
@@ -52,7 +52,7 @@ const PastLotteryRoundViewer = () => {
               message: TranslateString(999, 'The lottery number you provided does not exist'),
               type: 'out of range',
             },
-            isLoading: false,
+            isloading: false,
             isInitialized: true,
           }))
         } else {
@@ -60,7 +60,7 @@ const PastLotteryRoundViewer = () => {
             ...prevState,
             error: { message: null, type: null },
             roundData: data,
-            isLoading: false,
+            isloading: false,
             isInitialized: true,
           }))
         }
@@ -69,7 +69,7 @@ const PastLotteryRoundViewer = () => {
         setState((prevState) => ({
           ...prevState,
           error: { message: TranslateString(999, 'Error fetching data'), type: 'api' },
-          isLoading: false,
+          isloading: false,
           isInitialized: true,
         }))
       })
@@ -78,7 +78,7 @@ const PastLotteryRoundViewer = () => {
   return (
     <Wrapper>
       <PastLotterySearcher initialLotteryNumber={mostRecentLotteryNumber} onSubmit={handleSubmit} />
-      {!isInitialized || isLoading ? (
+      {!isInitialized || isloading ? (
         <Card>
           <StyledCardBody>
             <Loading />

@@ -53,7 +53,7 @@ const Value = styled(Text)`
 
 const NftCard: React.FC<NftCardProps> = ({ nft }) => {
   const [state, setState] = useState({
-    isLoading: false,
+    isloading: false,
     isOpen: false,
     bunnyCount: 0,
     bunnyBurnCount: 0,
@@ -77,7 +77,7 @@ const NftCard: React.FC<NftCardProps> = ({ nft }) => {
   const Icon = state.isOpen ? ChevronUpIcon : ChevronDownIcon
 
   const fetchDetails = useCallback(async () => {
-    setState((prevState) => ({ ...prevState, isLoading: true }))
+    setState((prevState) => ({ ...prevState, isloading: true }))
     try {
       const { methods } = getPancakeRabbitContract()
       const bunnyCount = await methods.bunnyCount(bunnyId).call()
@@ -85,7 +85,7 @@ const NftCard: React.FC<NftCardProps> = ({ nft }) => {
 
       setState((prevState) => ({
         ...prevState,
-        isLoading: false,
+        isloading: false,
         isDataFetched: true,
         bunnyCount: parseInt(bunnyCount, 10),
         bunnyBurnCount: parseInt(bunnyBurnCount, 10),
@@ -155,7 +155,7 @@ const NftCard: React.FC<NftCardProps> = ({ nft }) => {
       </CardBody>
       <CardFooter p="0">
         <DetailsButton endIcon={<Icon width="24px" color="primary" />} onClick={handleClick}>
-          {state.isLoading ? TranslateString(999, 'Loading...') : TranslateString(999, 'Details')}
+          {state.isloading ? TranslateString(999, 'Loading...') : TranslateString(999, 'Details')}
         </DetailsButton>
         {state.isOpen && (
           <InfoBlock>

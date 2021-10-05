@@ -1,6 +1,42 @@
 import { PoolConfig, QuoteToken, PoolCategory } from './types'
 
 const pools: PoolConfig[] = [
+  {
+    sousId: 0,
+    tokenName: 'COW',
+    stakingTokenName: QuoteToken.COW,
+    stakingTokenAddress: '0x3d774e309b63c28ad0c19bf69de4f65d0538f0a4',
+    contractAddress: {
+      97: '0xea5f97a28f0263fb1cb3d246727e1a1459373dbe',
+      56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+    },
+    poolCategory: PoolCategory.CORE,
+    projectLink: 'https://pancakeswap.finance/',
+    harvest: true,
+    tokenPerBlock: '1',
+    sortOrder: 1,
+    isFinished: false,
+    tokenDecimals: 9,
+  },
+
+  {
+    sousId: 2,
+    tokenName: 'MILK',
+    stakingTokenName: QuoteToken.MILK,
+    stakingTokenAddress: '0xf544828f224630d6fee099a65743e3f683f4f2cd',
+    contractAddress: {
+      97: '0xea5f97a28f0263fb1cb3d246727e1a1459373dbe',
+      56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+    },
+    poolCategory: PoolCategory.CORE,
+    projectLink: 'https://pancakeswap.finance/',
+    harvest: true,
+    tokenPerBlock: '1',
+    sortOrder: 2,
+    isFinished: false,
+    tokenDecimals: 18,
+  },
+
   // {
   //   sousId: 0,
   //   tokenName: 'CAKE',

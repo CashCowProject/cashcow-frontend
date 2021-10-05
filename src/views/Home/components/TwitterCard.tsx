@@ -35,12 +35,12 @@ const TwitterCard = () => {
         <Timeline
           dataSource={{
             sourceType: 'profile',
-            screenName: 'GooseFinance'
+            screenName: 'CashCowProtocol',
           }}
           options={{
             height: '300',
-            chrome: "noheader, nofooter",
-            width: "400"
+            chrome: 'noheader, nofooter',
+            width: '400',
           }}
         />
       </CardBody>

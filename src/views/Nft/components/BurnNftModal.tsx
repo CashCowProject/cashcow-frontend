@@ -30,7 +30,7 @@ const Actions = styled.div`
 `
 
 const BurnNftModal: React.FC<BurnNftModalProps> = ({ nft, tokenIds, onSuccess, onDismiss }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isloading, setisloading] = useState(false)
   const [error, setError] = useState(null)
   const [accepted, setAccepted] = useState(false)
   const TranslateString = useI18n()
@@ -45,7 +45,7 @@ const BurnNftModal: React.FC<BurnNftModalProps> = ({ nft, tokenIds, onSuccess, o
         .burnNFT(tokenId)
         .send({ from: account })
         .on('sending', () => {
-          setIsLoading(true)
+          setisloading(true)
         })
         .on('receipt', () => {
           onDismiss()
@@ -54,7 +54,7 @@ const BurnNftModal: React.FC<BurnNftModalProps> = ({ nft, tokenIds, onSuccess, o
         .on('error', () => {
           console.error(error)
           setError('Unable to burn NFT')
-          setIsLoading(false)
+          setisloading(false)
         })
     } catch (err) {
       console.error('Unable to burn NFT:', err)
@@ -94,7 +94,7 @@ const BurnNftModal: React.FC<BurnNftModalProps> = ({ nft, tokenIds, onSuccess, o
         <Button fullWidth variant="secondary" onClick={onDismiss}>
           {TranslateString(462, 'Cancel')}
         </Button>
-        <Button fullWidth onClick={handleConfirm} disabled={!account || isLoading || !accepted}>
+        <Button fullWidth onClick={handleConfirm} disabled={!account || isloading || !accepted}>
           {TranslateString(464, 'Confirm')}
         </Button>
       </Actions>

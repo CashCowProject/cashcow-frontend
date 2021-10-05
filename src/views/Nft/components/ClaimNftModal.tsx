@@ -32,7 +32,7 @@ const Actions = styled.div`
 `
 
 const ClaimNftModal: React.FC<ClaimNftModalProps> = ({ nft, onSuccess, onDismiss }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isloading, setisloading] = useState(false)
   const [error, setError] = useState(null)
   const TranslateString = useI18n()
   const { account } = useWallet()
@@ -46,7 +46,7 @@ const ClaimNftModal: React.FC<ClaimNftModalProps> = ({ nft, onSuccess, onDismiss
         .mintNFT(nft.bunnyId)
         .send({ from: account })
         .on('sending', () => {
-          setIsLoading(true)
+          setisloading(true)
         })
         .on('receipt', () => {
           onDismiss()
@@ -55,7 +55,7 @@ const ClaimNftModal: React.FC<ClaimNftModalProps> = ({ nft, onSuccess, onDismiss
         .on('error', () => {
           console.error(error)
           setError('Unable to claim NFT')
-          setIsLoading(false)
+          setisloading(false)
         })
     } catch (err) {
       console.error('Unable to mint NFT:', err)
@@ -85,7 +85,7 @@ const ClaimNftModal: React.FC<ClaimNftModalProps> = ({ nft, onSuccess, onDismiss
         <Button fullWidth variant="secondary" onClick={onDismiss}>
           {TranslateString(462, 'Cancel')}
         </Button>
-        <Button fullWidth onClick={handleConfirm} disabled={!account || isLoading || cakeInWallet <= 0}>
+        <Button fullWidth onClick={handleConfirm} disabled={!account || isloading || cakeInWallet <= 0}>
           {TranslateString(464, 'Confirm')}
         </Button>
       </Actions>
