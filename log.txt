@@ -1,0 +1,82 @@
+yarn run v1.22.15
+$ react-scripts start
+[34mℹ[39m [90m｢wds｣[39m: Project is running at http://192.168.0.13/
+[34mℹ[39m [90m｢wds｣[39m: webpack output is served from 
+[34mℹ[39m [90m｢wds｣[39m: Content not from webpack is served from /home/jbcl/Dapps/GolFinance/CashCow/cashcow-frontend/public
+[34mℹ[39m [90m｢wds｣[39m: 404s will fallback to /
+Starting the development server...
+
+Compiled with warnings.
+
+src/App.tsx
+  Line 2:35:  'Redirect' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/Localisation/languageContext.tsx
+  Line 33:7:  'fetchTranslationsForSelectedLanguage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 60:7:  Unexpected console statement                                               no-console
+
+src/state/farms/fetchFarms.ts
+  Line 12:3:   Unexpected console statement  no-console
+  Line 17:7:   Unexpected console statement  no-console
+  Line 18:7:   Unexpected console statement  no-console
+  Line 64:7:   Unexpected console statement  no-console
+  Line 65:7:   Unexpected console statement  no-console
+  Line 66:7:   Unexpected console statement  no-console
+  Line 67:7:   Unexpected console statement  no-console
+  Line 68:7:   Unexpected console statement  no-console
+  Line 69:7:   Unexpected console statement  no-console
+  Line 70:7:   Unexpected console statement  no-console
+  Line 82:11:  Unexpected console statement  no-console
+  Line 127:7:  Unexpected console statement  no-console
+
+src/state/hooks.ts
+  Line 2:21:  'useMemo' is defined but never used                    @typescript-eslint/no-unused-vars
+  Line 5:37:  'fetchPoolsPublicDataAsync' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 72:9:  'farm' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  Line 84:9:  'farm' is assigned a value but never used              @typescript-eslint/no-unused-vars
+
+src/utils/callHelpers.ts
+  Line 14:3:  Unexpected console statement  no-console
+  Line 15:3:  Unexpected console statement  no-console
+
+src/views/Farms/components/FarmCard/CardActionsContainer.tsx
+  Line 8:26:  'useFarmFromSymbol' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/views/Farms/components/FarmCard/CardHeading.tsx
+  Line 4:10:  'CommunityTag' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 4:24:  'CoreTag' is defined but never used       @typescript-eslint/no-unused-vars
+  Line 4:43:  'RiskTag' is defined but never used       @typescript-eslint/no-unused-vars
+  Line 28:3:  'risk' is defined but never used          @typescript-eslint/no-unused-vars
+
+src/views/Home/Home.tsx
+  Line 7:8:   'LotteryCard' is defined but never used               @typescript-eslint/no-unused-vars
+  Line 57:9:  'TranslateString' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/views/Home/components/CakeHarvestBalance.tsx
+  Line 4:8:  'BigNumber' is defined but never used       @typescript-eslint/no-unused-vars
+  Line 6:8:  'useAllEarnings' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/views/Home/components/FarmStakingCard.tsx
+  Line 30:7:  'CardImage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/views/Home/components/TotalValueLockedCard.tsx
+  Line 3:35:  'Skeleton' is defined but never used     @typescript-eslint/no-unused-vars
+  Line 5:10:  'useGetStats' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/views/Home/components/TwitterCard.tsx
+  Line 2:35:   'Text' is defined but never used              @typescript-eslint/no-unused-vars
+  Line 3:8:    'BigNumber' is defined but never used         @typescript-eslint/no-unused-vars
+  Line 6:10:   'getBalanceNumber' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 7:10:   'useTotalSupply' is defined but never used    @typescript-eslint/no-unused-vars
+  Line 7:26:   'useBurnedBalance' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 9:10:   'getCakeAddress' is defined but never used    @typescript-eslint/no-unused-vars
+  Line 10:8:   'CardValue' is defined but never used         @typescript-eslint/no-unused-vars
+  Line 11:10:  'useFarms' is defined but never used          @typescript-eslint/no-unused-vars
+  Line 18:7:   'Row' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+src/views/Pools/Syrup.tsx
+  Line 42:5:  Unexpected console statement  no-console
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
