@@ -23,10 +23,10 @@ const farms: FarmConfig[] = [
     pid: 0,
     risk: 1,
     isTokenOnly: true,
-    lpSymbol: 'COW-GOL LP',
+    lpSymbol: 'COW',
     lpAddresses: {
-      97: '0x09BF1f4C32ADfb640C7a1D7459eF6DDd43c12a87', // LP Token - GolSwap LPs (GOL-LP)
-      // 97: '0xc0fa2384b67d715aa0efd3c8c453d3cbc17e6ca3',  // COW LP
+      // 97: '0x09BF1f4C32ADfb640C7a1D7459eF6DDd43c12a87', // LP Token - GolSwap LPs (GOL-LP)
+      97: '0x3d774e309b63c28ad0c19bf69de4f65d0538f0a4',  // COW LP
       56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
     },
     tokenSymbol: 'COW',
@@ -42,26 +42,26 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.cow,
   },
 
-  {
-    pid: 1,
-    risk: 1,
-    isTokenOnly: true,
-    lpSymbol: 'COW-BNB LP',
-    lpAddresses: {
-      97: '0x8033F96dAA52E5a726b45Fc86cfaBeAA7231F263', // LP Token - No address token - Ivan
-      56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
-    },
-    tokenSymbol: 'COW',
-    tokenAddresses: {
-      97: '0x3d774e309b63c28ad0c19bf69de4f65d0538f0a4',
-      56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    },
-    // quoteTokenSymbol: QuoteToken.BNB,
-    // quoteTokenAdresses: contracts.wbnb,
+  // {
+  //   pid: 1,
+  //   risk: 1,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'COW-BNB LP',
+  //   lpAddresses: {
+  //     97: '0x8033F96dAA52E5a726b45Fc86cfaBeAA7231F263', // LP Token - No address token - Ivan
+  //     56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
+  //   },
+  //   tokenSymbol: 'COW',
+  //   tokenAddresses: {
+  //     97: '0x3d774e309b63c28ad0c19bf69de4f65d0538f0a4',
+  //     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+  //   },
+  //   // quoteTokenSymbol: QuoteToken.BNB,
+  //   // quoteTokenAdresses: contracts.wbnb,
 
-    quoteTokenSymbol: QuoteToken.COW,
-    quoteTokenAdresses: contracts.cow,
-  },
+  //   quoteTokenSymbol: QuoteToken.COW,
+  //   quoteTokenAdresses: contracts.cow,
+  // },
 
   // 0xc5E6577876cAB36705346ECBd5C8e9EB3FB9B06C
 

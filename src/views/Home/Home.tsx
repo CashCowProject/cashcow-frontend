@@ -54,13 +54,12 @@ const Cards = styled(BaseLayout)`
 `
 
 const Home: React.FC = () => {
-  const TranslateString = useI18n()
-
+  
   return (
     <Page>
       <Hero>
         <Heading as="h1" size="xl" mb="24px" color="secondary">
-          Cash Cow Protocol
+          CashCow Protocol
         </Heading>
         <Text>Earn MILK By Simply Staking Your COW</Text>
       </Hero>

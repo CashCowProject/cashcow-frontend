@@ -68,9 +68,9 @@ export const usePoolFromPid = (sousId): Pool => {
 // Prices
 
 export const usePriceBnbBusd = (): BigNumber => {
-  const pid = 2 // BUSD-BNB LP
+  const pid = 0 // BUSD-BNB LP => We changed it to the COW TOKEN
   const farm = useFarmFromPid(pid)
-  // return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
+  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 
   return ZERO
 }
