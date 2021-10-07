@@ -11,7 +11,7 @@ import CakeHarvestBalance from './CakeHarvestBalance'
 import CakeWalletBalance from './CakeWalletBalance'
 import { usePriceCakeBusd } from '../../../state/hooks'
 import useTokenBalance from '../../../hooks/useTokenBalance'
-import { getCakeAddress } from '../../../utils/addressHelpers'
+import { getCakeAddress, getMasterChefAddress, getMilkAddress } from '../../../utils/addressHelpers'
 import useAllEarnings from '../../../hooks/useAllEarnings'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 
@@ -46,6 +46,9 @@ const FarmedStakingCard = () => {
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
   const cakeBalance = getBalanceNumber(useTokenBalance(getCakeAddress()))
+  
+  // const cakeBalance = getBalanceNumber(useTokenBalance(getMilkAddress()))
+  
   const eggPrice = usePriceCakeBusd().toNumber()
   const allEarnings = useAllEarnings()
   const earningsSum = allEarnings.reduce((accum, earning) => {
