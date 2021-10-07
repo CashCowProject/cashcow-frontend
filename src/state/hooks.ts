@@ -18,6 +18,7 @@ export const useFetchPublicData = () => {
 }
 
 // Farms
+
 export const useFarms = (): Farm[] => {
   const farms = useSelector((state: State) => state.farms.data)
   return farms
@@ -45,6 +46,7 @@ export const useFarmUser = (pid) => {
 }
 
 // Pools
+
 export const usePools = (account): Pool[] => {
   const { fastRefresh } = useRefresh()
   const dispatch = useDispatch()
@@ -64,12 +66,13 @@ export const usePoolFromPid = (sousId): Pool => {
 }
 
 // Prices
-export const usePriceBnbBusd = (): BigNumber => {
-  const pid = 20 // BUSD-BNB LP => We changed it to the COW TOKEN
-  const farm = useFarmFromPid(pid)
 
-  console.log('usePriceBnbBusd', farm.tokenPriceVsQuote )
+export const usePriceBnbBusd = (): BigNumber => {
+  const pid = 0 // BUSD-BNB LP => We changed it to the COW TOKEN
+  const farm = useFarmFromPid(pid)
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
+
+  return ZERO
 }
 
 export const usePriceCakeBusd = (): BigNumber => {
@@ -79,9 +82,9 @@ export const usePriceCakeBusd = (): BigNumber => {
   // return farm.tokenPriceVsQuote ? bnbPriceUSD.times(farm.tokenPriceVsQuote) : ZERO
   const pid = 0 // EGG-BUSD LP
   const farm = useFarmFromPid(pid)
-  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO;
+  // return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO;
 
-  // return ZERO
+  return ZERO
 }
 
 export const useTotalValue = (): BigNumber => {
