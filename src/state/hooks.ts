@@ -71,6 +71,7 @@ export const usePriceBnbBusd = (): BigNumber => {
   const pid = 0 // BUSD-BNB LP => We changed it to the COW TOKEN
   const farm = useFarmFromPid(pid)
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
+
 }
 
 

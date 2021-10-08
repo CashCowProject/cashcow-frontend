@@ -1,5 +1,6 @@
 {
-  "name": "goose-frontend",
+  "name": "cashcow-frontend",
+  "homepage": "https://app.cashcowprotocol.com",
   "version": "0.1.0",
   "private": true,
   "scripts": {

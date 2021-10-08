@@ -28,7 +28,7 @@ const config: MenuEntry[] = [
   {
     label: 'Milk Bar',
     icon: 'PoolIcon',
-    href: '/nests',
+    href: '/milkbar',
   },
   // {
   //   label: 'Pools',
