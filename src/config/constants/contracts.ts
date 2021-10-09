@@ -1,16 +1,12 @@
 export default {
   cake: {
-    56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82', // This should be the milk address
+    56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82', // Milk address here
     // 97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
-    97: '0xF544828F224630d6fEE099a65743E3F683F4F2Cd', // This should be the milk address
+    97: '0xF544828F224630d6fEE099a65743E3F683F4F2Cd', // Milk address here
   },
   masterChef: {
-    56: '0xEA5F97A28F0263FB1Cb3D246727e1A1459373Dbe',
-    97: '0xEA5F97A28F0263FB1Cb3D246727e1A1459373Dbe',
-  },
-  wbnb: {
-    56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    97: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
+    56: '0xEA5F97A28F0263FB1Cb3D246727e1A1459373Dbe', // COW MasterChef address here
+    97: '0xEA5F97A28F0263FB1Cb3D246727e1A1459373Dbe', // COW MasterChef address here
   },
   lottery: {
     56: '',
@@ -23,6 +19,10 @@ export default {
   mulltiCall: {
     56: '0x1ee38d535d541c55c9dae27b12edf090c608e6fb',
     97: '0x67ADCB4dF3931b0C5Da724058ADC2174a9844412',
+  },
+  wbnb: {
+    56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    97: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
   },
   busd: {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
