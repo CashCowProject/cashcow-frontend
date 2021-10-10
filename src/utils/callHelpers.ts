@@ -9,7 +9,7 @@ export const approve = async (lpContract, masterChefContract, account) => {
 
 export const stake = async (masterChefContract, pid, amount, account) => {
   // Hardcoded hack by CryptoWhatElse for pool number 0 which has only 9 decimals (COW)
-  const decimals = pid === 0 ? 9 : 18
+  const decimals = pid === 10 ? 9 : 18
 
   console.log('decimals', decimals)
   console.log('pid', pid)
@@ -42,7 +42,7 @@ export const sousStakeBnb = async (sousChefContract, amount, account) => {
 
 export const unstake = async (masterChefContract, pid, amount, account) => {
   // Hardcoded hack by CryptoWhatElse for pool number 0 which has only 9 decimals (COW)
-  const decimals = pid === 0 ? 9 : 18
+  const decimals = pid === 10 ? 9 : 18
 
   return masterChefContract.methods
     .withdraw(pid, new BigNumber(amount).times(new BigNumber(10).pow(decimals)).toString())

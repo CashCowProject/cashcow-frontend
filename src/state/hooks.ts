@@ -68,16 +68,26 @@ export const usePoolFromPid = (sousId): Pool => {
 // Prices
 
 export const usePriceBnbBusd = (): BigNumber => {
-  const pid = 0 // BUSD-BNB LP => We changed it to the COW TOKEN
+  // return ZERO;
+  
+  
+  const pid = 8 // BUSD-BNB LP
   const farm = useFarmFromPid(pid)
+
+  console.log(farm.tokenPriceVsQuote, 'what??')
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 
 }
 
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const pid = 3 // BNB-MILK LP
+  const pid = 7 // MILK-BUSD LP
   const farm = useFarmFromPid(pid)
+
+  console.log('farm.tokenPriceVsQuote', farm.tokenPriceVsQuote)
+
+  // return ZERO;
+
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
 
