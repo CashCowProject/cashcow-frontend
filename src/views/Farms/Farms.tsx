@@ -66,14 +66,6 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         let apy = cakePrice.times(cakeRewardPerYear)
         let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0)
 
-        // console.log('totalValue', farm.lpTotalInQuoteToken)
-
-        // console.log('milkPerBlock', farm.eggPerBlock)
-        // console.log('poolWeight', farm.poolWeight)
-        // console.log('milkRewardPerYear', cakeRewardPerYear)
-        // console.log('quoteTokenSymbol', farm.quoteTokenSymbol)
-        // console.log('bnbPrice', farm.bnbPrice)
-
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice)
         }
@@ -121,7 +113,6 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
           </Route>
         </FlexLayout>
       </div>
-      <Image src="/images/cow/6.png" alt="illustration" width={594} height={250} responsive />
     </Page>
   )
 }

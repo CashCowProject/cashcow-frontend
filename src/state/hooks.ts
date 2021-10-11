@@ -68,40 +68,27 @@ export const usePoolFromPid = (sousId): Pool => {
 // Prices
 
 export const usePriceBnbBusd = (): BigNumber => {
-  // return ZERO;
-  
-  
-  const pid = 8 // BUSD-BNB LP
+  const pid = 0 // BUSD-BNB LP
   const farm = useFarmFromPid(pid)
 
-  console.log(farm.tokenPriceVsQuote, 'what??')
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
-
 }
 
-
 export const usePriceCakeBusd = (): BigNumber => {
-  const pid = 7 // MILK-BUSD LP
+  const pid = 1 // MILK-BUSD LP
   const farm = useFarmFromPid(pid)
-
-  console.log('farm.tokenPriceVsQuote', farm.tokenPriceVsQuote)
-
-  // return ZERO;
 
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
 
 export const useTotalValue = (): BigNumber => {
-
-  
   const farms = useFarms()
   const bnbPrice = usePriceBnbBusd()
   const cakePrice = usePriceCakeBusd()
   let value = new BigNumber(0)
   for (let i = 0; i < farms.length; i++) {
     const farm = farms[i]
-
-    console.log('farm.quoteTokenSymbol', farm.quoteTokenSymbol)
+    
     if (farm.lpTotalInQuoteToken) {
       let val
       if (farm.quoteTokenSymbol === QuoteToken.BNB) {

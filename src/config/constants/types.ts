@@ -52,6 +52,7 @@ export interface FarmConfig {
   quoteTokenAdresses: Address
   multiplier?: string
   isTokenOnly?: boolean
+  hide?: boolean
   isCommunity?: boolean
   risk: number
   dual?: {
