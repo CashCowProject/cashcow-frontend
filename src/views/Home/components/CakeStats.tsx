@@ -9,6 +9,8 @@ import { getCakeAddress } from 'utils/addressHelpers'
 import CardValue from './CardValue'
 import { useFarms, usePriceCakeBusd } from '../../../state/hooks'
 
+// 0x000000000000000000000000000000000000dEaD
+
 const StyledCakeStats = styled(Card)`
   margin-left: auto;
   margin-right: auto;

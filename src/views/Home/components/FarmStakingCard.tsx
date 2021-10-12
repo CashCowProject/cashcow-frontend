@@ -11,7 +11,7 @@ import CakeHarvestBalance from './CakeHarvestBalance'
 import CakeWalletBalance from './CakeWalletBalance'
 import { usePriceCakeBusd } from '../../../state/hooks'
 import useTokenBalance from '../../../hooks/useTokenBalance'
-import { getCakeAddress, getMasterChefAddress, getMilkAddress } from '../../../utils/addressHelpers'
+import { getCakeAddress } from '../../../utils/addressHelpers'
 import useAllEarnings from '../../../hooks/useAllEarnings'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 
@@ -19,7 +19,7 @@ const StyledFarmStakingCard = styled(Card)`
   background-image: url('/images/cow/3.png');
   background-repeat: no-repeat;
   background-position: top 20px right -30px;
-  background-size: 180px 180px;
+  background-size: 140px 140px;
   min-height: 300px;
 `
 

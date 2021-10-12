@@ -1,7 +1,6 @@
 export default {
   cake: {
     56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82', // Milk address here
-    // 97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
     97: '0x3eFA66aB2b1690e9BE8e82784EDfF2cF2dc150e0', // Milk address here
   },
   masterChef: {
@@ -26,11 +25,10 @@ export default {
   },
   busd: {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    // 97: '0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee',
     97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
   },
   cow: {
-    56: '0xF544828F224630d6fEE099a65743E3F683F4F2Cd',
+    56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
     97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14',
   },
   milk: {

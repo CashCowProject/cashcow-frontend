@@ -51,7 +51,7 @@ const farms: FarmConfig[] = [
     tokenSymbol: 'COW-BUSD',
     tokenAddresses: {
       97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14', // COW
-      56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
@@ -70,7 +70,7 @@ const farms: FarmConfig[] = [
     tokenSymbol: 'COW',
     tokenAddresses: {
       97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14', // COW
-      56: '',
+      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
     },
      quoteTokenSymbol: QuoteToken.BUSD,
      quoteTokenAdresses: contracts.busd,
