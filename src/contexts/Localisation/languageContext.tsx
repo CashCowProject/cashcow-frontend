@@ -57,7 +57,6 @@ const LanguageContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (selectedLanguage) {
-      console.log(`import(\`../../../public/i18n/${selectedLanguage.code}.json\`)`)
       fetch(`./i18n/${selectedLanguage.code}.json`)
         .then((r) => r.json())
         // fetchTranslationsForSelectedLanguage(selectedLanguage)

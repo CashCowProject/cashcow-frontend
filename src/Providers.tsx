@@ -13,8 +13,6 @@ import store from 'state'
 const Providers: React.FC = ({ children }) => {
   const rpcUrl = getRpcUrl()
   const chainId = parseInt(process.env.REACT_APP_CHAIN_ID)
-
-  console.log('chainId', chainId)
   
   return (
     <Provider store={store}>
