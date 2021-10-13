@@ -1,6 +1,6 @@
 {
   "name": "cashcow-frontend",
-  "homepage": "https://app.cashcowprotocol.com",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "scripts": {
