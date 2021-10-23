@@ -16,7 +16,7 @@ const config: MenuEntry[] = [
       },
       {
         label: '$MILK',
-        href: '#',
+        href: 'https://pancakeswap.finance/swap?outputCurrency=0xe5bd6c5b1c2df8f499847a545838c09e45f4a262&inputCurrency=0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
       },
     ],
   },

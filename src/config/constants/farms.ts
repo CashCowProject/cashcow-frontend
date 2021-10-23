@@ -28,12 +28,12 @@ const farms: FarmConfig[] = [
     lpSymbol: 'MILK-BUSD LP',
     lpAddresses: {
       97: '0xc6231bfbc66ab4b9dfd4ed8966f119d41c9eeb45', // MILK-BUSD LP
-      56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
+      56: '0xa5771442E68392BE17c7d96Bac0d92593d39e17C', // MILK-BUSD LP
     },
     tokenSymbol: 'MILK-BUSD',
     tokenAddresses: {
       97: '0x3eFA66aB2b1690e9BE8e82784EDfF2cF2dc150e0', // MILK
-      56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+      56: '0xe5bd6C5b1c2Df8f499847a545838C09E45f4A262', // MILK
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
@@ -46,12 +46,12 @@ const farms: FarmConfig[] = [
     lpSymbol: 'COW-BUSD LP',
     lpAddresses: {
       97: '0xc214b43d8f7cccffc28c273ae74cf946538c2037', // COW-BUSD LP
-      56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
+      56: '0xAd1230E155ba671D5fb860a515970C253DD49361', // COW-BUSD LP
     },
     tokenSymbol: 'COW-BUSD',
     tokenAddresses: {
       97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14', // COW
-      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
+      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483', // COW
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
@@ -65,12 +65,12 @@ const farms: FarmConfig[] = [
     lpSymbol: 'COW',
     lpAddresses: {
       97: '0xc214b43d8f7cccffc28c273ae74cf946538c2037',  // COW BUSD LP
-      56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
+      56: '0xAd1230E155ba671D5fb860a515970C253DD49361', // COW BUSD LP
     },
     tokenSymbol: 'COW',
     tokenAddresses: {
       97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14', // COW
-      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
+      56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483', // COW
     },
      quoteTokenSymbol: QuoteToken.BUSD,
      quoteTokenAdresses: contracts.busd,
@@ -82,13 +82,13 @@ const farms: FarmConfig[] = [
     isTokenOnly: true,
     lpSymbol: 'MILK',
     lpAddresses: {
-      97: '0xc6231bfbc66ab4b9dfd4ed8966f119d41c9eeb45', // MILK
-      56: '0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
+      97: '0xc6231bfbc66ab4b9dfd4ed8966f119d41c9eeb45', // MILK-BUSD LP
+      56: '0xa5771442E68392BE17c7d96Bac0d92593d39e17C', // MILK-BUSD LP
     },
     tokenSymbol: 'MILK',
     tokenAddresses: {
       97: '0x3eFA66aB2b1690e9BE8e82784EDfF2cF2dc150e0', // MILK
-      56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+      56: '0xe5bd6C5b1c2Df8f499847a545838C09E45f4A262', // MILK
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
