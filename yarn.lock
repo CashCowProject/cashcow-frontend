@@ -1835,9 +1835,9 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@CashCowProject/cashcow-uikit":
+"@pancakeswap-libs/uikit@https://github.com/CashCowProject/cashcow-uikit":
   version "0.10.2"
-  resolved "https://codeload.github.com/CashCowProject/cashcow-uikit/tar.gz/a2df49368864659a9ae6f10ae0f6719b14c06070"
+  resolved "https://github.com/CashCowProject/cashcow-uikit#a83f7bcf0de39fce013e8404bdb362f10cf88af6"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
