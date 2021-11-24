@@ -92,6 +92,24 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
+  },
+
+  {
+    pid: 5,
+    risk: 1,
+    isTokenOnly: true,
+    lpSymbol: 'GOL',
+    lpAddresses: {
+      97: '',
+      56: '0xef1d3deceb43d85d84842032d404ade23eb31b1d', // GOL-BUSD LP
+    },
+    tokenSymbol: 'GOL',
+    tokenAddresses: {
+      97: '',
+      56: '0x52f6a03a53840c01470f33a0b016e4c3e3dfe796', // GOL
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
   }
 ]
 
