@@ -29,6 +29,16 @@ export interface Pool extends PoolConfig {
   }
 }
 
+export interface SortOrderType {
+  field: string
+  direction: string
+}
+
+export interface MarketState {
+  sortOrder: SortOrderType
+  collectionType: SortOrderType
+}
+
 // Slices states
 
 export interface FarmsState {
@@ -44,4 +54,5 @@ export interface PoolsState {
 export interface State {
   farms: FarmsState
   pools: PoolsState
+  markets: MarketState
 }

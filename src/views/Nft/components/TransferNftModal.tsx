@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Web3 from 'web3'

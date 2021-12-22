@@ -15,8 +15,6 @@ const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
   const cakePriceUsd = usePriceCakeBusd()
 
-  // console.log('cakePriceUsd', new bigNumber(cakePriceUsd))
-
   return (
     <UikitMenu
       account={account}
@@ -29,6 +27,12 @@ const Menu = (props) => {
       setLang={setSelectedLanguage}
       cakePriceUsd={cakePriceUsd.toNumber()}
       links={config}
+      // profile={{
+      //   username: "MyNFTS",
+      //   image: "https://ibb.co/xh2Fxyc",
+      //   profileLink: "/myNFTs",
+      //   noProfileLink: "/no-myNFTs",
+      // }}
       {...props}
     />
   )

@@ -46,6 +46,22 @@ const config: MenuEntry[] = [
   //   href: '/nft',
   // },
   {
+    label: 'Blind Box',
+    icon: 'NftIcon',
+    href: '/blind-box'
+  },
+  {
+    label: 'NFT Market',
+    icon: 'NftIcon',
+    href: '/nft-market'
+  },
+  {
+    label: 'My NFTs',
+    icon: 'NftIcon',
+    href: '/myNFTs'
+  },
+  
+  {
     label: 'Info',
     icon: 'InfoIcon',
     items: [
