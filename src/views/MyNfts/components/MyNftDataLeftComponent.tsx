@@ -379,7 +379,7 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
 
                 <div style={{display: 'flex', justifyContent:'space-between'}}>
                     <div style={{display: 'flex', width: "70%"}}>
-                        <InputTag type="number" maxLength={12} placeholder="Price of NFT" value={priceNft} onChange={handleChange}/>
+                        <InputTag type="number" maxLength={18} placeholder="Price of NFT" value={priceNft} onChange={handleChange}/>
                         <ItemValueToken>
                             <img src="/images/farms/milk.png" alt="token" style={{width: "26px", height: '26px', marginRight: '4px' }}/>
                             MILK

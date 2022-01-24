@@ -108,7 +108,7 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
                     <NftOnChainEachData>
                         <div style={{color: isDark ? 'white' : '#694f4e'}}>Owner</div>
                         <NftOnChainLinkStyle>
-                            <a rel="noreferrer" target='_blank' href={`https://bscscan.com/address/${account}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
+                            <a rel="noreferrer" target='_blank' href={`https://testnet.bscscan.com/address/${account}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
                                 {account}
                             </a>
                         </NftOnChainLinkStyle>
@@ -116,7 +116,7 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
                     <NftOnChainEachData>
                         <div style={{color: isDark ? 'white' : '#694f4e'}}>Contract Address</div>
                         <NftOnChainLinkStyle>
-                            <a rel="noreferrer" target='_blank' href={`https://bscscan.com/address/${myToken.isAIR ? getAirNftAddress() : getHappyCowAddress()}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
+                            <a rel="noreferrer" target='_blank' href={`https://testnet.bscscan.com/address/${myToken.isAIR ? getAirNftAddress() : getHappyCowAddress()}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
                                 {myToken.isAIR ? getAirNftAddress() : getHappyCowAddress()}
                             </a>
                         </NftOnChainLinkStyle>

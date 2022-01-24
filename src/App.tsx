@@ -17,6 +17,7 @@ import PageLoader from './components/PageLoader'
 // Only pool is included in the main bundle because of it's the most visited page'
 const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
+const Stakes = lazy(() => import('./views/Stakes'))
 // const Lottery = lazy(() => import('./views/Lottery'))
 const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
@@ -68,6 +69,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/farms">
               <Farms />
+            </Route>
+            <Route path="/stakes">
+              <Stakes />
             </Route>
             <Route path="/milkbar">
               <Farms tokenMode />

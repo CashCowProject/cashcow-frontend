@@ -42,7 +42,7 @@ const NftMarketRule = () => {
                     2. After NFT is listed in the trading market, operations such as transfer, auction and stake are not allowed.
                 </NftMarketRuleEach>
                 <NftMarketRuleEach>
-                    3. The market will charge 10% service fee, which is used for burning both $MILK and $COW, adding $MILK liquidity and for Treasury.
+                    3. The market will charge 10% of the seller his revenue as a service fee, which is used for burning both $MILK and $COW, adding $MILK liquidity and for Treasury.
                 </NftMarketRuleEach>
             </NftMarketRuleContent>
         </NftMarketRuleContainer>

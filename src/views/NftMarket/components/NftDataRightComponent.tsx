@@ -123,17 +123,17 @@ const NftDataRightComponent = ({itemId} : NftDataRightComponentInterface) => {
                     <NftOnChainEachData>
                         <div style={{color: isDark ? 'white' : '#694f4e'}}>Owner</div>
                         <NftOnChainLinkStyle>
-                            <a rel="noreferrer" target='_blank' href={`https://bscscan.com/address/${ownerAddress}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
+                            <Link to="/" style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
                                 {ownerAddress}
-                            </a>
+                            </Link>
                         </NftOnChainLinkStyle>
                     </NftOnChainEachData>
                     <NftOnChainEachData>
                         <div style={{color: isDark ? 'white' : '#694f4e'}}>Contract Address</div>
                         <NftOnChainLinkStyle>
-                            <a rel="noreferrer" target='_blank' href={`https://bscscan.com/address/${isAIR ? getAirNftAddress() : getHappyCowAddress()}`} style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
+                            <Link to="/" style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
                                 {isAIR ? getAirNftAddress() : getHappyCowAddress()}
-                            </a>
+                            </Link>
                         </NftOnChainLinkStyle>
                     </NftOnChainEachData>
                     <NftOnChainEachData>

@@ -23,6 +23,9 @@ const GlobalStyle = createGlobalStyle`
       position: relative;
     }
   }
+  .ReactModal__Overlay {
+    z-index: 999;
+  }
 `
 
 export default GlobalStyle

@@ -63,7 +63,7 @@ const MyNftsDeatail = () => {
             });
             const owners = await Promise.all(airNftOwners)
             _.map(owners, (owner, idx) => {
-                if (owner.toLowerCase() !== account.toLowerCase())
+                if (owner !== account)
                     return
                 
                 tokenIds.push({tokenId: airNFTs[idx], isAIR: true})

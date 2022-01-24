@@ -26,6 +26,11 @@ const config: MenuEntry[] = [
     href: '/farms',
   },
   {
+    label: 'Staking',
+    icon: 'TicketIcon',
+    href: '/stakes',
+  },
+  {
     label: 'Milk Bar',
     icon: 'PoolIcon',
     href: '/milkbar',
@@ -71,7 +76,7 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Whitepaper',
-        href: 'https://cashcow-protocol.gitbook.io/cashcow-protocol/',
+        href: 'https://cashcowprotocol.gitbook.io/cashcow/',
       },
     ],
   },
