@@ -55,11 +55,6 @@ const config: MenuEntry[] = [
     icon: 'NftIcon',
     href: '/nft-market'
   },
-  {
-    label: 'My NFTs',
-    icon: 'NftIcon',
-    href: '/myNFTs'
-  },
   
   {
     label: 'Info',

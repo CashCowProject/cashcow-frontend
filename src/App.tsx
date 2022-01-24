@@ -1,16 +1,12 @@
-import React, { useEffect, Suspense, lazy, useContext } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Toaster } from 'react-hot-toast'
+import React, { useEffect, Suspense, lazy } from 'react'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { ResetCSS } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import { useFetchPublicData } from 'state/hooks'
-import { LoadingContext } from 'contexts/LoadingContext'
-import BackLoader from 'components/BackLoader'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import PageLoader from './components/PageLoader'
-
 // import NftGlobalNotification from './views/Nft/components/NftGlobalNotification'
 
 // Route-based code splitting
@@ -22,11 +18,7 @@ const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Blindbox = lazy(() => import('./views/Blindbox'))
-const BlindboxDetail = lazy(() => import('./views/Blindbox/BlindboxDetail'))
-const NftMarket = lazy(() => import('./views/NftMarket'))
-const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
-const MyNfts = lazy(() => import('./views/MyNfts'))
-const MyNftsDetail = lazy(() => import('./views/MyNfts/MyNftsDeatail'))
+
 // This config is required for number formating
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
@@ -39,10 +31,7 @@ const App: React.FC = () => {
     if (!account && window.localStorage.getItem('accountStatus')) {
       connect('injected')
     }
-
-  }, [account, connect]);
-
-  const { loading } = useContext(LoadingContext);
+  }, [account, connect])
 
   useFetchPublicData()
 
@@ -50,16 +39,6 @@ const App: React.FC = () => {
     <Router>
       <ResetCSS />
       <GlobalStyle />
-      {loading &&
-        <BackLoader/>
-      }
-      <Toaster 
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          duration: 5000,
-        }}
-      />
       <Menu>
         <Suspense fallback={<PageLoader />}>
           <Switch>
@@ -75,23 +54,8 @@ const App: React.FC = () => {
             <Route path="/pools">
               <Pools />
             </Route>
-            <Route exact path="/blind-box">
-              <Blindbox />
-            </Route>
-            <Route path="/blind-box/:index">
-              <BlindboxDetail />
-            </Route>
-            <Route exact path="/nft-market">
-              <NftMarket />
-            </Route>
-            <Route path="/nft-market/:itemId">
-              <NftMarketDetail />
-            </Route>
-            <Route exact path="/MyNfts">
-              <MyNfts />
-            </Route>
-            <Route path="/MyNfts/:myTokenId">
-              <MyNftsDetail />
+            <Route path="/blind-box">
+             <Blindbox />
             </Route>
             {/* <Route path="/ifo"> */}
             {/*  <Ifos /> */}
@@ -108,7 +72,6 @@ const App: React.FC = () => {
             {/* </Route> */}
             {/* 404 */}
             <Route component={NotFound} />
-            
           </Switch>
         </Suspense>
       </Menu>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const StartTimeContainer = styled.div`
@@ -41,37 +41,13 @@ const Sep = styled.div`
 `
 
 export interface StartTimeInterface {
-    countdown?: number;
+    delayDay?: string;
+    delayHour?: string;
+    delayMinute?: string;
+    delaySecond?: string;
 }
 
-const StartTime = ({ countdown }:StartTimeInterface) => {
-    const [ day, setDay ] = useState(0);
-    const [ hour, setHour ] = useState(0);
-    const [ minute, setMinute ] = useState(0);
-    const [ second, setSecond ] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const current = new Date();
-            const range = (countdown - current.getTime()) / 1000;
-
-            if (range < 0) {
-                setDay(0);
-                setHour(0);
-                setMinute(0);
-                setSecond(0);
-                return;
-            }
-
-            setDay(Math.floor(range / 3600 / 24));
-            setHour(Math.floor((range % (3600 * 24)) / 3600));
-            setMinute(Math.floor((range % 3600) / 60));
-            setSecond(Math.floor(range % 60));
-        }, 1000);
-
-        return () => clearInterval(interval)
-    }, [countdown]);
-
+const StartTime = ({delayDay, delayHour, delayMinute, delaySecond}:StartTimeInterface) => {
     return (
         <StartTimeContainer>
             <StartTimeTitle>
@@ -80,7 +56,7 @@ const StartTime = ({ countdown }:StartTimeInterface) => {
             <StartTimeItems>
                 <StartTimeItem>
                     <Num>
-                        {day}
+                        {delayDay}
                     </Num>
                 </StartTimeItem>
                 <StartTimeItem>
@@ -88,7 +64,7 @@ const StartTime = ({ countdown }:StartTimeInterface) => {
                         :
                     </Sep>
                     <Num>
-                        {hour}
+                        {delayHour}
                     </Num>
                 </StartTimeItem>
                 <StartTimeItem>
@@ -96,7 +72,7 @@ const StartTime = ({ countdown }:StartTimeInterface) => {
                         :
                     </Sep>
                     <Num>
-                        {minute}
+                        {delayMinute}
                     </Num>
                 </StartTimeItem>
                 <StartTimeItem>
@@ -104,7 +80,7 @@ const StartTime = ({ countdown }:StartTimeInterface) => {
                         :
                     </Sep>
                     <Num>
-                        {second}
+                        {delaySecond}
                     </Num>
                 </StartTimeItem>
                 

@@ -8,18 +8,18 @@ import { LanguageContextProvider } from 'contexts/Localisation/languageContext'
 import { ThemeContextProvider } from 'contexts/ThemeContext'
 import { BlockContextProvider } from 'contexts/BlockContext'
 import { RefreshContextProvider } from 'contexts/RefreshContext'
-import { LoadingContextProvider } from 'contexts/LoadingContext'
 import store from 'state'
 
 const Providers: React.FC = ({ children }) => {
-  const rpcUrl = getRpcUrl();
-
+  const rpcUrl = getRpcUrl()
+  const chainId = parseInt(process.env.REACT_APP_CHAIN_ID)
+  
   return (
     <Provider store={store}>
       <ThemeContextProvider>
         <LanguageContextProvider>
           <bsc.UseWalletProvider
-            chainId={Number(process.env.REACT_APP_CHAIN_ID)}
+            chainId={chainId}
             connectors={{
               walletconnect: { rpcUrl },
               bsc,
@@ -27,9 +27,7 @@ const Providers: React.FC = ({ children }) => {
           >
             <BlockContextProvider>
               <RefreshContextProvider>
-                <LoadingContextProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                </LoadingContextProvider>
+                <ModalProvider>{children}</ModalProvider>
               </RefreshContextProvider>
             </BlockContextProvider>
           </bsc.UseWalletProvider>

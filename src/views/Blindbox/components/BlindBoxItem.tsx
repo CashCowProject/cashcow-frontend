@@ -6,6 +6,10 @@ import ItemMainContainer from './ItemMainContainer'
 export interface BlindBoxItemInterface {
     itemId?: number;
     background?: string;
+    delayDay?: string;
+    delayHour?: string;
+    delayMinute?: string;
+    delaySecond?: string;
     itemTitle?: string;
 }
 
@@ -16,17 +20,15 @@ const ItemBackgroundCover = styled.div`
     position: relative;
     margin-bottom: 25px;
     margin-top: 25px;
-    margin-left: auto;
-    margin-right: auto;
     border-radius: 32px;
 
 `
 
-const BlindBoxItem = ({itemId, background, itemTitle}: BlindBoxItemInterface) => {
+const BlindBoxItem = ({itemId, background, delayDay, delayHour, delayMinute, delaySecond, itemTitle}: BlindBoxItemInterface) => {
     const ItemBackground = styled.div`
         width: 100%;
         height: 100%;
-        background-image : url(images/${background});
+        background-image : url(images/NFT/${background});
         background-size: cover;
         background-position: 0;
         background-repeat: no-repeat;
@@ -35,14 +37,11 @@ const BlindBoxItem = ({itemId, background, itemTitle}: BlindBoxItemInterface) =>
         &:hover{
             transform: scale(1.02);
         }
-        @media (max-width: 768px) {
-            background-position: 30%;
-        }
         `
     return (
         <ItemBackgroundCover>
             <ItemBackground>
-                <ItemMainContainer itemId={itemId} itemTitle={itemTitle}/>                
+                <ItemMainContainer itemId={itemId} delayDay={delayDay} delayHour={delayHour} delayMinute={delayMinute} delaySecond={delaySecond} itemTitle={itemTitle}/>                
             </ItemBackground>
         </ItemBackgroundCover>
     )
