@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
