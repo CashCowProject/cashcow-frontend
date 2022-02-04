@@ -1,7 +1,19 @@
+import _ from 'lodash'
 import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { StakeContext } from 'contexts/StakeContext'
 import styled from 'styled-components'
+import toast from 'react-hot-toast'
 import useTheme from 'hooks/useTheme'
+import { PINATA_BASE_URI } from 'config/constants/nfts';
+import HappyCows from 'config/abi/HappyCows.json'
+import AirNfts from 'config/abi/AirNft.json'
+import { getHappyCowAddress, getStakingAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { useWallet } from '@binance-chain/bsc-use-wallet'
+import Staking from 'config/abi/Staking.json'
+import airNFTs from 'config/constants/airnftsTemp'
+import Web3 from "web3";
+import { AbiItem, toBN } from "web3-utils"
+import { LoadingContext } from 'contexts/LoadingContext';
 import { Tag } from '@pancakeswap-libs/uikit'
 
 const MultiplierTag = styled(Tag)`
@@ -58,10 +70,17 @@ const CandidateWrapper = styled.div`
     }
   `
 
-const StakeCandidate = ({data, closeRequest}) => {
+const web3 = new Web3(Web3.givenProvider)
+const stakingContract = new web3.eth.Contract(Staking.abi as AbiItem[], getStakingAddress());
+const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
+const airnftContract = new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+
+const StakeCandidate = ({data, closeRequest, index}) => {
     const { isDark } = useTheme()
+    const { account } = useWallet()
     const [nftInfo, setNFTInfo] = useState({tokenName: '', tokenId: '', imgUrl: '', isAIR: false})
-    const { appendCandidate } = useContext(StakeContext)
+    const { setLoading } = useContext(LoadingContext);
+    const { appendCandidate, initMyNFTS, initSelectedNFTs } = useContext(StakeContext)
 
     const fetchNft = useCallback(async ()=>{
         if (!data || !data.tokenId)
@@ -73,6 +92,7 @@ const StakeCandidate = ({data, closeRequest}) => {
         let imageUrl = json.image;
         if (!data.isAIR) {
             imageUrl = imageUrl.slice(7)
+            imageUrl = `${PINATA_BASE_URI}${imageUrl}`
         }
 
         setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, isAIR: data.isAIR});
@@ -82,9 +102,92 @@ const StakeCandidate = ({data, closeRequest}) => {
         fetchNft()
     },[fetchNft])
 
-    const nftSelected = () => {
-        appendCandidate(data)
+    const nftSelected = async () => {
+        setLoading(true);
+
+        console.log("Data: ", data);
+        if(!data.isAIR)
+            try {
+                await happyCowsContract.methods.approve(getStakingAddress(), data.tokenId).send({from: account});
+                await stakingContract.methods.stake(data.contractAddress, data.tokenId).send({from: account});
+                toast.success('Successfully Staked NFT.');
+            } catch (error) {
+                const { message } = error as Error;
+                toast.error(message);
+            }
+        else
+            try {
+                await airnftContract.methods.approve(getStakingAddress(), data.tokenId).send({from: account});
+                await stakingContract.methods.stake(data.contractAddress, data.tokenId).send({from: account});
+                toast.success('Successfully Staked NFT.');
+            } catch (error) {
+                const { message } = error as Error;
+                toast.error(message);
+            }
+
+        console.log("Staking Data: ", data);
+        const tmpStakingItems = await stakingContract.methods.getStakedItems(account).call();
+        const stakingItems = []
+        for(let i = 0; i < tmpStakingItems.length; i ++) {
+            if(index === '1' && tmpStakingItems[i].contractAddress === getHappyCowAddress())
+                stakingItems.push(tmpStakingItems[i]);
+            else if(index === '2' && tmpStakingItems[i].contractAddress === getAirNftAddress())
+                stakingItems.push(tmpStakingItems[i]);  
+        }
+
+        initSelectedNFTs(stakingItems);
+
         closeRequest()
+
+        /** Init My NFTs again */
+
+        const tokenIds = []
+        const tmpMyTokens = []
+        if(index === '1') {
+            const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({from: account})
+            
+            _.map(happyCowTokens, itm => {
+                tokenIds.push({tokenId: itm, isAIR: false})
+            });
+        }
+        
+        // retrieve my nft from air
+        else {
+            const airNftOwners = []
+            _.map(airNFTs, nft => {
+                airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+            });
+            const owners = await Promise.all(airNftOwners)
+            _.map(owners, (owner, idx) => {
+                if (owner.toLowerCase() !== account.toLowerCase())
+                    return
+                tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
+            });
+
+        }
+        
+        const myTokenHashes = [];
+        for (let i = 0; i < tokenIds.length; i ++) {
+            if (!tokenIds[i].isAIR)
+                myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call());
+            else
+                myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call());
+        }
+        const result = await Promise.all(myTokenHashes);
+        
+        for (let i = 0; i < tokenIds.length; i ++) {
+            if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
+            tmpMyTokens[i].tokenId = tokenIds[i].tokenId
+            tmpMyTokens[i].tokenHash = result[i]
+            tmpMyTokens[i].isAIR = tokenIds[i].isAIR
+            if(!tokenIds[i].isAIR)
+                tmpMyTokens[i].contractAddress = getHappyCowAddress();
+            else
+                tmpMyTokens[i].contractAddress = getAirNftAddress();
+        }
+
+        initMyNFTS(tmpMyTokens);
+        setLoading(false);
     }
 
     return (

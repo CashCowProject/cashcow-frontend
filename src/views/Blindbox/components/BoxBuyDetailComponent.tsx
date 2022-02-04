@@ -5,9 +5,10 @@ import { Button } from '@pancakeswap-libs/uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import MilkToken from 'config/abi/MilkToken.json'
 import HappyCows from 'config/abi/HappyCows.json'
+import Genesis from 'config/abi/Genesis.json'
 import { toWei, AbiItem, toBN } from "web3-utils";
 import { LoadingContext } from 'contexts/LoadingContext'
-import { getHappyCowAddress, getMilkAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMilkAddress, getAirNftAddress } from 'utils/addressHelpers'
 import Web3 from "web3";
 import { usePriceCakeBusd } from 'state/hooks'
 import useTheme from 'hooks/useTheme'
@@ -85,11 +86,11 @@ const BoxBuyDetailComponent = () => {
             const currentBlockNumber = await web3.eth.getBlockNumber();
             const blockNumber = await happyCowsContract.methods.blockNumber().call();
 
-            if (currentBlockNumber < blockNumber) {
-                setMintingState(false);
-            }
+            // if (currentBlockNumber < blockNumber) {
+            //     setMintingState(false);
+            // }
         }
-
+        console.log("Cake Price: ", cakePriceUsd.toNumber());
         setMilkPrice(cakePriceUsd.toNumber());
         getTotalSupply()
     }, [account, connect, cakePriceUsd])
@@ -156,11 +157,11 @@ const BoxBuyDetailComponent = () => {
         setLoading(true);
         const priceWei = toWei(toBN("10000000000000000000000000000000000000000"), 'ether');
         const web3 = new Web3(Web3.givenProvider);
-        const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+        const happyCowsContract = new web3.eth.Contract(Genesis.abi as AbiItem[], getAirNftAddress());
         const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
-        const allowance = await milkTokenContract.methods.allowance(account, getHappyCowAddress()).call();
+        const allowance = await milkTokenContract.methods.allowance(account, getAirNftAddress()).call();
         if(parseInt(allowance.toString()) < parseInt(price))
-            await milkTokenContract.methods.approve(getHappyCowAddress(), priceWei).send({ from: account });
+            await milkTokenContract.methods.approve(getAirNftAddress(), priceWei).send({ from: account });
 
         try {
             await happyCowsContract.methods

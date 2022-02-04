@@ -32,3 +32,6 @@ export const getHappyCowAddress = () => {
 export const getAirNftAddress = () => {
   return addresses.airnft[chainId]
 }
+export const getStakingAddress = () => {
+  return addresses.staking[chainId]
+}

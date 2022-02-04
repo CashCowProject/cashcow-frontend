@@ -5,19 +5,22 @@ import { StakeItem, NewItem } from './ItemComponents'
 
 const StakeItemContainer = styled.div`
     display: flex;
+    width: 100%;
     flex-wrap: wrap;
-    margin: 0 -15px;
 `
-const StakeItems = () => {
+const StakeItems = ({index}) => {
   const { selectedNFTS } = useContext(StakeContext)
   return (
     <StakeItemContainer>
-      <>
         {selectedNFTS.map((itm) => (
-          <StakeItem key={itm.tokenId} data={itm} />
+          <div style={{width: '25%'}}>
+            <StakeItem key={itm.tokenId} data={itm} index={index}/>
+          </div>
         ))}
-        <NewItem />
-      </>
+        <div style={{width: '25%'}}>
+          <NewItem index={index}/>
+        </div>
+
     </StakeItemContainer>
   )
 }

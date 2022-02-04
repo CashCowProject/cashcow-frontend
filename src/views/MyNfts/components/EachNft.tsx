@@ -12,10 +12,9 @@ import { getNumberSuffix } from 'utils/formatBalance';
 
 const NftEachItemContainer = styled.div`
     cursor: pointer;
-    min-width: 230px;
-    max-width: calc(25% - 30px);
     flex: 1;
-    margin: 30px 15px 0;
+    margin-right: 15px;
+    margin-bottom: 15px;
     border-radius: 16px;
     background: #fff;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
@@ -152,7 +151,8 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
                 imageUrl = imageUrl.slice(7);
                 setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`);
             } else {
-                setImageIpfsHash(imageUrl);
+                imageUrl = imageUrl.slice(7);
+                setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`);
             }
             setName(json.name);
         } catch (e) {

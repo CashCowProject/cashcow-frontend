@@ -42,16 +42,14 @@ const Divider = styled.div`
     background-position: 50%;
 `
 
-const NewItem = () => {
+const NewItem = ({index}) => {
   const TranslateString = useI18n()
   const { isDark } = useTheme()
   const [isOpen, setModalOpen] = useState(false)
 
   const ItemContainer = styled.div`
-    min-width: 230px;
-    max-width: calc(25% - 30px);
-    flex: 1;
-    margin: 30px 15px 0;
+    margin-right: 15px;
+    margin-bottom: 15px;
     border-radius: 16px;
     background: ${!isDark ? 'white' : '#27262c'};
     box-shadow: 0px 2px 12px -8px ${!isDark ? 'rgba(25, 19, 38, 0.7)' : 'rgba(203, 203, 203, 0.7)'}, 0px 1px 1px ${!isDark ? 'rgba(25, 19, 38, 0.05)' : 'rgba(203, 203, 203, 0.05)'};
@@ -99,16 +97,13 @@ const NewItem = () => {
         <Divider />
         <Flex flexDirection="column" style={{padding: '24px'}}>
           <Text fontSize="24px" style={{textAlign: 'center'}}>Add NFT</Text>
-          <Text>Position HashRate</Text>
-          <Text fontSize="24px" mb="24px">1</Text>
-          <StakeBtn>Stake</StakeBtn>
-          <UpgradeBtn>Upgrade HashRate</UpgradeBtn>
         </Flex>
       </Flex>
       <SelectNFT 
         isOpen={isOpen}
         closeDialog={closeDialog}
         addNFTHandler={addNFT2Stake}
+        index={index}
       />
     </ItemContainer>
   )

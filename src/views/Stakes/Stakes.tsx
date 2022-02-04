@@ -1,77 +1,69 @@
 import _ from 'lodash'
 import React, { useCallback, useContext, useEffect, useMemo } from 'react'
+import {useParams} from 'react-router-dom'
 import Page from 'components/layout/Page'
 import { StakeContext } from 'contexts/StakeContext'
+import { LoadingContext } from 'contexts/LoadingContext';
 import { AbiItem } from "web3-utils"
 import { Heading } from '@pancakeswap-libs/uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMarketAddress, getAirNftAddress, getStakingAddress } from 'utils/addressHelpers'
 import Web3 from "web3";
 import AirNfts from 'config/abi/AirNft.json'
+import Staking from 'config/abi/Staking.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import Market from 'config/abi/Market.json'
-import airNFTs from 'config/constants/airnfts'
+import airNFTs from 'config/constants/airnftsTemp'
 import { StatisticsInfo, StakeItems } from './components'
 
 const web3 = new Web3(Web3.givenProvider)
+const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
+
+const marketContract = new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
+
+const stakingContract = new web3.eth.Contract(Staking.abi as AbiItem[], getStakingAddress())
+
+const airnftContract = new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+
+type boxParam = {
+  index: string;
+};
 
 const Stakes = () => {
+  const { index } = useParams<boxParam>();
   const { account } = useWallet()
-
-  const happyCowsContract = useMemo(() => {
-    return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
-  }, []) 
-
-  const marketContract = useMemo(() => {
-      return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
-  }, [])
-
-  const airnftContract = useMemo(() => {
-      return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
-  }, [])
-
-  const { myNFTS, initMyNFTS } = useContext(StakeContext)
-
+  const { myNFTS, initMyNFTS, initSelectedNFTs } = useContext(StakeContext)
+  const { setLoading } = useContext(LoadingContext);
+  
   useEffect(() => {
-    if (!account || myNFTS.length > 0)
+    if (!account)
       return;
 
     async function fetchMyNFTS () {
-      const tmpMyTokens = []
-      const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({from: account})
+      setLoading(true);
       const tokenIds = []
-      _.map(happyCowTokens, itm => {
-          tokenIds.push({tokenId: itm, isAIR: false})
-      });
+      const tmpMyTokens = []
+      if(index === '1') {
+        const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({from: account})
+        
+        _.map(happyCowTokens, itm => {
+            tokenIds.push({tokenId: itm, isAIR: false})
+        });
+      }
       
       // retrieve my nft from air
-      const airNftOwners = []
-      _.map(airNFTs, nft => {
-          airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
-      });
-      const owners = await Promise.all(airNftOwners)
-      _.map(owners, (owner, idx) => {
-          if (owner.toLowerCase() !== account.toLowerCase())
-              return
-          
-          tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
-      });
+      else {
+        const airNftOwners = []
+        _.map(airNFTs, nft => {
+            airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+        });
+        const owners = await Promise.all(airNftOwners)
+        _.map(owners, (owner, idx) => {
+            if (owner.toLowerCase() !== account.toLowerCase())
+                return
+            tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
+        });
 
-      const items = await marketContract.methods.fetchItemsCreated().call({from: account});
-      const tokenIdLength = tokenIds.length;
-      for(let i = 0; i < tokenIdLength; i ++) {
-          if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
-          tmpMyTokens[i].itemId = '0'
-      }
-      let currentIndex = 0;
-      for(let i = 0; i < items.length; i ++) {
-          if(items[i].isSold === false) {
-              tokenIds.push({tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress()})
-
-              if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
-              tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
-              currentIndex ++;
-          }
       }
       
       const myTokenHashes = [];
@@ -88,27 +80,38 @@ const Stakes = () => {
           tmpMyTokens[i].tokenId = tokenIds[i].tokenId
           tmpMyTokens[i].tokenHash = result[i]
           tmpMyTokens[i].isAIR = tokenIds[i].isAIR
+          if(!tokenIds[i].isAIR)
+            tmpMyTokens[i].contractAddress = getHappyCowAddress();
+          else
+            tmpMyTokens[i].contractAddress = getAirNftAddress();
       }
 
-      tmpMyTokens.push(tmpMyTokens[0])
-      tmpMyTokens.push(tmpMyTokens[0])
-      tmpMyTokens.push(tmpMyTokens[0])
-      tmpMyTokens.push(tmpMyTokens[0])
-      tmpMyTokens.push(tmpMyTokens[0])
-
       initMyNFTS(tmpMyTokens);
+
+      const tmpStakingItems = await stakingContract.methods.getStakedItems(account).call();
+      console.log(tmpStakingItems);
+      const stakingItems = []
+      for(let i = 0; i < tmpStakingItems.length; i ++) {
+        if(index === '1' && tmpStakingItems[i].contractAddress === getHappyCowAddress())
+          stakingItems.push(tmpStakingItems[i]);
+        else if(index === '2' && tmpStakingItems[i].contractAddress === getAirNftAddress())
+          stakingItems.push(tmpStakingItems[i]);  
+      }
+
+      initSelectedNFTs(stakingItems);
+      setLoading(false);
     }
 
     fetchMyNFTS()
-
-  }, [happyCowsContract, airnftContract, account, initMyNFTS, marketContract, myNFTS])
+  // eslint-disable-next-line
+  }, [account, index])
 
   return (
     <Page>
       <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center' }}>
-        <StatisticsInfo />
+        <StatisticsInfo index={index}/>
       </Heading>
-      <StakeItems />
+      <StakeItems index={index}/>
     </Page>
   )
 }
