@@ -26,6 +26,10 @@ const GlobalStyle = createGlobalStyle`
   .ReactModal__Overlay {
     z-index: 999;
   }
+  iframe
+  {
+      display: none;
+  }
 `
 
 export default GlobalStyle

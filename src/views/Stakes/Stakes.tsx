@@ -74,7 +74,6 @@ const Stakes = () => {
               myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call());
       }
       const result = await Promise.all(myTokenHashes);
-      
       for (let i = 0; i < tokenIds.length; i ++) {
           if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
           tmpMyTokens[i].tokenId = tokenIds[i].tokenId

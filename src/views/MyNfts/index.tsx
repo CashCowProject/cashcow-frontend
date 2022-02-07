@@ -44,7 +44,6 @@ const MyNfts = () => {
 
     const getTokenHashes = useCallback(
         async () => {
-            console.log('aaaa');
             const tmpMyTokens = [];
             const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({from: account})
             const tokenIds = []
@@ -53,17 +52,19 @@ const MyNfts = () => {
             });
             
             // retrieve my nft from air
-            // const airNftOwners = []
-            // _.map(airNFTs, nft => {
-            //     airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
-            // });
-            // const owners = await Promise.all(airNftOwners)
-            // _.map(owners, (owner, idx) => {
-            //     if (owner !== account)
-            //         return
+            const airNftOwners = []
+            _.map(airNFTs, nft => {
+                airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+            });
+            const owners = await Promise.all(airNftOwners)
+            _.map(owners, (owner, idx) => {
+                if (owner !== account)
+                    return
                 
-            //     tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
-            // });
+                tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
+            });
+
+            console.log(tokenIds);
 
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
             const tokenIdLength = tokenIds.length;

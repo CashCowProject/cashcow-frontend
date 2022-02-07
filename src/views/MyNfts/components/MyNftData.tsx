@@ -43,6 +43,7 @@ export interface NftDataInterface {
 
 const MyNftData = ({myToken}: NftDataInterface) => {
     const { isDark } = useTheme()
+    console.log(myToken);
     return (
         <NftDataContainer style={{background: isDark ? "#27262c" : ''}}>
             <GradientBack />

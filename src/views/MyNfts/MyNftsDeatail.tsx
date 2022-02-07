@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from '@pancakeswap-libs/uikit'
 import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
-import airNFTs from 'config/constants/airnfts'
+import airNFTs from 'config/constants/airnftsTemp'
 import MyNftData from './components/MyNftData'
 import MyNftDetailHeader from './components/MyNftDetailHeader'
 
@@ -34,6 +34,7 @@ const MyNftsDeatail = () => {
     const { myTokenId } = useParams<boxParam>();
     const { account } = useWallet()
     const [myToken, setMyToken] = useState({});
+    const [isAIR, setIsAIR] = useState(false);
 
     const happyCowsContract = useMemo(() => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
@@ -57,17 +58,17 @@ const MyNftsDeatail = () => {
             });
             
             // retrieve my nft from air
-            // const airNftOwners = []
-            // _.map(airNFTs, nft => {
-            //     airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
-            // });
-            // const owners = await Promise.all(airNftOwners)
-            // _.map(owners, (owner, idx) => {
-            //     if (owner !== account)
-            //         return
+            const airNftOwners = []
+            _.map(airNFTs, nft => {
+                airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+            });
+            const owners = await Promise.all(airNftOwners)
+            _.map(owners, (owner, idx) => {
+                if (owner !== account)
+                    return
                 
-            //     tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
-            // });
+                tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
+            });
 
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
             console.log("Items:", items);
@@ -103,6 +104,7 @@ const MyNftsDeatail = () => {
                 tmpMyTokens[i].isAIR = tokenIds[i].isAIR
             }
 
+            setIsAIR(tmpMyTokens[myTokenId].isAIR);
             setMyToken(tmpMyTokens[myTokenId]);
         },
         [account, happyCowsContract, marketContract, airnftContract, myTokenId]
@@ -118,7 +120,7 @@ const MyNftsDeatail = () => {
                 My NFT Detail
                 </Heading>
             </StyledHero>
-            <MyNftDetailHeader collectionName="HappyCow"/>
+            <MyNftDetailHeader collectionName={isAIR ? "Air NFT" : "HappyCow"}/>
             <NftDetailContainer>
                 <MyNftData myToken={myToken} />
             </NftDetailContainer>      

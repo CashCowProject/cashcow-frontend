@@ -104,7 +104,7 @@ const StakeCandidate = ({data, closeRequest, index}) => {
 
     const nftSelected = async () => {
         setLoading(true);
-
+        closeRequest()
         console.log("Data: ", data);
         if(!data.isAIR)
             try {
@@ -136,8 +136,6 @@ const StakeCandidate = ({data, closeRequest, index}) => {
         }
 
         initSelectedNFTs(stakingItems);
-
-        closeRequest()
 
         /** Init My NFTs again */
 

@@ -150,7 +150,8 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
         
         let imageUrl = json.image;
         if (isAIR) {
-            setImage(imageUrl);
+            imageUrl = imageUrl.slice(7);
+            setImage(`${PINATA_BASE_URI}${imageUrl}`);
         } else {
             imageUrl = imageUrl.slice(7);
             setImage(`${PINATA_BASE_URI}${imageUrl}`);

@@ -165,6 +165,7 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
     // const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
 
     const fetchNft = useCallback(async ()=>{
+        console.log(myToken);
         const marketItems = await marketContract.methods.fetchMarketItems().call({from:account});
         if (!myToken) return
         for(let i = 0;i < marketItems.length; i ++) {
@@ -194,7 +195,8 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
             imageUrl = imageUrl.slice(7);
             setImage(`${PINATA_BASE_URI}${imageUrl}`);
         } else {
-            setImage(imageUrl);
+            imageUrl = imageUrl.slice(7);
+            setImage(`${PINATA_BASE_URI}${imageUrl}`);
         }
     }, [account, myToken])
 

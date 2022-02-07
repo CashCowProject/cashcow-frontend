@@ -10,7 +10,7 @@ const MyRate = ({myMilkPower}) => {
       <Text style={{textAlign: 'left'}}>{TranslateString(10011, 'My MilkPower')}</Text>
       <Flex mt="12px">
         <Text color="secondary" fontSize="24px" pr="3px" ml="6px">
-          {getNumberSuffix(myMilkPower / 1000000, 0)}
+          {getNumberSuffix(myMilkPower, 0)}
         </Text>
       </Flex>
     </Flex>
