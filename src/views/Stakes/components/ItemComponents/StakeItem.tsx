@@ -135,6 +135,7 @@ const StakeItem = ({data, index}) => {
     const json = await res.json()
     console.log("Name: ",json.name);
     let imageUrl = json.image;
+    imageUrl = imageUrl.slice(7);
     imageUrl = `${PINATA_BASE_URI}${imageUrl}`
     const rwdMilk = await stakingContract.methods.getPendingMilk(data.itemId).call();
     setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, rewardMilk: rwdMilk, isAIR: data.isAIR});
