@@ -7,7 +7,6 @@ import { getNumberSuffix } from 'utils/formatBalance';
 const RatePer = ({dailyMilkRate}) => {
   const cakePriceUsd = usePriceCakeBusd()
 
-  console.log("Daily Milk Rate: ", dailyMilkRate);
   const TranslateString = useI18n()
   return (
     <Flex flexDirection="column">

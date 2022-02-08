@@ -9,7 +9,6 @@ export interface TotalStackedInferface {
 
 const TotalStaked = ({ totalStakedCount }: TotalStackedInferface) => {
   const TranslateString = useI18n()
-  console.log("Total Staked Count: ", totalStakedCount);
   return (
     <Flex flexDirection="column" justifyContent="flex-start">
       <Text style={{textAlign: 'left'}}>{TranslateString(10008, 'Total Staked')}</Text>

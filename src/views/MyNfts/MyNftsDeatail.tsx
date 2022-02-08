@@ -71,7 +71,6 @@ const MyNftsDeatail = () => {
             });
 
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
-            console.log("Items:", items);
             const tokenIdLength = tokenIds.length;
             for(let i = 0; i < tokenIdLength; i ++) {
                 if (!tmpMyTokens[i]) tmpMyTokens[i] = {}

@@ -64,7 +64,6 @@ const MyNfts = () => {
                 tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
             });
 
-            console.log(tokenIds);
 
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
             const tokenIdLength = tokenIds.length;

@@ -133,7 +133,6 @@ const StakeItem = ({data, index}) => {
       tokenURI = await airnftContract.methods.tokenURI(data.tokenId).call();
     const res = await fetch(tokenURI)
     const json = await res.json()
-    console.log("Name: ",json.name);
     let imageUrl = json.image;
     imageUrl = imageUrl.slice(7);
     imageUrl = `${PINATA_BASE_URI}${imageUrl}`
@@ -142,10 +141,9 @@ const StakeItem = ({data, index}) => {
   }, [data])
 
   const fetchMilkPower = useCallback(async () => {
-    const totalStkCount = await stakingContract.methods.getTotalStakedCount(index).call();
-    const tmpTotalMilkPower = await stakingContract.methods.getTotalMilkPower(index).call();
-    console.log(tmpTotalMilkPower);
-    const tmpMilkPower = tmpTotalMilkPower / totalStkCount;
+    const poolInfo = await stakingContract.methods.pools(index).call();
+    console.log(poolInfo.milkPower);
+    const tmpMilkPower = poolInfo.milkPower;
     setMilkPower(tmpMilkPower);
   }, [index])
   useEffect(() => {
@@ -162,10 +160,10 @@ const StakeItem = ({data, index}) => {
       } catch (error) {
           const { message } = error as Error;
           toast.error(message);
+          console.log(message);
     }
 
     const tmpStakingItems = await stakingContract.methods.getStakedItems(account).call();
-    console.log(tmpStakingItems);
     const stakingItems = []
     for(let i = 0; i < tmpStakingItems.length; i ++) {
       if(index === '1' && tmpStakingItems[i].contractAddress === getHappyCowAddress())
@@ -242,7 +240,7 @@ const StakeItem = ({data, index}) => {
           </div>
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '14px'}}>
             <Text>Milk Power: </Text> &nbsp;&nbsp;
-            <Text fontSize="15px">{getNumberSuffix(milkPower / 1000000, 2)}</Text>
+            <Text fontSize="15px">{getNumberSuffix(milkPower, 0)}</Text>
           </div>
           <StakeBtn onClick= {() => unstakeNFT()}>Unstake</StakeBtn>
           {/* <UpgradeBtn>Upgrade HashRate</UpgradeBtn> */}

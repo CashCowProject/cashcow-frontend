@@ -165,7 +165,6 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
     // const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
 
     const fetchNft = useCallback(async ()=>{
-        console.log(myToken);
         const marketItems = await marketContract.methods.fetchMarketItems().call({from:account});
         if (!myToken) return
         for(let i = 0;i < marketItems.length; i ++) {

@@ -88,7 +88,6 @@ const Stakes = () => {
       initMyNFTS(tmpMyTokens);
 
       const tmpStakingItems = await stakingContract.methods.getStakedItems(account).call();
-      console.log(tmpStakingItems);
       const stakingItems = []
       for(let i = 0; i < tmpStakingItems.length; i ++) {
         if(index === '1' && tmpStakingItems[i].contractAddress === getHappyCowAddress())
@@ -96,7 +95,6 @@ const Stakes = () => {
         else if(index === '2' && tmpStakingItems[i].contractAddress === getAirNftAddress())
           stakingItems.push(tmpStakingItems[i]);  
       }
-
       initSelectedNFTs(stakingItems);
       setLoading(false);
     }

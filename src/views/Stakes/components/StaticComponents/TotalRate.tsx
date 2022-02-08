@@ -5,7 +5,6 @@ import { getNumberSuffix } from 'utils/formatBalance';
 
 const TotalRate = ({totalMilkPower}) => {
   const TranslateString = useI18n()
-  console.log("total Milk Power", totalMilkPower);
   return (
     <Flex flexDirection="column">
       <Text style={{textAlign: 'left'}}>{TranslateString(10010, 'Total MilkPower')}</Text>

@@ -90,10 +90,8 @@ const StakeCandidate = ({data, closeRequest, index}) => {
         const json = await res.json()
 
         let imageUrl = json.image;
-        if (!data.isAIR) {
-            imageUrl = imageUrl.slice(7)
-            imageUrl = `${PINATA_BASE_URI}${imageUrl}`
-        }
+        imageUrl = imageUrl.slice(7)
+        imageUrl = `${PINATA_BASE_URI}${imageUrl}`
 
         setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, isAIR: data.isAIR});
     }, [data])
@@ -105,7 +103,6 @@ const StakeCandidate = ({data, closeRequest, index}) => {
     const nftSelected = async () => {
         setLoading(true);
         closeRequest()
-        console.log("Data: ", data);
         if(!data.isAIR)
             try {
                 await happyCowsContract.methods.approve(getStakingAddress(), data.tokenId).send({from: account});
@@ -125,7 +122,6 @@ const StakeCandidate = ({data, closeRequest, index}) => {
                 toast.error(message);
             }
 
-        console.log("Staking Data: ", data);
         const tmpStakingItems = await stakingContract.methods.getStakedItems(account).call();
         const stakingItems = []
         for(let i = 0; i < tmpStakingItems.length; i ++) {
