@@ -136,9 +136,9 @@ const StakeItem = ({data, index}) => {
     let imageUrl = json.image;
     imageUrl = imageUrl.slice(7);
     imageUrl = `${PINATA_BASE_URI}${imageUrl}`
-    const rwdMilk = await stakingContract.methods.getPendingMilk(data.itemId).call();
+    const rwdMilk = await stakingContract.methods.getPendingMilk(account, data.itemId).call();
     setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, rewardMilk: rwdMilk, isAIR: data.isAIR});
-  }, [data])
+  }, [data, account])
 
   const fetchMilkPower = useCallback(async () => {
     const poolInfo = await stakingContract.methods.pools(index).call();
@@ -155,7 +155,7 @@ const StakeItem = ({data, index}) => {
     setLoading(true);
 
     try {
-        await stakingContract.methods.unstake(data.itemId, index).send({from: account});
+        await stakingContract.methods.unstake(data.itemId).send({from: account});
           toast.success('Successfully Harvest and Unstake For this NFT.');
       } catch (error) {
           const { message } = error as Error;
@@ -233,7 +233,7 @@ const StakeItem = ({data, index}) => {
         </ImageContainer>
         <Divider />
         <Flex flexDirection="column" style={{padding: '24px'}}>
-          <Text fontSize="24px" style={{textAlign: 'center'}}>{nftInfo.tokenName}</Text>
+          <Text fontSize="20px" style={{textAlign: 'center'}}>{nftInfo.tokenName}</Text>
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Text>Reward Milk: </Text> &nbsp;&nbsp;
             <Text fontSize="15px">{getNumberSuffix(nftInfo.rewardMilk / 1000000, 2)}</Text>
