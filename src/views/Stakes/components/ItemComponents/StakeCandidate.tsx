@@ -105,7 +105,8 @@ const StakeCandidate = ({data, closeRequest, index}) => {
         closeRequest()
         if(!data.isAIR)
             try {
-                await happyCowsContract.methods.approve(getStakingAddress(), data.tokenId).send({from: account});
+            await happyCowsContract.methods.approve(getStakingAddress(), data.tokenId).send({from: account});
+
                 await stakingContract.methods.stake(data.contractAddress, data.tokenId).send({from: account});
                 toast.success('Successfully Staked NFT.');
             } catch (error) {
@@ -119,6 +120,7 @@ const StakeCandidate = ({data, closeRequest, index}) => {
                 toast.success('Successfully Staked NFT.');
             } catch (error) {
                 const { message } = error as Error;
+                console.log(message);
                 toast.error(message);
             }
 

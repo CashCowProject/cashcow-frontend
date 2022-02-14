@@ -136,9 +136,9 @@ const StakeItem = ({data, index}) => {
     let imageUrl = json.image;
     imageUrl = imageUrl.slice(7);
     imageUrl = `${PINATA_BASE_URI}${imageUrl}`
-    const rwdMilk = await stakingContract.methods.getPendingMilk(account, data.itemId).call();
+    const rwdMilk = await stakingContract.methods.getPendingMilk(data.itemId).call();
     setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, rewardMilk: rwdMilk, isAIR: data.isAIR});
-  }, [data, account])
+  }, [data])
 
   const fetchMilkPower = useCallback(async () => {
     const poolInfo = await stakingContract.methods.pools(index).call();
