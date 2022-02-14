@@ -39,7 +39,7 @@ const StatisticsInfo = ({index}) => {
 
   const fetchInfo = useCallback(async ()=>{
     
-    const rwdAllMilk = await stakingContract.methods.getPendingMilkForAll(index).call();
+    const rwdAllMilk = await stakingContract.methods.getPendingMilkForAll(index, account).call();
     const totalStkCount = await stakingContract.methods.getTotalStakedCount(index).call();
     const tmpTotalMilkPower = await stakingContract.methods.getTotalMilkPower(index).call();
     const tmpMyMilkPower = await stakingContract.methods.getMyMilkPower(index, account).call();
