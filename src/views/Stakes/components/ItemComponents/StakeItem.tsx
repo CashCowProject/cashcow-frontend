@@ -83,9 +83,9 @@ const StakeItem = ({data, index}) => {
     position: relative;
   `
   const StakeBtn = styled.div`
-    border-color: ${!isDark ? '#fad551' : '#101820'};
-    background-color: ${!isDark ? '#fad551' : '#101820'};
-    color: ${!isDark ? '#361B72' : 'white'};
+    border-color: ${!isDark ? '#00D86C' : '#101820'};
+    background-color: ${!isDark ? '#00D86C' : '#101820'};
+    color: ${!isDark ? 'white' : 'white'};
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -117,7 +117,7 @@ const StakeItem = ({data, index}) => {
     }
   `
 
-  const [nftInfo, setNFTInfo] = useState({tokenName: '', tokenId: '', imgUrl: '',rewardMilk: 0, isAIR: false})
+  const [nftInfo, setNFTInfo] = useState({tokenName: '', tokenId: '', imgUrl: '', isAIR: false})
   const fetchNft = useCallback(async ()=>{
     if (!data || !data.tokenId)
         return;
@@ -136,8 +136,7 @@ const StakeItem = ({data, index}) => {
     let imageUrl = json.image;
     imageUrl = imageUrl.slice(7);
     imageUrl = `${PINATA_BASE_URI}${imageUrl}`
-    const rwdMilk = await stakingContract.methods.getPendingMilk(data.itemId).call();
-    setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, rewardMilk: rwdMilk, isAIR: data.isAIR});
+    setNFTInfo({tokenName: json.name, tokenId: data.tokenId, imgUrl: imageUrl, isAIR: data.isAIR});
   }, [data])
 
   const fetchMilkPower = useCallback(async () => {
@@ -234,10 +233,6 @@ const StakeItem = ({data, index}) => {
         <Divider />
         <Flex flexDirection="column" style={{padding: '24px'}}>
           <Text fontSize="20px" style={{textAlign: 'center'}}>{nftInfo.tokenName}</Text>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Reward Milk: </Text> &nbsp;&nbsp;
-            <Text fontSize="15px">{getNumberSuffix(nftInfo.rewardMilk / 1000000, 2)}</Text>
-          </div>
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '14px'}}>
             <Text>Milk Power: </Text> &nbsp;&nbsp;
             <Text fontSize="15px">{getNumberSuffix(milkPower, 0)}</Text>

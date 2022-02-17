@@ -39,14 +39,14 @@ const StatisticsInfo = ({index}) => {
 
   const fetchInfo = useCallback(async ()=>{
     
-    const rwdAllMilk = await stakingContract.methods.getPendingMilkForAll(index, account).call();
+    const pendingMilk = await stakingContract.methods.getPendingMilk(index, account).call();
     const pool = await stakingContract.methods.pools(index).call();
     const totalStkCount = pool.stakedCount;
     console.log("Totla Staked Count", totalStkCount);
     const tmpTotalMilkPower = await stakingContract.methods.getTotalMilkPower(index).call();
     const tmpMyMilkPower = await stakingContract.methods.getMyMilkPower(index, account).call();
     const tmpDailyMilkRate = await stakingContract.methods.getDailyMilkRate(index).call();
-    setPoolInfo({rewardAllMilk: rwdAllMilk, totalStakedCount: totalStkCount, myStakedCount: selectedNFTS.length, totalMilkPower: tmpTotalMilkPower, myMilkPower: tmpMyMilkPower, dailyMilkRate: tmpDailyMilkRate});
+    setPoolInfo({rewardAllMilk: pendingMilk, totalStakedCount: totalStkCount, myStakedCount: selectedNFTS.length, totalMilkPower: tmpTotalMilkPower, myMilkPower: tmpMyMilkPower, dailyMilkRate: tmpDailyMilkRate});
   }, [account, selectedNFTS, index])
   
   useEffect(() => {

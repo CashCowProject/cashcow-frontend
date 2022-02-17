@@ -116,7 +116,7 @@ const Harvet = ({ rewardAllMilk, index }) => {
       <Flex mt="12px">
         <Image src='/images/farms/milk.png' alt='MILK' width={32} height={32} />
         <Text color="secondary" fontSize="24px" pr="3px" ml="6px">
-          {getNumberSuffix(rewardAllMilk / 1000000, 2)}
+          {getNumberSuffix(rewardAllMilk / 1000000, 3)}
         </Text>
         <Text textTransform="uppercase" color="textSubtle" fontSize="18px" style={{lineHeight: 2}}>
           {`≈ $${cakePriceUsd.toNumber() * rewardAllMilk}`}
