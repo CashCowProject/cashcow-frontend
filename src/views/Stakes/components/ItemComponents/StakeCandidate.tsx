@@ -191,7 +191,7 @@ const StakeCandidate = ({data, closeRequest, index}) => {
             <span>{nftInfo.tokenName}</span>
             <HoverWrapper>
                 <TypeTag variant="success" outline>
-                    {nftInfo.isAIR ? 'Genise' : 'HappyCow'}
+                    {nftInfo.isAIR ? 'Genesis' : 'HappyCow'}
                 </TypeTag>
                 <MultiplierTag variant="secondary">{nftInfo.isAIR ? '10X' : '1X'}</MultiplierTag>
             </HoverWrapper>

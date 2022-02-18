@@ -91,7 +91,7 @@ const NewItem = ({index}) => {
   return (
     <ItemContainer style={{background : isDark ? '#27262c' : ''}}>
       <Flex flexDirection="column">
-        <ImageContainer style={{background: isDark ? '#101820' : '#77FFC0'}} onClick={e=>setModalOpen(true)}>
+        <ImageContainer style={{background: isDark ? '#101820' : 'white'}} onClick={e=>setModalOpen(true)}>
           <AddImage />
         </ImageContainer>
         <Divider />
