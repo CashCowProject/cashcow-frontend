@@ -196,6 +196,7 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
         } else {
             setImage(imageUrl);
         }
+
     }, [account, myToken])
 
     useEffect(() => {
@@ -226,6 +227,7 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
         try {
             await marketContract.methods
                 .createMarketItem(myToken.isAIR ? getAirNftAddress() : getHappyCowAddress(), toBN(myToken.tokenId), toWei(priceNft, 'ether'))
+
                 .send({from: account})
                 .on('transactionHash', function() {
                     toast.success('Transaction submitted.');
@@ -382,6 +384,7 @@ const MyNftDataLeftComponent = ({myToken} : NftDataLeftComponentInterface) => {
                         <InputTag type="number" maxLength={12} placeholder="Price of NFT" value={priceNft} onChange={handleChange}/>
                         <ItemValueToken>
                             <img src="/images/farms/milk.png" alt="token" style={{width: "26px", height: '26px', marginRight: '4px' }}/>
+
                             MILK
                         </ItemValueToken>
                     </div>

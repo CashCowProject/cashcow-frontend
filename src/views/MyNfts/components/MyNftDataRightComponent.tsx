@@ -72,17 +72,16 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
     const happyCowsContract = useMemo(() => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
     }, []) 
-
+    
     const airnftContract = useMemo(() => {
         return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
     }, [])
-
+    
     const fetchNft = useCallback(async ()=>{
         if(!myToken) return;
         const tmpTokenId = myToken.tokenId
 
         if (!tmpTokenId) return;
-
         let nftHash = null; 
         if (!myToken.isAIR) {
             nftHash = await happyCowsContract.methods.tokenURI(toBN(tmpTokenId)).call({from:account});
@@ -96,7 +95,6 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
         setTokenId(myToken.tokenId);
 
     }, [myToken, account, happyCowsContract, airnftContract])
-
     useEffect(() => {
         fetchNft()
     }, [myToken, fetchNft])

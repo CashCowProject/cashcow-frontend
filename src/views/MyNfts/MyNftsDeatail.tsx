@@ -34,7 +34,7 @@ const MyNftsDeatail = () => {
     const { myTokenId } = useParams<boxParam>();
     const { account } = useWallet()
     const [myToken, setMyToken] = useState({});
-
+    
     const happyCowsContract = useMemo(() => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
     }, []) 
@@ -68,7 +68,6 @@ const MyNftsDeatail = () => {
                 
                 tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
             });
-
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
             const tokenIdLength = tokenIds.length;
             for(let i = 0; i < tokenIdLength; i ++) {
@@ -78,8 +77,8 @@ const MyNftsDeatail = () => {
             let currentIndex = 0;
             for(let i = 0; i < items.length; i ++) {
                 if(items[i].isSold === false) {
-                    tokenIds.push({tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress()})
 
+                    tokenIds.push({tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress()})
                     if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
                     tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
                     currentIndex ++;

@@ -130,7 +130,7 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     const happyCowsContract = useMemo(() => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
     }, []) 
-
+    
     const airnftContract = useMemo(() => {
         return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
     }, [])
@@ -155,13 +155,12 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
             imageUrl = imageUrl.slice(7);
             setImage(`${PINATA_BASE_URI}${imageUrl}`);
         }
-        
         setName(json.name);
 
         setMilkPrice(cakePriceUsd.toNumber());
 
     }, [account, happyCowsContract, airnftContract, nftEachItem, cakePriceUsd])
-
+    
     useEffect(() => {
         fetchNft();
     },[fetchNft])
