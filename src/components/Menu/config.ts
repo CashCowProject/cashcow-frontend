@@ -26,6 +26,20 @@ const config: MenuEntry[] = [
     href: '/farms',
   },
   {
+    label: 'Staking',
+    icon: 'TicketIcon',
+    items: [
+      {
+        label: 'HappyCows',
+        href: '/stakes/1',
+      },
+      {
+        label: 'Genesis',
+        href: '/stakes/2',
+      }
+    ]
+  },
+  {
     label: 'Milk Bar',
     icon: 'PoolIcon',
     href: '/milkbar',

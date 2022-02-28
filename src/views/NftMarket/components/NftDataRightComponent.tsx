@@ -1,12 +1,13 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
+import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem, toBN } from "web3-utils"
 import Web3 from "web3";
-import { getHappyCowAddress, getMarketAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 
 const NftOnChainDataContainer = styled.div`
@@ -66,6 +67,7 @@ export interface NftDataRightComponentInterface {
 const NftDataRightComponent = ({itemId} : NftDataRightComponentInterface) => {
     const { isDark } = useTheme()
     const { account} = useWallet()
+    const [isAIR, setIsAIR] = useState(false);
     const [tokenId, setTokenId] = useState('');
     const [ownerAddress, setOwnerAddress] = useState('');
     const [dna, setDna] = useState('');
@@ -79,24 +81,36 @@ const NftDataRightComponent = ({itemId} : NftDataRightComponentInterface) => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
     }, []);
 
+    const airnftContract = useMemo(() => {
+        return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+    }, [])
 
     const fetchNft = useCallback(async ()=>{
         const marketItems = await marketContract.methods.fetchMarketItems().call({from:account});
         let index = 0;
+        let isTokenAir = false
         for(let i = 0;i < marketItems.length; i ++) {
             if(marketItems[i].itemId === itemId) {
+                isTokenAir = marketItems[i].nftContract === getAirNftAddress()
                 setTokenId(marketItems[i].tokenId.toString());
                 setOwnerAddress(marketItems[i].seller.toString());
                 index = i;
                 break;
             }
         }
-        const nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({from:account});
+
+        let nftHash = null
+        if (isTokenAir)
+            nftHash = await airnftContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({from:account});
+        else
+            nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({from:account});
+
         const res = await fetch(nftHash);
         const json = await res.json();
+        setIsAIR(isTokenAir);
         setDna(json.dna);
         setAttr(json.attributes);
-    }, [account, marketContract, itemId, happyCowsContract])
+    }, [account, marketContract, airnftContract, itemId, happyCowsContract])
 
     useEffect(() => {
         fetchNft()
@@ -118,7 +132,7 @@ const NftDataRightComponent = ({itemId} : NftDataRightComponentInterface) => {
                         <div style={{color: isDark ? 'white' : '#694f4e'}}>Contract Address</div>
                         <NftOnChainLinkStyle>
                             <Link to="/" style={{textDecoration: 'underline', color: isDark ? 'white' : '#431216'}}>
-                                {getHappyCowAddress()}
+                                {isAIR ? getAirNftAddress() : getHappyCowAddress()}
                             </Link>
                         </NftOnChainLinkStyle>
                     </NftOnChainEachData>
@@ -140,12 +154,14 @@ const NftDataRightComponent = ({itemId} : NftDataRightComponentInterface) => {
                             BSC
                         </NftOnChainLinkStyle>
                     </NftOnChainEachData> */}
-                    <NftOnChainEachData>
-                        <div style={{color: isDark ? 'white' : '#694f4e'}}>DNA</div>
-                        <NftOnChainLinkStyle style={{color: isDark ? 'white' : ''}}>
-                            {dna}
-                        </NftOnChainLinkStyle>
-                    </NftOnChainEachData>
+                    {dna && 
+                        <NftOnChainEachData>
+                            <div style={{color: isDark ? 'white' : '#694f4e'}}>DNA</div>
+                            <NftOnChainLinkStyle style={{color: isDark ? 'white' : ''}}>
+                                {dna}
+                            </NftOnChainLinkStyle>
+                        </NftOnChainEachData>
+                    }
                     {
                         attr.map((item) => (
                             <NftOnChainEachData key={item.trait_type}>

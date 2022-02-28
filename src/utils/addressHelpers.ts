@@ -29,3 +29,9 @@ export const getMarketAddress = () => {
 export const getHappyCowAddress = () => {
   return addresses.happycow[chainId]
 }
+export const getAirNftAddress = () => {
+  return addresses.airnft[chainId]
+}
+export const getStakingAddress = () => {
+  return addresses.staking[chainId]
+}

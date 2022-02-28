@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
 import {Button} from '@pancakeswap-libs/uikit'
+import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import MilkToken from 'config/abi/MilkToken.json'
@@ -10,7 +11,7 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from "web3-utils"
 import Web3 from "web3";
 import { usePriceCakeBusd } from 'state/hooks'
-import { getHappyCowAddress, getMilkAddress, getMarketAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMilkAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext';
 import { PINATA_BASE_URI } from 'config/constants/nfts';
@@ -113,9 +114,9 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
     const { account } = useWallet()
     // const [selectedToken, setSelectedToken] = useState('Milk');
     const selectedToken = 'Milk';
+    const [isAIR, setIsAIR] = useState(false);
     const [image, setImage] = useState('');
     const [name, setName] = useState('');
-    const [tokenId, setTokenId] = useState('');
     const [salePrice, setSalePrice] = useState('');
     const [milkPrice, setMilkPrice] = useState(0);
     const [description, setDescription] = useState('');
@@ -132,13 +133,19 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
         return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
     }, []);
 
+    const airnftContract = useMemo(() => {
+        return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+    }, [])
     const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
 
     const fetchNft = useCallback(async ()=>{
         const marketItems = await marketContract.methods.fetchMarketItems().call({from:account});
+        let isAirToken = false
+        let tokenId = null
         for(let i = 0;i < marketItems.length; i ++) {
             if(marketItems[i].itemId === itemId) {
-                setTokenId(marketItems[i].tokenId.toString());
+                isAirToken = marketItems[i].nftContract === getAirNftAddress()
+                tokenId = marketItems[i].tokenId
                 setSalePrice(fromWei(marketItems[i].price, 'ether'));
                 if(marketItems[i].seller === account) {
                     setFlgMyNft(true);
@@ -147,20 +154,31 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
             }
         }
 
-        const nftHash = await happyCowsContract.methods.tokenURI(toBN(tokenId)).call({from:account});
+        if (!tokenId)
+            return
+
+        let nftHash = null
+        if (isAirToken)
+            nftHash = await airnftContract.methods.tokenURI(toBN(tokenId)).call({from:account});
+        else
+            nftHash = await happyCowsContract.methods.tokenURI(toBN(tokenId)).call({from:account});
         const res = await fetch(nftHash);
         const json = await res.json();
 
         let imageUrl = json.image;
-        imageUrl = imageUrl.slice(7);
-        setImage(`${PINATA_BASE_URI}${imageUrl}`);
+        if (isAirToken) {
+            setImage(imageUrl);
+        } else {
+            imageUrl = imageUrl.slice(7);
+            setImage(`${PINATA_BASE_URI}${imageUrl}`);
+        }
+        setIsAIR(isAirToken)
         setName(json.name);
         setDescription(json.description);
 
         setMilkPrice(cakePriceUsd.toNumber());
 
-    }, [account, marketContract, itemId, happyCowsContract, tokenId, cakePriceUsd])
-
+    }, [account, marketContract, airnftContract, itemId, happyCowsContract, cakePriceUsd])
     useEffect(() => {
         fetchNft();
     },[fetchNft])
@@ -179,7 +197,10 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
                 toast.success('Approved Milk token.');
             }
 
-            await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({from: account});
+            if (isAIR)
+                await marketContract.methods.createMarketSale(getAirNftAddress(), itemId).send({from: account});
+            else
+                await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({from: account});
             history.push("/nft-market");
             toast.success('Successfully bought NFT.');
         } catch (error) {

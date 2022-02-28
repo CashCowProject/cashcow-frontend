@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Web3 from "web3";
 import { fromWei, AbiItem } from "web3-utils";
+import AirNfts from 'config/abi/AirNft.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
-import { getHappyCowAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getAirNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts';
 import { getNumberSuffix } from 'utils/formatBalance';
@@ -130,8 +131,17 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
         return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
     }, []) 
 
+    const airnftContract = useMemo(() => {
+        return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+    }, [])
+
     const fetchNft = useCallback(async ()=>{
-        const nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({from:account});
+        let nftHash = null
+        const isAIR = nftEachItem.nftContract === getAirNftAddress()
+        if (isAIR)
+            nftHash = await airnftContract.methods.tokenURI(nftEachItem.tokenId).call({from:account})
+        else
+            nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({from:account})
         if(nftEachItem.seller === account) {
             setFlgMyNft(true);
         }
@@ -139,13 +149,19 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
         const json = await res.json();
         
         let imageUrl = json.image;
-        imageUrl = imageUrl.slice(7);
-        setImage(`${PINATA_BASE_URI}${imageUrl}`);
+        if (isAIR) {
+            imageUrl = imageUrl.slice(7);
+            setImage(`${PINATA_BASE_URI}${imageUrl}`);
+        } else {
+            imageUrl = imageUrl.slice(7);
+            setImage(`${PINATA_BASE_URI}${imageUrl}`);
+        }
+        
         setName(json.name);
 
         setMilkPrice(cakePriceUsd.toNumber());
 
-    }, [account, happyCowsContract, nftEachItem, cakePriceUsd])
+    }, [account, happyCowsContract, airnftContract, nftEachItem, cakePriceUsd])
 
     useEffect(() => {
         fetchNft();

@@ -9,6 +9,7 @@ import { ThemeContextProvider } from 'contexts/ThemeContext'
 import { BlockContextProvider } from 'contexts/BlockContext'
 import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { LoadingContextProvider } from 'contexts/LoadingContext'
+import { StakeContextProvider } from 'contexts/StakeContext'
 import store from 'state'
 
 const Providers: React.FC = ({ children }) => {
@@ -28,7 +29,9 @@ const Providers: React.FC = ({ children }) => {
             <BlockContextProvider>
               <RefreshContextProvider>
                 <LoadingContextProvider>
-                  <ModalProvider>{children}</ModalProvider>
+                  <StakeContextProvider>
+                    <ModalProvider>{children}</ModalProvider>
+                  </StakeContextProvider>
                 </LoadingContextProvider>
               </RefreshContextProvider>
             </BlockContextProvider>
