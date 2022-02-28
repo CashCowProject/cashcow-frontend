@@ -82,13 +82,14 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
         const tmpTokenId = myToken.tokenId
 
         if (!tmpTokenId) return;
-
+      
         let nftHash = null; 
         if (!myToken.isAIR) {
             nftHash = await happyCowsContract.methods.tokenURI(toBN(tmpTokenId)).call({from:account});
         } else {
             nftHash = await airnftContract.methods.tokenURI(toBN(tmpTokenId)).call({from:account});
         }
+
         const res = await fetch(nftHash);
         const json = await res.json();
         setDna(json.dna);
@@ -96,7 +97,7 @@ const MyNftDataRightComponent = ({myToken} : MyNftDataRightComponentInterface) =
         setTokenId(myToken.tokenId);
 
     }, [myToken, account, happyCowsContract, airnftContract])
-
+    
     useEffect(() => {
         fetchNft()
     }, [myToken, fetchNft])

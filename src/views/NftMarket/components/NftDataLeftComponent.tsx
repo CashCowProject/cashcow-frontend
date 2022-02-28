@@ -136,7 +136,6 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
     const airnftContract = useMemo(() => {
         return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
     }, [])
-
     const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
 
     const fetchNft = useCallback(async ()=>{
@@ -180,7 +179,6 @@ const NftDataLeftComponent = ({itemId} : NftDataLeftComponentInterface) => {
         setMilkPrice(cakePriceUsd.toNumber());
 
     }, [account, marketContract, airnftContract, itemId, happyCowsContract, cakePriceUsd])
-
     useEffect(() => {
         fetchNft();
     },[fetchNft])

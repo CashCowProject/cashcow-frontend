@@ -80,7 +80,6 @@ const MyNftsDeatail = () => {
             for(let i = 0; i < items.length; i ++) {
                 if(items[i].isSold === false) {
                     tokenIds.push({tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress()})
-
                     if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
                     tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
                     currentIndex ++;

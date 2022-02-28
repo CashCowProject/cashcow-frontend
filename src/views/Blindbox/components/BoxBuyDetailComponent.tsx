@@ -122,7 +122,6 @@ const BoxBuyDetailComponent = () => {
 
     
     const buyButtonHandler = async () => {
-
         setMintingState(false);
         setLoading(true);
         const priceWei = toWei(toBN("10000000000000000000000000000000000000000"), 'ether');
