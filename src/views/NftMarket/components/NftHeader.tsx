@@ -88,6 +88,7 @@ const filterByCollection = [
     { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
     { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
     { label: 'Crazy Cows', value: { field: 'CrazyCows', direction: 'asc' } },
+    { label: 'Genises', value: { field: 'AirNFT', direction: 'asc' } },
 ]
 
 

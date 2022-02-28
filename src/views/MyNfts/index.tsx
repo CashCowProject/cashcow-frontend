@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {useEffect, useState, useMemo, useCallback,} from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
@@ -5,10 +6,12 @@ import { Heading } from '@pancakeswap-libs/uikit'
 import { AbiItem } from "web3-utils"
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from "web3";
+import AirNfts from 'config/abi/AirNft.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import Market from 'config/abi/Market.json'
 import Page from 'components/layout/Page'
-import { getHappyCowAddress, getMarketAddress } from 'utils/addressHelpers'
+import airNFTs from 'config/constants/airnfts'
+import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
 import EachNft from './components/EachNft'
 
 const StyledHero = styled.div`
@@ -35,10 +38,31 @@ const MyNfts = () => {
         return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
     }, [])
 
+    const airnftContract = useMemo(() => {
+        return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+    }, [])
+
     const getTokenHashes = useCallback(
         async () => {
             const tmpMyTokens = [];
-            let tokenIds = await happyCowsContract.methods.fetchMyNfts().call({from: account});
+            const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({from: account})
+            const tokenIds = []
+            _.map(happyCowTokens, itm => {
+                tokenIds.push({tokenId: itm, isAIR: false})
+            });
+            
+            // retrieve my nft from air
+            const airNftOwners = []
+            _.map(airNFTs, nft => {
+                airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+            });
+            const owners = await Promise.all(airNftOwners)
+            _.map(owners, (owner, idx) => {
+                if (owner.toLowerCase() !== account.toLowerCase())
+                    return
+                
+                tokenIds.push({tokenId: airNFTs[idx], isAIR: true})
+            });
             const items = await marketContract.methods.fetchItemsCreated().call({from: account});
             const tokenIdLength = tokenIds.length;
             for(let i = 0; i < tokenIdLength; i ++) {
@@ -48,10 +72,8 @@ const MyNfts = () => {
             let currentIndex = 0;
             for(let i = 0; i < items.length; i ++) {
                 if(items[i].isSold === false) {
-                    tokenIds = [
-                        ...tokenIds, 
-                        items[i].tokenId
-                    ];
+                    tokenIds.push({tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress()})
+
                     if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
                     tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
                     currentIndex ++;
@@ -59,19 +81,23 @@ const MyNfts = () => {
             }
             
             const myTokenHashes = [];
-            for(let i = 0; i < tokenIds.length; i ++) {
-                myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i]).call());
+            for (let i = 0; i < tokenIds.length; i ++) {
+                if (!tokenIds[i].isAIR)
+                    myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call());
+                else
+                    myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call());
             }
             const result = await Promise.all(myTokenHashes);
             
-            for(let i = 0; i < tokenIds.length; i ++) {
+            for (let i = 0; i < tokenIds.length; i ++) {
                 if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
-                tmpMyTokens[i].tokenId = tokenIds[i]
+                tmpMyTokens[i].tokenId = tokenIds[i].tokenId
                 tmpMyTokens[i].tokenHash = result[i]
+                tmpMyTokens[i].isAIR = tokenIds[i].isAIR
             }
             setMyTokens(tmpMyTokens);
         },
-        [account, happyCowsContract, marketContract]
+        [account, happyCowsContract, marketContract, airnftContract]
     )
     useEffect( () => {
         getTokenHashes()
