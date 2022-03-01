@@ -88,6 +88,7 @@ const filterByCollection = [
     { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
     { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
     { label: 'Crazy Cows', value: { field: 'CrazyCows', direction: 'asc' } },
+    { label: 'Genises', value: { field: 'AirNFT', direction: 'asc' } },
 ]
 
 
@@ -115,7 +116,7 @@ const NftHeader = () => {
                 <SearchBox>
                     <InputTag placeholder="Please enter keywords to search" />
                     <LinkTag>
-                        <img alt="search icon" src="https://jojo.fun/img/icon-search.eaf98785.svg"/>
+                        <img alt="search icon" style={{ width: 30, height: 30 }} src="https://img.icons8.com/FFFFFF/search" />
                     </LinkTag>
                 </SearchBox>
             </RightContainer>

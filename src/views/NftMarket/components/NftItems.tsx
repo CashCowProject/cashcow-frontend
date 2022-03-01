@@ -59,6 +59,14 @@ const NftItems = () => {
                     }
                 }
                 break;
+            case "AirNFT":
+                for(let i = 0; i < filteredTmpMarketItems.length; i ++) {
+                    if(filteredTmpMarketItems[i].nftContract === addresses.airnft[chainId]) {
+                        filteredMarketItems[index] = filteredTmpMarketItems[i];
+                        index ++;
+                    }
+                }
+                break;
             default:
                 break;
         }
