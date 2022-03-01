@@ -1,37 +1,120 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { setSortOrder, setCollectionType } from 'state/markets'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import useTheme from 'hooks/useTheme'
+import Select from '../../../components/Select/Select'
 
-const NftDetailHeaderContainer = styled.div`
-    font-size: 15px;
-    color: #694f4e;
+const NftHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
-const NftDetailPrevious = styled.div`
-    display: inline;
+const LeftContainer = styled.div`
+  flex: left;
+  align-items: center;
 `
-export interface NftDetailHeaderInterface {
-    collectionName?: string;
+
+const RightContainer = styled.div`
+  display: flex;
+  flex: right;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-top: 10px;
+    flex-wrap: wrap;
+
+    > div {
+      width: 40%;
+      margin-top: 10px;
+    }
+  }
+`
+
+const SearchBox = styled.div`
+  display: flex;
+  position: relative;
+`
+
+const InputTag = styled.input`
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  height: 44px;
+  line-height: 44px;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 0 68px 0 16px;
+  display: flex;
+  outline: none;
+  width: 230px;
+  color: #431216;
+  background: transparent;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const LinkTag = styled.a`
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+  height: auto;
+  padding: 0 20px;
+  transform: translateY(0) !important;
+  border: 0 none;
+  background: #00d86c;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+`
+
+const sortByItems = [
+  { label: 'Recently listed', value: { field: 'RecentlyListed', direction: 'desc' } },
+  { label: 'Lowest price', value: { field: 'LowestPrice', direction: 'asc' } },
+  { label: 'Highest price', value: { field: 'HighestPrice', direction: 'desc' } },
+]
+
+const filterByCollection = [
+  { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
+  { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
+  { label: 'Genesis', value: { field: 'AirNFT', direction: 'asc' } },
+]
+
+const NftHeader = () => {
+  const dispatch = useDispatch()
+  const { isDark } = useTheme()
+
+  return (
+    <NftHeaderContainer>
+      <LeftContainer style={{ color: isDark ? 'white' : '' }}>Nft Marketplace</LeftContainer>
+      <RightContainer>
+        <Select
+          options={sortByItems}
+          onOptionChange={(option) => dispatch(setSortOrder(option.value))}
+          style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+        />
+        <Select
+          options={filterByCollection}
+          onOptionChange={(option) => dispatch(setCollectionType(option.value))}
+          style={{ marginRight: '15px' }}
+        />
+        {/* <SearchBox>
+          <InputTag placeholder="Please enter keywords to search" />
+          <LinkTag>
+            <img alt="search icon" style={{ width: 30, height: 30 }} src="https://img.icons8.com/FFFFFF/search" />
+          </LinkTag>
+        </SearchBox> */}
+      </RightContainer>
+    </NftHeaderContainer>
+  )
 }
 
-const NftDetailHeader = ({collectionName} : NftDetailHeaderInterface) => {
-    const { isDark } = useTheme()
-
-    return (
-        <NftDetailHeaderContainer>
-            <NftDetailPrevious>
-                <Link to="/nft-market" style={{color: isDark ? 'white' : '#431216'}}>
-                    NFT Market
-                </Link>
-                <span style={{padding: '0 8px', color: isDark ? 'white' : ''}}>{'>'}</span>
-            </NftDetailPrevious>
-            <NftDetailPrevious>
-                <span style={{fontSize: '15px', color: isDark ? 'white' : '#694f4e'}}>
-                    {collectionName}
-                </span>
-            </NftDetailPrevious>
-        </NftDetailHeaderContainer>
-    )
-}
-
-export default NftDetailHeader
+export default NftHeader
