@@ -149,7 +149,7 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     if (!isAIR) {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
-    }
+    } else setImage(imageUrl)
 
     setName(json.name)
 

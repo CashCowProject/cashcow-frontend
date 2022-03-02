@@ -101,22 +101,6 @@ const StakeItem = ({ data, index }) => {
     }
   `
 
-  const UpgradeBtn = styled(Tag)`
-    border-color: ${!isDark ? '#fad551' : '#101820'};
-    background-color: ${!isDark ? 'rgba(250,213,81,.2)' : 'rgba(16,24,32,.2)'};
-    color: ${!isDark ? '#361B72' : 'white'};
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    padding: 16px 12px;
-    font-size: 18px;
-    border-radius: 12px;
-    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-    &:hover {
-      transform: scale(1.04);
-    }
-  `
-
   const [nftInfo, setNFTInfo] = useState({ tokenName: '', tokenId: '', imgUrl: '', isAIR: false })
   const fetchNft = useCallback(async () => {
     if (!data || !data.tokenId) return

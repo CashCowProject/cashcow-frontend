@@ -187,10 +187,11 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
     setDescription(json.description)
 
     let imageUrl = json.image
-
     if (!myToken.isAIR) {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else {
+      setImage(imageUrl)
     }
   }, [account, myToken])
 

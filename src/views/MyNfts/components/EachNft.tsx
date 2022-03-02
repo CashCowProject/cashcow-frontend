@@ -146,7 +146,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
       if (!eachMyToken.isAIR) {
         imageUrl = imageUrl.slice(7)
         setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`)
-      }
+      } else setImageIpfsHash(imageUrl)
       setName(json.name)
     } catch (e) {
       // console.log(e);
