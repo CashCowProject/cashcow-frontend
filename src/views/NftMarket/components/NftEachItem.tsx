@@ -146,11 +146,12 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     const json = await res.json()
 
     let imageUrl = json.image
-    if (!isAIR) {
+    if (isAIR) {
+      setImage(imageUrl)
+    } else {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
-    } else setImage(imageUrl)
-
+    }
     setName(json.name)
 
     setMilkPrice(cakePriceUsd.toNumber())
