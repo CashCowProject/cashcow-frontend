@@ -11,9 +11,6 @@ export const stake = async (masterChefContract, pid, amount, account) => {
   // Hardcoded hack by CryptoWhatElse for pool number 0 which has only 9 decimals (COW)
   const decimals = pid === 3 ? 9 : 18
 
-  console.log('decimals', decimals)
-  console.log('pid', pid)
-
   return masterChefContract.methods
     .deposit(pid, new BigNumber(amount).times(new BigNumber(10).pow(decimals)).toString())
     .send({ from: account })

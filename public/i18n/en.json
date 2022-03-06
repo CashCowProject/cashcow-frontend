@@ -1241,6 +1241,48 @@
         "stringId": 10005,
         "text": "Market Cap"
       }
+    },
+    {
+      "data": {
+        "stringId": 10006,
+        "text": "NFT Staking Pool"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10007,
+        "text": "Harvest"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10008,
+        "text": "Total Staked"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10009,
+        "text": "My Staked"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10010,
+        "text": "Total Mining HashRate"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10011,
+        "text": "My Mining HashRate"
+      }
+    },
+    {
+      "data": {
+        "stringId": 10012,
+        "text": "1000 Mining HashRate/24H to get"
+      }
     }
   ],
   "pagination": {

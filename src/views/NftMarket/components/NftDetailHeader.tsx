@@ -4,34 +4,32 @@ import { Link } from 'react-router-dom'
 import useTheme from 'hooks/useTheme'
 
 const NftDetailHeaderContainer = styled.div`
-    font-size: 15px;
-    color: #694f4e;
+  font-size: 15px;
+  color: #694f4e;
 `
 const NftDetailPrevious = styled.div`
-    display: inline;
+  display: inline;
 `
 export interface NftDetailHeaderInterface {
-    collectionName?: string;
+  collectionName?: string
 }
 
-const NftDetailHeader = ({collectionName} : NftDetailHeaderInterface) => {
-    const { isDark } = useTheme()
+const NftDetailHeader = ({ collectionName }: NftDetailHeaderInterface) => {
+  const { isDark } = useTheme()
 
-    return (
-        <NftDetailHeaderContainer>
-            <NftDetailPrevious>
-                <Link to="/nft-market" style={{color: isDark ? 'white' : '#431216'}}>
-                    NFT Market
-                </Link>
-                <span style={{padding: '0 8px', color: isDark ? 'white' : ''}}>{'>'}</span>
-            </NftDetailPrevious>
-            <NftDetailPrevious>
-                <span style={{fontSize: '15px', color: isDark ? 'white' : '#694f4e'}}>
-                    {collectionName}
-                </span>
-            </NftDetailPrevious>
-        </NftDetailHeaderContainer>
-    )
+  return (
+    <NftDetailHeaderContainer>
+      <NftDetailPrevious>
+        <Link to="/nft-market" style={{ color: isDark ? 'white' : '#431216' }}>
+          NFT Market
+        </Link>
+        <span style={{ padding: '0 8px', color: isDark ? 'white' : '' }}>{'>'}</span>
+      </NftDetailPrevious>
+      <NftDetailPrevious>
+        <span style={{ fontSize: '15px', color: isDark ? 'white' : '#694f4e' }}>{collectionName}</span>
+      </NftDetailPrevious>
+    </NftDetailHeaderContainer>
+  )
 }
 
 export default NftDetailHeader

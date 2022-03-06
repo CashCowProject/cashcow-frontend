@@ -85,11 +85,10 @@ const BoxBuyDetailComponent = () => {
             const currentBlockNumber = await web3.eth.getBlockNumber();
             const blockNumber = await happyCowsContract.methods.blockNumber().call();
 
-            if (currentBlockNumber < blockNumber) {
-                setMintingState(false);
-            }
+            // if (currentBlockNumber < blockNumber) {
+            //     setMintingState(false);
+            // }
         }
-
         setMilkPrice(cakePriceUsd.toNumber());
         getTotalSupply()
     }, [account, connect, cakePriceUsd])
@@ -123,35 +122,6 @@ const BoxBuyDetailComponent = () => {
 
     
     const buyButtonHandler = async () => {
-        // try {
-        //     const priceWei = toWei(toBN(10000), 'ether');
-        //     const json = getJSONFile();
-        //     const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
-        //     await axios.post(url, json, {
-        //             headers: {
-        //                 pinata_api_key: "1b1f7b061096b2fac570",
-        //                 pinata_secret_api_key: "789184e23409d8b0979b6f3b758c80bab8df4de0e27914081ca2c4275746a99f"
-        //             }
-        //         })
-        //         .then(async function (response) {
-        //             const ipfsHash = response.data.IpfsHash;
-        //             await milkTokenContract.methods.approve(getHappyCowAddress(), priceWei).send({ from: account });
-
-        //             await happyCowsContract.methods.buyBlindBox(ipfsHash, getMarketAddress()).send({from: account});
-
-        //             const happyCowsBalance = await milkTokenContract.methods.balanceOf(getHappyCowAddress()).call();
-
-        //             console.log("Balance of Milk token of BlindBox",happyCowsBalance);
-        //             const amount = mintedAmount + 1;
-        //             setMintedAmount(amount); 
-        //         })
-        //         .catch(function (error) {
-        //             console.log("Error Occurs: ", error);
-        //         });
-        // } catch (e) {
-        //     console.log(e);
-        // }
-
         setMintingState(false);
         setLoading(true);
         const priceWei = toWei(toBN("10000000000000000000000000000000000000000"), 'ether');
