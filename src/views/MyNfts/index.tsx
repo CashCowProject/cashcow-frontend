@@ -10,7 +10,7 @@ import AirNfts from 'config/abi/AirNft.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import Market from 'config/abi/Market.json'
 import Page from 'components/layout/Page'
-import airNFTs from 'config/constants/airnftsTemp'
+import airNFTs from 'config/constants/airnfts'
 import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
 import EachNft from './components/EachNft'
 

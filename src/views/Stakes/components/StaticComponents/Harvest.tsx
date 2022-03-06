@@ -13,7 +13,7 @@ import { StakeContext } from 'contexts/StakeContext'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import useI18n from 'hooks/useI18n'
-import airNFTs from 'config/constants/airnftsTemp'
+import airNFTs from 'config/constants/airnfts'
 import { getNumberSuffix } from 'utils/formatBalance'
 
 const web3 = new Web3(Web3.givenProvider)
