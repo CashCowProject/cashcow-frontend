@@ -71,7 +71,7 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Whitepaper',
-        href: 'https://cashcowprotocol.gitbook.io/cashcow/',
+        href: 'https://cashcow-protocol.gitbook.io/cashcow-protocol/',
       },
     ],
   },

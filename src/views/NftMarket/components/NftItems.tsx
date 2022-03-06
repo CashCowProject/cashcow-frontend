@@ -50,9 +50,9 @@ const NftItems = () => {
           }
         }
         break
-      case 'CrazyCows':
+      case 'AirNFT':
         for (let i = 0; i < filteredTmpMarketItems.length; i++) {
-          if (filteredTmpMarketItems[i].nftContract === '0x00000000000000000000000000000000000000') {
+          if (filteredTmpMarketItems[i].nftContract === addresses.airnft[chainId]) {
             filteredMarketItems[index] = filteredTmpMarketItems[i]
             index++
           }
