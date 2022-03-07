@@ -7,7 +7,7 @@ const config: MenuEntry[] = [
     href: '/',
   },
   {
-    label: 'Buy',
+    label: 'Trade',
     icon: 'TradeIcon',
     items: [
       {
@@ -20,13 +20,38 @@ const config: MenuEntry[] = [
       },
     ],
   },
+
   {
-    label: 'Farms',
-    icon: 'FarmIcon',
-    href: '/farms',
+    label: 'Earn',
+    icon: 'PoolIcon',
+    items: [
+      {
+        label: 'Farms',
+        href: '/farms',
+      },
+      {
+        label: 'Milk Bar',
+        href: '/milkbar',
+      },
+    ],
   },
+
+
+  // {
+  //   label: 'Farms',
+  //   icon: 'FarmIcon',
+  //   href: '/farms',
+  // },
+
   {
-    label: 'Staking',
+    label: 'NFT Blind Box',
+    // icon: 'NftIcon',
+    icon: 'TicketIcon',
+    href: '/blind-box'
+  },
+
+  {
+    label: 'NFT Staking',
     icon: 'TicketIcon',
     items: [
       {
@@ -39,11 +64,13 @@ const config: MenuEntry[] = [
       }
     ]
   },
-  {
-    label: 'Milk Bar',
-    icon: 'PoolIcon',
-    href: '/milkbar',
-  },
+  // {
+  //   label: 'Milk Bar',
+  //   icon: 'PoolIcon',
+  //   href: '/milkbar',
+  // },
+
+
   // {
   //   label: 'Pools',
   //   icon: 'PoolIcon',
@@ -60,18 +87,15 @@ const config: MenuEntry[] = [
   //   href: '/nft',
   // },
   {
-    label: 'Blind Box',
-    icon: 'NftIcon',
-    href: '/blind-box'
-  },
-  {
     label: 'NFT Market',
-    icon: 'NftIcon',
+    // icon: 'NftIcon',
+    icon: 'TicketIcon',
     href: '/nft-market'
   },
   {
     label: 'My NFTs',
-    icon: 'NftIcon',
+    // icon: 'NftIcon',
+    icon: 'TicketIcon',
     href: '/myNFTs'
   },
   
