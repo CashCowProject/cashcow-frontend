@@ -30,6 +30,12 @@ const GlobalStyle = createGlobalStyle`
   {
       display: none;
   }
+  .LinkItemContainer {
+    width: 25%;
+    @media (max-width: 500px) {
+      width: 100%;
+    }
+  }
 `
 
 export default GlobalStyle

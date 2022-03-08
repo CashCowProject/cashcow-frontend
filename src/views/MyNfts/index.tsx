@@ -106,7 +106,7 @@ const MyNfts = () => {
       <NftItemContainer>
         {myTokens.map((EachMyToken, index) => {
           return (
-            <Link key={EachMyToken.tokenHash} to={`/myNFTs/${index}`} style={{ width: '25%' }}>
+            <Link key={EachMyToken.tokenHash} to={`/myNFTs/${index}`} className="LinkItemContainer">
               <EachNft eachMyToken={EachMyToken} key={EachMyToken.tokenId} />
             </Link>
           )
