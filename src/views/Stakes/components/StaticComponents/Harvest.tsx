@@ -125,7 +125,7 @@ const Harvet = ({ rewardAllMilk, index }) => {
           {getNumberSuffix(rewardAllMilk / 1000000, 3)}
         </Text>
         <Text textTransform="uppercase" color="textSubtle" fontSize="18px" style={{ lineHeight: 2 }}>
-          {`≈ $${(cakePriceUsd.toNumber() * rewardAllMilk) / 1000000}`}
+          {`≈ $${getNumberSuffix((cakePriceUsd.toNumber() * rewardAllMilk) / 1000000, 7)}`}
         </Text>
       </Flex>
     </Flex>
