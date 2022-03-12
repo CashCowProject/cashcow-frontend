@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import Page from 'components/layout/Page'
 import BlindBoxItem from './components/BlindBoxItem'
 

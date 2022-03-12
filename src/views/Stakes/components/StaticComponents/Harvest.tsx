@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { useContext } from 'react'
-import { Flex, Image, Text, Button } from '@pancakeswap-libs/uikit'
+import { Flex, Image, Text, Button } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
 import { getHappyCowAddress, getStakingAddress, getAirNftAddress } from 'utils/addressHelpers'

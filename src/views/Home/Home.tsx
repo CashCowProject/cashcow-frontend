@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Heading, Text, BaseLayout } from '@pancakeswap-libs/uikit'
+import { Heading, Text, BaseLayout } from 'cashcow-uikit'
 import Page from 'components/layout/Page'
 import FarmStakingCard from './components/FarmStakingCard'
 import CakeStats from './components/CakeStats'

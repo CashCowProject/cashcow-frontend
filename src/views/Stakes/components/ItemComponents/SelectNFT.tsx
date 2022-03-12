@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {useContext, useState, useMemo} from 'react'
 import styled from 'styled-components'
 import { StakeContext } from 'contexts/StakeContext'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
 import useI18n from 'hooks/useI18n'
 import Modal from 'react-modal';

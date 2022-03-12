@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Flex, Text, Tag } from '@pancakeswap-libs/uikit'
+import { Flex, Text, Tag } from 'cashcow-uikit'
 import useI18n from 'hooks/useI18n'
 import useTheme from 'hooks/useTheme'
 import styled from 'styled-components'

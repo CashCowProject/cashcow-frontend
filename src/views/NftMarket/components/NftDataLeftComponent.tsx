@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect, useContext } from 're
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { Button } from '@pancakeswap-libs/uikit'
+import { Button } from 'cashcow-uikit'
 import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
 import HappyCows from 'config/abi/HappyCows.json'

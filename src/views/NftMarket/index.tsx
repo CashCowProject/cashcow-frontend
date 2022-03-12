@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Page from 'components/layout/Page'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import NftHeader from './components/NftHeader'
 import NftItems from './components/NftItems'
 
