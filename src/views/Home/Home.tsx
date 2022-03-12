@@ -1,11 +1,14 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { Heading, Text, BaseLayout } from '@pancakeswap-libs/uikit'
 import Page from 'components/layout/Page'
 import FarmStakingCard from './components/FarmStakingCard'
 import CakeStats from './components/CakeStats'
 import TotalValueLockedCard from './components/TotalValueLockedCard'
 import TwitterCard from './components/TwitterCard'
+
+
+
 
 const Hero = styled.div`
   align-items: center;
@@ -16,13 +19,17 @@ const Hero = styled.div`
   justify-content: center;
   flex-direction: column;
   margin: auto;
-  margin-bottom: 32px;
+  margin-bottom: 32px;  
   padding-top: 116px;
   text-align: center;
+  height: 175px;
+ 
+
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/cow/1-home.png'), url('/images/cow/3-home.png');
-    background-position: left center, right center;
-    height: 165px;
+    background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'), url('/images/cow/2cowdrinkmilk.png');
+    background-position: left center, center bottom, right center;
+    height: 300px, 185px, 185px;  
+    width:  300px, 185px, 185px;  
     padding-top: 0;
   }
 `
@@ -47,17 +54,42 @@ const Cards = styled(BaseLayout)`
     & > div {
       grid-column: span 6;
     }
-  }
+  }  
 `
+// const Bgimage = styled.div`
+// // color:  {false} ? ${({ theme }) => theme.colors.background} : ${({ theme }) => theme.colors.borderColor};
+// // background-image: url('/images/cow/home-backgroundlight.png')
+
+// background-image: (true) ? url('/images/cow/home-backgroundlight.png') : url('/images/cow/3-home.png');
+
+// `
+
+
+// const tema = `${ ({theme })=> theme.isDark} `
+
+
+let tema;
 
 const Home: React.FC = () => {
+
+  const {isDark}=useTheme();
   
+
   return (
-    <Page>
+
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        
+      }}
+    >
       <Hero>
-        <Heading as="h1" size="xl" mb="15px" mt="20px" color="secondary">
-          CashCow Protocol
-        </Heading>
+        <Heading as="h1" size="lg"   >
+        CashCow Protocol
+        </Heading>        
         <Text>Earn MILK By Simply Staking Your COW</Text>
       </Hero>
       <div>
