@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useTheme } from 'styled-components'
 import Page from 'components/layout/Page'
 import { StakeContext } from 'contexts/StakeContext'
 import { LoadingContext } from 'contexts/LoadingContext'
@@ -31,6 +32,7 @@ const Stakes = () => {
   const { account } = useWallet()
   const { initMyNFTS, initSelectedNFTs } = useContext(StakeContext)
   const { setLoading } = useContext(LoadingContext)
+  const { isDark } = useTheme()
 
   useEffect(() => {
     if (!account) return
@@ -94,7 +96,14 @@ const Stakes = () => {
   }, [account, index])
 
   return (
-    <Page>
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center' }}>
         <StatisticsInfo index={index} />
       </Heading>

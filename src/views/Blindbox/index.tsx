@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Heading } from 'cashcow-uikit'
 import Page from 'components/layout/Page'
@@ -20,8 +20,17 @@ const StyledHero = styled.div`
 
 const Blindbox = () => {
 
+    const { isDark } = useTheme()
+
     return (
-        <Page>
+        <Page
+            style={{
+                backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+            }}
+        >
             <StyledHero>
                 <Heading as="h1" size="lg" color="secondary" mb="20px">
                     Blind Box
@@ -29,7 +38,7 @@ const Blindbox = () => {
             </StyledHero>
             {
                 boxData.map((boxItem) => {
-                    return <Link key={boxItem.id} to={`/blind-box/${boxItem.id}`}><BlindBoxItem background={boxItem.image} itemId={boxItem.id} itemTitle={boxItem.itemTitle}/></Link>
+                    return <Link key={boxItem.id} to={`/blind-box/${boxItem.id}`}><BlindBoxItem background={boxItem.image} itemId={boxItem.id} itemTitle={boxItem.itemTitle} /></Link>
                 })
             }
         </Page>

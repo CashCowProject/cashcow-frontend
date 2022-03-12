@@ -1,6 +1,6 @@
 import React from 'react'
-import {useParams} from 'react-router-dom'
-import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
+import styled, { useTheme } from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import NftData from './components/NftData'
@@ -23,19 +23,27 @@ const NftDetailContainer = styled.div`
 
 const NftMarketDetail = () => {
     const { itemId } = useParams<boxParam>();
+    const { isDark } = useTheme();
 
     return (
-        <Page>
+        <Page
+            style={{
+                backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+            }}
+        >
             <StyledHero>
                 <Heading as="h1" size="lg" color="secondary" mb="20px">
-                NFT MarketPlace
+                    NFT MarketPlace
                 </Heading>
             </StyledHero>
-            <NftDetailHeader collectionName="HappyCow"/>
+            <NftDetailHeader collectionName="HappyCow" />
             <NftDetailContainer>
                 <NftData itemId={itemId} />
             </NftDetailContainer>
-            <NftMarketRule/>
+            <NftMarketRule />
         </Page>
     )
 }

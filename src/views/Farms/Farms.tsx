@@ -13,6 +13,7 @@ import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
 import useI18n from 'hooks/useI18n'
+import { useTheme } from 'styled-components'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import FarmTabButtons from './components/FarmTabButtons'
 import Divider from './components/Divider'
@@ -29,6 +30,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const bnbPrice = usePriceBnbBusd()
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
   const { tokenMode } = farmsProps
+  const {isDark} = useTheme()
 
   const dispatch = useDispatch()
   const { fastRefresh } = useRefresh()
@@ -91,7 +93,14 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   )
 
   return (
-    <Page>
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center' }}>
         {tokenMode
           ? TranslateString(10002, 'Stake tokens to earn MILK')
@@ -100,7 +109,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       <Heading as="h2" color="secondary" mb="12px" style={{ textAlign: 'center' }}>
         REMEMBER $COW Token has a 10% transaction fee that affects both deposits and withdrawals
       </Heading>
-      
+
       <Heading as="h4" color="secondary" mb="50px" style={{ textAlign: 'center' }}>
         All deposit fees will be used for Milk Buybacks and Burns
       </Heading>

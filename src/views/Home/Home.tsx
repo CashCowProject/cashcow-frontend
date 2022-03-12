@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { Heading, Text, BaseLayout } from 'cashcow-uikit'
 import Page from 'components/layout/Page'
 import FarmStakingCard from './components/FarmStakingCard'
@@ -72,18 +72,15 @@ let tema;
 
 const Home: React.FC = () => {
 
-  const {isDark}=useTheme();
-  
+  const {isDark}=useTheme(); 
 
   return (
-
     <Page
       style={{
         backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        
+        backgroundRepeat: 'no-repeat',        
       }}
     >
       <Hero>
