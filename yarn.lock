@@ -1853,7 +1853,7 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@https://github.com/CashCowProject/cashcow-uikit":
+"cashcow-uikit@https://github.com/CashCowProject/cashcow-uikit":
   version "0.10.2"
   resolved "https://github.com/CashCowProject/cashcow-uikit#a83f7bcf0de39fce013e8404bdb362f10cf88af6"
   dependencies:
@@ -5017,6 +5017,17 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
+
+cashcow-uikit@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/cashcow-uikit/-/cashcow-uikit-0.10.3.tgz#36e61e898beba3d815dbd42615e9af27333bc689"
+  integrity sha512-gbw212qVnxxNndUY/VoXPWHqZxyJLiHWjHrPsozbGqqsQePcfM7fI8aFVVu/fq89/y58BmQJCKZJtZOd2C7gNw==
+  dependencies:
+    "@types/lodash" "^4.14.162"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
 
 chalk@2.4.2, chalk@^2.0.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import { AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from 'web3'
@@ -106,7 +106,7 @@ const MyNfts = () => {
       <NftItemContainer>
         {myTokens.map((EachMyToken, index) => {
           return (
-            <Link key={EachMyToken.tokenHash} to={`/myNFTs/${index}`} style={{ width: '25%' }}>
+            <Link key={EachMyToken.tokenHash} to={`/myNFTs/${index}`} className="LinkItemContainer">
               <EachNft eachMyToken={EachMyToken} key={EachMyToken.tokenId} />
             </Link>
           )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Image, Text } from '@pancakeswap-libs/uikit'
+import { Flex, Image, Text } from 'cashcow-uikit'
 import useI18n from 'hooks/useI18n'
 import { usePriceCakeBusd } from 'state/hooks'
 import { getNumberSuffix } from 'utils/formatBalance';

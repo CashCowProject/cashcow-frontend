@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, Heading, Text } from '@pancakeswap-libs/uikit'
+import { Card, CardBody, Heading, Text } from 'cashcow-uikit'
 import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { Timeline } from 'react-twitter-widgets'

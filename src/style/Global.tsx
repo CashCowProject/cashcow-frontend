@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { PancakeTheme } from '@pancakeswap-libs/uikit'
+import { PancakeTheme } from 'cashcow-uikit'
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -29,6 +29,12 @@ const GlobalStyle = createGlobalStyle`
   iframe
   {
       display: none;
+  }
+  .LinkItemContainer {
+    width: 25%;
+    @media (max-width: 500px) {
+      width: 100%;
+    }
   }
 `
 

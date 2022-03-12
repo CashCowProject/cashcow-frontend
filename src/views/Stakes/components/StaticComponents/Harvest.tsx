@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { useContext } from 'react'
-import { Flex, Image, Text, Button } from '@pancakeswap-libs/uikit'
+import { Flex, Image, Text, Button } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
 import { getHappyCowAddress, getStakingAddress, getAirNftAddress } from 'utils/addressHelpers'
@@ -125,7 +125,7 @@ const Harvet = ({ rewardAllMilk, index }) => {
           {getNumberSuffix(rewardAllMilk / 1000000, 3)}
         </Text>
         <Text textTransform="uppercase" color="textSubtle" fontSize="18px" style={{ lineHeight: 2 }}>
-          {`≈ $${(cakePriceUsd.toNumber() * rewardAllMilk) / 1000000}`}
+          {`≈ $${getNumberSuffix((cakePriceUsd.toNumber() * rewardAllMilk) / 1000000, 3)}`}
         </Text>
       </Flex>
     </Flex>

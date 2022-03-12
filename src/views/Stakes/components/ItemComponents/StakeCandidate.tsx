@@ -13,7 +13,7 @@ import airNFTs from 'config/constants/airnfts'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import { LoadingContext } from 'contexts/LoadingContext'
-import { Tag } from '@pancakeswap-libs/uikit'
+import { Tag } from 'cashcow-uikit'
 
 const MultiplierTag = styled(Tag)`
   margin-left: 4px;
