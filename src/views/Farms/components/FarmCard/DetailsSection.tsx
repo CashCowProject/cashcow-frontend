@@ -55,8 +55,8 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         <StyledLinkExternal
           href={
             isTokenOnly
-              ? `${lpLabel === 'GOL' ? 'https://gol.finance' : 'https://pancakeswap.finance'}/swap?outputCurrency=${tokenAddresses[process.env.REACT_APP_CHAIN_ID]}`
-              : `${lpLabel === 'GOL' ? 'https://gol.finance' : 'https://pancakeswap.finance'}/add/${liquidityUrlPathParts}`
+              ? `${(lpLabel === 'GOL' || lpLabel === 'MILK-BNB GLP') ? 'https://gol.finance' : 'https://pancakeswap.finance'}/swap?outputCurrency=${tokenAddresses[process.env.REACT_APP_CHAIN_ID]}`
+              : `${(lpLabel === 'GOL' || lpLabel === 'MILK-BNB GLP') ? 'https://gol.finance' : 'https://pancakeswap.finance'}/add/${liquidityUrlPathParts}`
           }
         >
           {lpLabel}
