@@ -7,15 +7,11 @@ import CakeStats from './components/CakeStats'
 import TotalValueLockedCard from './components/TotalValueLockedCard'
 import TwitterCard from './components/TwitterCard'
 
-
-
-
 const Hero = styled.div`
   align-items: center;
   background-image: url('/images/cow/1-home.png');
   background-repeat: no-repeat;
   background-position: top center;
-  display: flex;
   justify-content: center;
   flex-direction: column;
   margin: auto;
@@ -29,7 +25,9 @@ const Hero = styled.div`
     background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'), url('/images/cow/2cowdrinkmilk.png');
     background-position: left center, center bottom, right center;
     height: 300px, 185px, 185px;  
-    width:  300px, 185px, 185px;  
+    width:  300px, 185px, 185px;
+    margin-right: 3%;
+    margin-left: 3%;
     padding-top: 0;
   }
 `
@@ -56,19 +54,6 @@ const Cards = styled(BaseLayout)`
     }
   }  
 `
-// const Bgimage = styled.div`
-// // color:  {false} ? ${({ theme }) => theme.colors.background} : ${({ theme }) => theme.colors.borderColor};
-// // background-image: url('/images/cow/home-backgroundlight.png')
-
-// background-image: (true) ? url('/images/cow/home-backgroundlight.png') : url('/images/cow/3-home.png');
-
-// `
-
-
-// const tema = `${ ({theme })=> theme.isDark} `
-
-
-let tema;
 
 const Home: React.FC = () => {
 
@@ -84,10 +69,10 @@ const Home: React.FC = () => {
       }}
     >
       <Hero>
-        <Heading as="h1" size="lg"   >
+        <Heading as="h1" style={{fontSize: '3.5vw'}}>
         CashCow Protocol
         </Heading>        
-        <Text>Earn MILK By Simply Staking Your COW</Text>
+        <Text style={{fontSize: '1vw'}}>Earn MILK By Simply Staking Your COW</Text>
       </Hero>
       <div>
         <Cards>
