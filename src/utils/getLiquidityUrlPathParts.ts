@@ -3,7 +3,7 @@
 // In the URL, using the quote token 'BNB' is represented by 'ETH'
 const getLiquidityUrlPathParts = ({ quoteTokenAdresses, quoteTokenSymbol, tokenAddresses }) => {
   const chainId = process.env.REACT_APP_CHAIN_ID
-  const firstPart = quoteTokenSymbol === 'BNB' ? 'ETH' : quoteTokenAdresses[chainId]
+  const firstPart = quoteTokenSymbol === 'BNB' ? 'BNB' : quoteTokenAdresses[chainId]
   const secondPart = tokenAddresses[chainId]
   return `${firstPart}/${secondPart}`
 }
