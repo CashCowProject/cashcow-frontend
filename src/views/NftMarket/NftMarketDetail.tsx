@@ -35,8 +35,8 @@ const NftMarketDetail = () => {
             }}
         >
             <StyledHero>
-                <Heading as="h1" size="lg" color="secondary" mb="20px">
-                    NFT MarketPlace
+                <Heading as="h1" size="lg" color="text" mb="20px">
+                    NFT MARKETPLACE
                 </Heading>
             </StyledHero>
             <NftDetailHeader collectionName="HappyCow" />

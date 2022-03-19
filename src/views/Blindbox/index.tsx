@@ -32,7 +32,7 @@ const Blindbox = () => {
             }}
         >
             <StyledHero>
-                <Heading as="h1" size="lg" color="secondary" mb="20px">
+                <Heading as="h1" size="lg" color="text" mb="20px">
                     Blind Box
                 </Heading>
             </StyledHero>

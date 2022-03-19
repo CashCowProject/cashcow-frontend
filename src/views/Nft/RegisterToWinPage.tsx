@@ -31,10 +31,10 @@ const RegisterToWinPage = () => {
     <Page>
       <Container>
         <StyledHero>
-          <Heading as="h1" size="xxl" color="secondary" mb="24px">
+          <Heading as="h1" size="xxl" color="text" mb="24px">
             NFTs
           </Heading>
-          <Heading as="h2" size="lg" color="secondary" mb="16px">
+          <Heading as="h2" size="lg" color="text" mb="16px">
             {TranslateString(614, 'Trade in for CAKE, or keep for your collection!')}
           </Heading>
           <Text mb="24px">{TranslateString(616, 'Register your interest in winning an NFT below.')}</Text>

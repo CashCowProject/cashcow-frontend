@@ -104,7 +104,7 @@ const Stakes = () => {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center' }}>
+      <Heading as="h1" size="lg" color="text" mb="25px" style={{ textAlign: 'center' }}>
         <StatisticsInfo index={index} />
       </Heading>
       <StakeItems index={index} />
