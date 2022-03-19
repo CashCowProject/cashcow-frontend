@@ -19,7 +19,6 @@ const Hero = styled.div`
   padding-top: 116px;
   text-align: center;
   height: 175px;
- 
 
   ${({ theme }) => theme.mediaQueries.lg} {
     background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'), url('/images/cow/2cowdrinkmilk.png');
