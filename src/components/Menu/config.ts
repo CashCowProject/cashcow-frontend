@@ -43,12 +43,12 @@ const config: MenuEntry[] = [
   //   href: '/farms',
   // },
 
-  {
-    label: 'NFT Blind Box',
-    // icon: 'NftIcon',
-    icon: 'TicketIcon',
-    href: '/blind-box'
-  },
+  // {
+  //   label: 'NFT Blind Box',
+  //   // icon: 'NftIcon',
+  //   icon: 'TicketIcon',
+  //   href: '/blind-box'
+  // },
 
   {
     label: 'NFT Staking',
