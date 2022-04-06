@@ -5008,10 +5008,9 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cashcow-uikit@^0.10.3:
+"cashcow-uikit@https://github.com/matiasvidela96/cashcow-uikit-v2":
   version "0.10.3"
-  resolved "https://registry.yarnpkg.com/cashcow-uikit/-/cashcow-uikit-0.10.3.tgz#36e61e898beba3d815dbd42615e9af27333bc689"
-  integrity sha512-gbw212qVnxxNndUY/VoXPWHqZxyJLiHWjHrPsozbGqqsQePcfM7fI8aFVVu/fq89/y58BmQJCKZJtZOd2C7gNw==
+  resolved "https://github.com/matiasvidela96/cashcow-uikit-v2#98126cfb0c0aaa86ca92c1da687bd5decc8fea77"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
