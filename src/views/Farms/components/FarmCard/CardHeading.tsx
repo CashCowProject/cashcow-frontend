@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Tag, Flex, Heading, Image } from '@pancakeswap-libs/uikit'
+import { Tag, Flex, Heading, Image } from 'cashcow-uikit'
 import { CommunityTag, CoreTag, NoFeeTag, RiskTag } from 'components/Tags'
 
 export interface ExpandableSectionProps {

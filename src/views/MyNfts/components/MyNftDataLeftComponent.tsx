@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { Button, Heading } from '@pancakeswap-libs/uikit'
+import { Button, Heading } from 'cashcow-uikit'
 import Market from 'config/abi/Market.json'
 import AirNfts from 'config/abi/AirNft.json'
 import HappyCows from 'config/abi/HappyCows.json'

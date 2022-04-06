@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { Flex,  BaseLayout } from '@pancakeswap-libs/uikit'
+import { Flex,  BaseLayout } from 'cashcow-uikit'
 import Staking from 'config/abi/Staking.json'
 import { getStakingAddress} from 'utils/addressHelpers'
 import Web3 from "web3";

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Heading, Card, CardBody, Button } from '@pancakeswap-libs/uikit'
+import { Heading, Card, CardBody, Button } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import BigNumber from 'bignumber.js'
 import useI18n from 'hooks/useI18n'
@@ -16,7 +16,7 @@ import useAllEarnings from '../../../hooks/useAllEarnings'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 
 const StyledFarmStakingCard = styled(Card)`
-  background-image: url('/images/cow/3.png');
+  /* background-image: url('/images/cow/3.png'); */
   background-repeat: no-repeat;
   background-position: top 20px right -30px;
   background-size: 140px 140px;
@@ -75,7 +75,6 @@ const FarmedStakingCard = () => {
         <Heading size="xl" mb="24px">
           {TranslateString(542, 'Farms & Staking')}
         </Heading>
-
         <Block>
           <Label>{TranslateString(544, 'MILK to Harvest')}</Label>
           <CakeHarvestBalance earningsSum={earningsSum} />

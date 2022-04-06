@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import { AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from 'web3'
@@ -29,6 +29,7 @@ const web3 = new Web3(Web3.givenProvider)
 const MyNfts = () => {
   const { account } = useWallet()
   const [myTokens, setMyTokens] = useState([])
+  const { isDark } = useTheme();
 
   const happyCowsContract = useMemo(() => {
     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
@@ -97,9 +98,16 @@ const MyNfts = () => {
   }, [getTokenHashes])
 
   return (
-    <Page>
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px">
+        <Heading as="h1" size="lg" color="text" mb="20px">
           My NFTs
         </Heading>
       </StyledHero>

@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Heading, Text, BaseLayout } from '@pancakeswap-libs/uikit'
+import styled, { useTheme } from 'styled-components'
+import { Heading, Text, BaseLayout } from 'cashcow-uikit'
 import Page from 'components/layout/Page'
 import FarmStakingCard from './components/FarmStakingCard'
 import CakeStats from './components/CakeStats'
@@ -12,17 +12,21 @@ const Hero = styled.div`
   background-image: url('/images/cow/1-home.png');
   background-repeat: no-repeat;
   background-position: top center;
-  display: flex;
   justify-content: center;
   flex-direction: column;
   margin: auto;
-  margin-bottom: 32px;
+  margin-bottom: 32px;  
   padding-top: 116px;
   text-align: center;
+  height: 175px;
+
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/cow/1-home.png'), url('/images/cow/3-home.png');
-    background-position: left center, right center;
-    height: 165px;
+    background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'), url('/images/cow/2cowdrinkmilk.png');
+    background-position: left center, center bottom, right center;
+    height: 300px, 185px, 185px;  
+    width:  300px, 185px, 185px;
+    margin-right: 3%;
+    margin-left: 3%;
     padding-top: 0;
   }
 `
@@ -47,18 +51,27 @@ const Cards = styled(BaseLayout)`
     & > div {
       grid-column: span 6;
     }
-  }
+  }  
 `
 
 const Home: React.FC = () => {
-  
+
+  const {isDark}=useTheme(); 
+
   return (
-    <Page>
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',        
+      }}
+    >
       <Hero>
-        <Heading as="h1" size="xl" mb="15px" mt="20px" color="secondary">
-          CashCow Protocol
-        </Heading>
-        <Text>Earn MILK By Simply Staking Your COW</Text>
+        <Heading as="h1" style={{fontSize: '3.5vw'}}>
+        CashCow Protocol
+        </Heading>        
+        <Text style={{fontSize: '1vw'}}>Earn MILK By Simply Staking Your COW</Text>
       </Hero>
       <div>
         <Cards>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, Heading, Text } from '@pancakeswap-libs/uikit'
+import { Card, CardBody, Heading, Text } from 'cashcow-uikit'
 import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { Timeline } from 'react-twitter-widgets'
@@ -11,6 +11,7 @@ import CardValue from './CardValue'
 import { useFarms } from '../../../state/hooks'
 
 const StyledTwitterCard = styled(Card)`
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
 `
@@ -29,7 +30,7 @@ const TwitterCard = () => {
   return (
     <StyledTwitterCard>
       <CardBody>
-        <Heading size="xl" mb="24px">
+        <Heading size="xl" mb="24px" style={{textAlign: 'left'}}>
           {TranslateString(10003, 'Announcements')}
         </Heading>
         <Timeline

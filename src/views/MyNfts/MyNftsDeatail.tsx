@@ -9,7 +9,7 @@ import { AbiItem } from 'web3-utils'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Page from 'components/layout/Page'
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from 'cashcow-uikit'
 import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
 import airNFTs from 'config/constants/airnfts'
 import MyNftData from './components/MyNftData'
@@ -106,7 +106,7 @@ const MyNftsDeatail = () => {
   return (
     <Page>
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px">
+        <Heading as="h1" size="lg" color="text" mb="20px">
           My NFT Detail
         </Heading>
       </StyledHero>

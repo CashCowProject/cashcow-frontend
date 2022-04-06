@@ -1,6 +1,6 @@
 import React from 'react'
 import {useRouteMatch, Link} from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem, Text, Toggle } from '@pancakeswap-libs/uikit'
+import { ButtonMenu, ButtonMenuItem, Text, Toggle } from 'cashcow-uikit'
 import styled from 'styled-components'
 import useI18n from 'hooks/useI18n'
 

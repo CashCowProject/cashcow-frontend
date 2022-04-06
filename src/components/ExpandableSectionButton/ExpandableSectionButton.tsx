@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import styled from 'styled-components'
-import { ChevronDownIcon, ChevronUpIcon, Text } from '@pancakeswap-libs/uikit'
+import { ChevronDownIcon, ChevronUpIcon, Text } from 'cashcow-uikit'
 
 export interface ExpandableSectionButtonProps {
   onClick?: () => void

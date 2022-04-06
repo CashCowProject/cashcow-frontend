@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { Button } from '@pancakeswap-libs/uikit'
+import { Button } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import MilkToken from 'config/abi/MilkToken.json'
 import HappyCows from 'config/abi/HappyCows.json'
