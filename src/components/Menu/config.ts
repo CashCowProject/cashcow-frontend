@@ -43,12 +43,12 @@ const config: MenuEntry[] = [
   //   href: '/farms',
   // },
 
-  {
-    label: 'NFT Blind Box',
-    // icon: 'NftIcon',
-    icon: 'TicketIcon',
-    href: '/blind-box'
-  },
+  // {
+  //   label: 'NFT Blind Box',
+  //   // icon: 'NftIcon',
+  //   icon: 'TicketIcon',
+  //   href: '/blind-box'
+  // },
 
   {
     label: 'NFT Staking',
@@ -109,7 +109,7 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Whitepaper',
-        href: 'https://cashcowprotocol.gitbook.io/cashcow/',
+        href: 'https://cashcow-protocol.gitbook.io/cashcow-protocol/',
       },
     ],
   },

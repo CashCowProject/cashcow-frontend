@@ -1269,13 +1269,13 @@
     {
       "data": {
         "stringId": 10010,
-        "text": "Total Mining HashRate"
+        "text": "Total MilkPower"
       }
     },
     {
       "data": {
         "stringId": 10011,
-        "text": "My Mining HashRate"
+        "text": "My MilkPower"
       }
     },
     {
