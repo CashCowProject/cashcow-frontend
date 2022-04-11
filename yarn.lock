@@ -5010,7 +5010,7 @@ caseless@~0.12.0:
 
 "cashcow-uikit@https://github.com/CashCowProject/cashcow-uikit.git#refactor":
   version "0.10.3"
-  resolved "https://github.com/CashCowProject/cashcow-uikit.git#1c39ca2b2be69d15a19db7439fc481bdc67647df"
+  resolved "https://github.com/CashCowProject/cashcow-uikit.git#3402920fbbc592284c5f7390713dbc86e2744e56"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
