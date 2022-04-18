@@ -35,3 +35,28 @@ export const getAirNftAddress = () => {
 export const getStakingAddress = () => {
   return addresses.staking[chainId]
 }
+
+export const getLandNftAddress = () => {
+  return addresses.landnft[chainId]
+}
+export const getCowNftAddress = () => {
+  return addresses.cownft[chainId]
+}
+export const getBullNftAddress = () => {
+  return addresses.bullnft[chainId]
+}
+export const getNftMinterAddress = () => {
+  return addresses.nftminter[chainId]
+}
+export const getNftSaleAddress = () => {
+  return addresses.nftsale[chainId]
+}
+export const getNftFarmingAddress = () => {
+  return addresses.nftfarming[chainId]
+}
+export const getNftBreedingAddress = () => {
+  return addresses.nftbreeding[chainId]
+}
+export const getBusdAddress = () => {
+  return addresses.busd[chainId]
+}

@@ -22,7 +22,19 @@ const Stakes = lazy(() => import('./views/Stakes'))
 const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
-const Blindbox = lazy(() => import('./views/Blindbox'))
+const Blindbox = lazy(() => import('./views/Blindbox2'))
+const BlindboxPack = lazy(() => import('./views/Blindbox2/NftPack'))
+const BlindboxPackCommon = lazy(() => import('./views/Blindbox2/NftPack/Common'))
+const BlindboxPackUncommon = lazy(() => import('./views/Blindbox2/NftPack/Uncommon'))
+const BlindboxPackRare = lazy(() => import('./views/Blindbox2/NftPack/Rare'))
+const BlindboxIndividual = lazy(() => import('./views/Blindbox2/Individual'))
+const BlindboxIndividualLand = lazy(() => import('./views/Blindbox2/Individual/Lands'))
+const BlindboxIndividualCow = lazy(() => import('./views/Blindbox2/Individual/Cows'))
+const BlindboxIndividualBull = lazy(() => import('./views/Blindbox2/Individual/Bulls'))
+const Lands = lazy(() => import('./views/MyNfts/Lands'))
+const LandDetail = lazy(() => import('./views/MyNfts/Lands/NftDetail'))
+const Cows = lazy(() => import('./views/MyNfts/Cows'))
+const CowDetail = lazy(() => import('./views/MyNfts/Cows/NftDetail'))
 const BlindboxDetail = lazy(() => import('./views/Blindbox/BlindboxDetail'))
 const NftMarket = lazy(() => import('./views/NftMarket'))
 const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
@@ -82,8 +94,44 @@ const App: React.FC = () => {
             <Route exact path="/blind-box">
               <Blindbox />
             </Route>
-            <Route path="/blind-box/:index">
+            <Route path="/blind-box/common-pack">
+              <BlindboxPackCommon />
+            </Route>
+            <Route path="/blind-box/uncommon-pack">
+              <BlindboxPackUncommon />
+            </Route>
+            <Route path="/blind-box/rare-pack">
+              <BlindboxPackRare />
+            </Route>
+            <Route path="/blind-box/pack">
+              <BlindboxPack />
+            </Route>
+            <Route path="/blind-box/land">
+              <BlindboxIndividualLand />
+            </Route>
+            <Route path="/blind-box/cow">
+              <BlindboxIndividualCow />
+            </Route>
+            <Route path="/blind-box/bull">
+              <BlindboxIndividualBull />
+            </Route>
+            <Route path="/blind-box/individual">
+              <BlindboxIndividual />
+            </Route>
+            {/* <Route path="/blind-box/:index">
               <BlindboxDetail />
+            </Route> */}
+            <Route exact path="/lands/:tokenId">
+              <LandDetail />
+            </Route>
+            <Route exact path="/lands">
+              <Lands />
+            </Route>
+            <Route exact path="/cows/:tokenId">
+              <CowDetail />
+            </Route>
+            <Route exact path="/cows">
+              <Cows />
             </Route>
             <Route exact path="/nft-market">
               <NftMarket />

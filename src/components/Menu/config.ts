@@ -43,12 +43,12 @@ const config: MenuEntry[] = [
   //   href: '/farms',
   // },
 
-  // {
-  //   label: 'NFT Blind Box',
-  //   // icon: 'NftIcon',
-  //   icon: 'TicketIcon',
-  //   href: '/blind-box'
-  // },
+  {
+    label: 'NFT Blind Box',
+    // icon: 'NftIcon',
+    icon: 'TicketIcon',
+    href: '/blind-box'
+  },
 
   {
     label: 'NFT Staking',
@@ -94,9 +94,26 @@ const config: MenuEntry[] = [
   },
   {
     label: 'My NFTs',
-    // icon: 'NftIcon',
-    icon: 'TicketIcon',
-    href: '/myNFTs'
+    icon: 'NftIcon',
+    // icon: 'TicketIcon',
+    items: [
+      {
+        label: 'My NFTs',
+        href: '/myNFTs'
+      },
+      {
+        label: 'My Lands',
+        href: '/lands',
+      },
+      {
+        label: 'My Cows',
+        href: '/cows',
+      },
+      {
+        label: 'My Bulls',
+        href: '/bulls',
+      }
+    ]
   },
   
   {

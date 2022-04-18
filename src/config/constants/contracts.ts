@@ -25,7 +25,8 @@ export default {
   },
   busd: {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
+    // 97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
+    97: '0xe509AA50277106F3B22782818f0468F62ed801ed',
   },
   cow: {
     56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
@@ -51,5 +52,33 @@ export default {
   staking: {
     56: '0x812825164c271DDb89d494E41488c0409BdEA724',
     97: '0x835e824722A3EE84dF6AA9f5f4F4149609fB567F'
-  }
+  },
+  landnft: {
+    56: '',
+    97: '0xe5edd1B60fe0036E5D6A8Fd10898f031bc0AB52F'
+  },
+  cownft: {
+    56: '',
+    97: '0x4973b26663DF2cFD22f5Ce7B05Aa8d41ACb5CA24'
+  },
+  bullnft: {
+    56: '',
+    97: '0xaabb086c19CC23f8FC74C7dBF1D95eCA58A8783a'
+  },
+  nftminter: {
+    56: '',
+    97: '0x6f05f0dd825Efdf24Eed5A3eFcDD3a121e295d04'
+  },
+  nftsale: {
+    56: '',
+    97: '0xebA46964a02E4b811636B344D009a28fD0374BF8'
+  },
+  nftfarming: {
+    56: '',
+    97: ''
+  },
+  nftbreeding: {
+    56: '',
+    97: ''
+  },
 }
