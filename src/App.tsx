@@ -35,6 +35,8 @@ const Lands = lazy(() => import('./views/MyNfts/Lands'))
 const LandDetail = lazy(() => import('./views/MyNfts/Lands/NftDetail'))
 const Cows = lazy(() => import('./views/MyNfts/Cows'))
 const CowDetail = lazy(() => import('./views/MyNfts/Cows/NftDetail'))
+const Bulls = lazy(() => import('./views/MyNfts/Bulls'))
+const BullDetail = lazy(() => import('./views/MyNfts/Bulls/NftDetail'))
 const BlindboxDetail = lazy(() => import('./views/Blindbox/BlindboxDetail'))
 const NftMarket = lazy(() => import('./views/NftMarket'))
 const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
@@ -132,6 +134,12 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/cows">
               <Cows />
+            </Route>
+            <Route exact path="/bulls/:tokenId">
+              <BullDetail />
+            </Route>
+            <Route exact path="/bulls">
+              <Bulls />
             </Route>
             <Route exact path="/nft-market">
               <NftMarket />

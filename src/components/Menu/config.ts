@@ -49,6 +49,29 @@ const config: MenuEntry[] = [
     icon: 'TicketIcon',
     href: '/blind-box'
   },
+  
+  {
+    label: 'My Farm',
+    icon: 'FarmIcon',
+    items: [
+      {
+        label: 'Dashboard',
+        href: '/farm/dashboard',
+      },
+      {
+        label: 'Map',
+        href: '/farm/map',
+      },
+      {
+        label: 'Management',
+        href: '/farm/management',
+      },
+      {
+        label: 'Breeding',
+        href: '/farm/breeding',
+      }
+    ]
+  },
 
   {
     label: 'NFT Staking',

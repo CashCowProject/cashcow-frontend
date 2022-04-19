@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import CowNFT from 'config/abi/LandNFT.json'
-import { getCowNftAddress } from 'utils/addressHelpers'
+import BullNFT from 'config/abi/BullNFT.json'
+import { getBullNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import Select from '../../../../components/Select/Select'
 
@@ -109,7 +109,7 @@ const NftHeader = () => {
   const [totalAmount, setTotalAmount] = useState(0)
 
   const nftContract = useMemo(() => {
-    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
 
   const fetchInfo = useCallback(async () => {
