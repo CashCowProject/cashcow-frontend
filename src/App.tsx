@@ -31,12 +31,16 @@ const BlindboxIndividual = lazy(() => import('./views/Blindbox2/Individual'))
 const BlindboxIndividualLand = lazy(() => import('./views/Blindbox2/Individual/Lands'))
 const BlindboxIndividualCow = lazy(() => import('./views/Blindbox2/Individual/Cows'))
 const BlindboxIndividualBull = lazy(() => import('./views/Blindbox2/Individual/Bulls'))
+
 const Lands = lazy(() => import('./views/MyNfts/Lands'))
 const LandDetail = lazy(() => import('./views/MyNfts/Lands/NftDetail'))
 const Cows = lazy(() => import('./views/MyNfts/Cows'))
 const CowDetail = lazy(() => import('./views/MyNfts/Cows/NftDetail'))
 const Bulls = lazy(() => import('./views/MyNfts/Bulls'))
 const BullDetail = lazy(() => import('./views/MyNfts/Bulls/NftDetail'))
+
+const FarmDashboard = lazy(() => import('./views/Game/Dashboard'))
+
 const BlindboxDetail = lazy(() => import('./views/Blindbox/BlindboxDetail'))
 const NftMarket = lazy(() => import('./views/NftMarket'))
 const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
@@ -140,6 +144,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/bulls">
               <Bulls />
+            </Route>
+            <Route exact path="/farm/dashboard">
+              <FarmDashboard />
             </Route>
             <Route exact path="/nft-market">
               <NftMarket />
