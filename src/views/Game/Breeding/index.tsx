@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import {Link, useParams} from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -8,9 +8,11 @@ import useTheme from 'hooks/useTheme'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
+import NftBreeding from 'config/abi/NftBreeding.json'
 import Web3 from "web3";
 import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
-import { getCowNftAddress, getBullNftAddress } from 'utils/addressHelpers'
+import { LoadingContext } from 'contexts/LoadingContext'
+import { getCowNftAddress, getBullNftAddress, getNftBreedingAddress } from 'utils/addressHelpers'
 import CowCard from './CowCard'
 import BullCard from './BullCard'
 import BreedingCard from './BreedingCard'
@@ -73,6 +75,7 @@ const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
 const FarmBreeding = () => {
+    const { setLoading } = useContext(LoadingContext);
     const { account, connect } = useWallet()
     const { index } = useParams<boxParam>();
     const { isDark } = useTheme();
@@ -80,6 +83,7 @@ const FarmBreeding = () => {
     const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
 
     const handleStartBreeding = async () => {
+      setLoading(true);
       // Checking breeding condition
       const cowNftContract = new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
       const bullNftContract = new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress());
@@ -88,8 +92,26 @@ const FarmBreeding = () => {
       const attrOfBull = await bullNftContract.methods.attrOf(selectedBullTokenId).call();
       
       if(attrOfCow.rarity === attrOfBull.rarity) {
-        console.log("Ready for breeding")
-        
+        const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
+        try {
+          await breedingContract.methods
+              .breed(selectedCowTokenId, selectedBullTokenId)
+              .send({from: account})
+              .on('transactionHash', function() {
+                  toast.success('Transaction submitted');
+              })
+              .on('receipt', function(receipt) {
+                  console.log(receipt);
+                  setLoading(false);
+                  toast.success('Breeding started');
+              })
+        } catch (err: unknown) {
+            console.log("ERROR: ", err);
+            setLoading(false);
+
+            const { message } = err as Error
+            toast.error(message);
+        }
       } else {
         toast.error('Cannot breed between Cow and Bull with different rarities')
       }
