@@ -110,7 +110,7 @@ const NftAttributeItem = styled.div`
   display: flex;
   align-items: center;
 `
-const BuyNowBtnContainer = styled.div`
+const ActionContainer = styled.div`
   margin-top: 24px;
 `
 const ContractInfoContainer = styled.div`
@@ -183,6 +183,10 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
             </NftAttributes>
           </AttributesContainer>
           <div style={{ flex: 1 }} />
+          <ActionContainer>
+            <Button style={{marginRight: "10px"}}>Stake to Farm</Button>
+            <Button style={{marginRight: "10px"}}>Stake to Breed</Button>
+          </ActionContainer>
         </NftInfo>
       </MetadataContainer>
       <ContractInfoContainer>

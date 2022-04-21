@@ -121,43 +121,43 @@ const LandCard = ({title, value}: CardInterface) => {
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/mountains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/plains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/woods.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/jungle.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>333</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>20</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/hills.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                         </table>
                     </TableContainer>

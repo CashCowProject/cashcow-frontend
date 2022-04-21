@@ -60,7 +60,6 @@ const FarmDashboard = () => {
 
     useEffect( () => {
       async function fetchInfo() {
-          
           const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
           const vMilkPower = await farmingContract.methods.milkPowerOf(account).call();
           const vGameMilkPower = await farmingContract.methods.milkPowerOfGame().call();
@@ -74,6 +73,13 @@ const FarmDashboard = () => {
             console.log(vMilkPerDay);
             setMilkPerDay( vMilkPerDay );
           }
+
+          const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
+          if(landTokenIds) {
+            console.log("AAA")
+            setLandAmount(landTokenIds.length);
+          }
+          console.log(landTokenIds);
       }
 
       fetchInfo();
@@ -149,9 +155,9 @@ const FarmDashboard = () => {
             <StaticCard title='MY MILKPOWER' value={milkPower.toString()}/>
             <StaticCard title='TOTAL MILKPOWER' value={gameMilkPower.toString()}/>
             <StaticCard title='MY MILK/DAY' value={milkPerDay.toString()}/>
-            <LandCard title='MY LANDS' value='2'/>
-            <CattleCard title='MY COWS' value='20'/>
-            <CattleCard title='MY BULLS' value='1'/>
+            <LandCard title='MY LANDS' value={landAmount.toString()}/>
+            <CattleCard title='MY COWS' value={cowAmount.toString()}/>
+            <CattleCard title='MY BULLS' value={bullAmount.toString()}/>
             <GenesisCard title='GENESIS NFT' hasGenesisNft={genesisNftStatus}/>
             <HappyCowCard title='HAPPY COW' value={happyCowStatus}/>
             <StaticCard title='$COW IN WALLET' value={cowTokenAmount}/>

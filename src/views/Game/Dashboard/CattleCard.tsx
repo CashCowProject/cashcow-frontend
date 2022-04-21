@@ -121,47 +121,46 @@ const CattleCard = ({title, value}: CardInterface) => {
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/highland.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/holstein.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/hereford.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/brahman.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>333</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>20</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/angus.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>1</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                         </table>
                     </TableContainer>
-                
             </Modal>
         </Container>
     )

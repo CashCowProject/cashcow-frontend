@@ -9,10 +9,11 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
 import NftBreeding from 'config/abi/NftBreeding.json'
+import MilkToken from 'config/abi/MilkToken.json'
 import Web3 from "web3";
 import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
 import { LoadingContext } from 'contexts/LoadingContext'
-import { getCowNftAddress, getBullNftAddress, getNftBreedingAddress } from 'utils/addressHelpers'
+import { getCowNftAddress, getBullNftAddress, getNftBreedingAddress, getMilkAddress } from 'utils/addressHelpers'
 import CowCard from './CowCard'
 import BullCard from './BullCard'
 import BreedingCard from './BreedingCard'
@@ -83,7 +84,7 @@ const FarmBreeding = () => {
     const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
 
     const handleStartBreeding = async () => {
-      setLoading(true);
+      
       // Checking breeding condition
       const cowNftContract = new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
       const bullNftContract = new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress());
@@ -92,8 +93,16 @@ const FarmBreeding = () => {
       const attrOfBull = await bullNftContract.methods.attrOf(selectedBullTokenId).call();
       
       if(attrOfCow.rarity === attrOfBull.rarity) {
-        const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
+        setLoading(true);
         try {
+          const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
+          const breedingPrice = breedingContract.methods.breedingPrice().call();
+          const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
+          const allowance = await milkTokenContract.methods.allowance(account, getNftBreedingAddress()).call();
+          if(parseInt(allowance.toString()) < parseInt(breedingPrice))
+              await milkTokenContract.methods.approve(getNftBreedingAddress(), breedingPrice).send({ from: account });
+        
+        
           await breedingContract.methods
               .breed(selectedCowTokenId, selectedBullTokenId)
               .send({from: account})
