@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export interface CardInterface {
     title?: string;
-    genesisNftStatus?: boolean;
+    hasGenesisNft?: boolean;
 }
 
 const Container = styled.div`
@@ -36,14 +36,14 @@ const ValueContainer = styled.div`
     justify-content: center;
     `
 
-const GenesisCard = ({title, genesisNftStatus}: CardInterface) => {
+const GenesisCard = ({title, hasGenesisNft}: CardInterface) => {
     return (
         <Container>
             <TitleContainer>
                 {title}
             </TitleContainer>
             <ValueContainer>
-                {genesisNftStatus && <img src="/images/svgs/check.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>}
+                {hasGenesisNft && <img src="/images/svgs/check.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>}
             </ValueContainer>
         </Container>
     )

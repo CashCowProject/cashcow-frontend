@@ -60,3 +60,7 @@ export const getNftBreedingAddress = () => {
 export const getBusdAddress = () => {
   return addresses.busd[chainId]
 }
+
+export const getCowTokenAddress = () => {
+  return addresses.cow[chainId]
+}

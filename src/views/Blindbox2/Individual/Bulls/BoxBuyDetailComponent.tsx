@@ -82,12 +82,19 @@ const BoxBuyDetailComponent = () => {
     })
 
     const buyButtonHandler = async () => {
+        const web3 = new Web3(Web3.givenProvider);
+
+        const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
+        const packSaleEnd = await saleContract.methods.packSaleEnd().call();
+        const currentTimestamp = Date.now();
+        if(packSaleEnd > (currentTimestamp / 1000)) {
+            toast.error('Pack Sale is not ended');
+            return;
+        }
+
         setMintingState(false);
         setLoading(true);
-
-        const web3 = new Web3(Web3.givenProvider);
         const busdTokenContract = new web3.eth.Contract(BUSD.abi as AbiItem[], getBusdAddress());
-        const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
         const allowance = await busdTokenContract.methods.allowance(account, getNftSaleAddress()).call();
         if(parseInt(allowance.toString()) < parseInt(price))
             await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });

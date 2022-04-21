@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 export interface CardInterface {
     title?: string;
-    value?: string;
+    value?: boolean[];
 }
 
 const Container = styled.div`
@@ -36,7 +36,12 @@ const ValueContainer = styled.div`
     align-items: center;
     justify-content: center;
     `
-
+const StatusContainer = styled.div`
+    background-color: #689330;
+    border-radius: 16px;
+    padding-top: 4px;
+    margin-left: 8px;
+    `
 const HappyCowCard = ({title, value}: CardInterface) => {
     
     return (
@@ -45,11 +50,21 @@ const HappyCowCard = ({title, value}: CardInterface) => {
                 {title}
             </TitleContainer>
             <ValueContainer>
-                <img src="/images/svgs/holstein.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>
-                <img src="/images/svgs/highland.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>
-                <img src="/images/svgs/hereford.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>
-                <img src="/images/svgs/brahman.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>
-                <img src="/images/svgs/angus.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>
+                <StatusContainer style={{background: value[0] ? '#689330' : 'gray'}}>
+                    <img src="/images/svgs/holstein.svg" alt="" style={{width: "36px",  height: "36px"}}/>
+                </StatusContainer>
+                <StatusContainer style={{background: value[1] ? '#689330' : 'gray'}}>
+                    <img src="/images/svgs/highland.svg" alt="" style={{width: "36px",  height: "36px"}}/>
+                </StatusContainer>
+                <StatusContainer style={{background: value[2] ? '#689330' : 'gray'}}>
+                    <img src="/images/svgs/hereford.svg" alt="" style={{width: "36px",  height: "36px"}}/>
+                </StatusContainer>
+                <StatusContainer style={{background: value[3] ? '#689330' : 'gray'}}>
+                    <img src="/images/svgs/brahman.svg" alt="" style={{width: "36px",  height: "36px"}}/>
+                </StatusContainer>
+                <StatusContainer style={{background: value[4] ? '#689330' : 'gray'}}>
+                    <img src="/images/svgs/angus.svg" alt="" style={{width: "36px",  height: "36px"}}/>
+                </StatusContainer>
             </ValueContainer>
         </Container>
     )
