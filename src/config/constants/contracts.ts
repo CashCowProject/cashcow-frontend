@@ -25,8 +25,8 @@ export default {
   },
   busd: {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    // 97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
-    97: '0xe509AA50277106F3B22782818f0468F62ed801ed',
+    97: '0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7',
+    // 97: '0xe509AA50277106F3B22782818f0468F62ed801ed', //fake
   },
   cow: {
     56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
@@ -75,7 +75,7 @@ export default {
   },
   nftfarming: {
     56: '',
-    97: '0x34f934D7A4900008F521fabbD5ab333D73Aaad42'
+    97: '0xC6a3f514d7539fcFc228BCaa63E60cB578B72E40'
   },
   nftbreeding: {
     56: '',

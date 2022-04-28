@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import {Link, useParams} from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
@@ -19,6 +19,7 @@ import CattleCard from './CattleCard'
 import LandCard from './LandCard'
 import GenesisCard from './GenesisCard'
 import HappyCowCard from './HappyCowCard'
+import Harvest from './Harvest'
 
 
 type boxParam = {
@@ -27,10 +28,14 @@ type boxParam = {
 
 const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false]; 
 const StyledHero = styled.div`
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 0px solid #e8e8e8;
     margin-bottom: 20px;
+    display: flex;
   `
-
+const Blank = styled.div`
+    display: flex;
+    flex: auto
+`
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -57,7 +62,7 @@ const FarmDashboard = () => {
     const [genesisNftStatus, setGenesisNftStatus] = useState(false)
     const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
     const [milkPerDay, setMilkPerDay] = useState(0);
-
+    
     useEffect( () => {
       async function fetchInfo() {
           const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
@@ -138,7 +143,6 @@ const FarmDashboard = () => {
 
       fetchCowTokenInfo();
     },[account])
-
     return (
         <Page style={{
             backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
@@ -150,6 +154,8 @@ const FarmDashboard = () => {
             <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
               My Farm Dashboard
             </Heading>
+            <Blank />
+            <Harvest title = "MILK REWARD" value = "0" />
           </StyledHero>
           <CardContainer>
             <StaticCard title='MY MILKPOWER' value={milkPower.toString()}/>
