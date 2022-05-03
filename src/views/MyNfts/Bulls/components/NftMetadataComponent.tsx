@@ -2,13 +2,17 @@ import React, { useState, useMemo, useCallback, useEffect, useContext } from 're
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
+import { provider } from 'web3-core'
 import toast from 'react-hot-toast'
 import { Button } from 'cashcow-uikit'
 import BullNFT from 'config/abi/BullNFT.json'
+import NftFarming from 'config/abi/NftFarming.json'
+import NftBreeding from 'config/abi/NftBreeding.json'
+import NftSale from 'config/abi/NftSale.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
-import { getBullNftAddress } from 'utils/addressHelpers'
+import { getBullNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 
@@ -110,7 +114,7 @@ const NftAttributeItem = styled.div`
   display: flex;
   align-items: center;
 `
-const BuyNowBtnContainer = styled.div`
+const ActionContainer = styled.div`
   margin-top: 24px;
 `
 const ContractInfoContainer = styled.div`
@@ -140,6 +144,7 @@ const timestampToStr = (_secs) => {
 const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const { isDark } = useTheme()
   const history = useHistory()
+  const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
   const [nftImage, setNftImage] = useState('')
   const [nftAttrs, setNftAttrs] = useState([])
   const [nftBirth, setNftBirth] = useState(0)
@@ -161,6 +166,26 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   useEffect(() => {
     fetchNftInfo()
   }, [fetchNftInfo])
+
+  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
+  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
+  const farmActionHandler = async (_tokenId: string) =>{
+    try{
+      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
+    }catch (error) {
+
+    }
+  }
+
+  const saleActionHandler = async (_tokenId: string) =>{
+    try{
+
+    }catch (error) {
+      
+    }    
+  }
 
   return (
     <Container style={{background: isDark ? "#27262c" : ''}}>
@@ -200,6 +225,13 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
             </NftAttributes>
           </AttributesContainer>
           <div style={{ flex: 1 }} />
+
+          <ActionContainer>
+            <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
+            <Button style={{marginRight: "10px"}}>Stake to Breed</Button>
+            <Button style={{marginRight: "10px"}}>Move to Sale</Button>
+          </ActionContainer>
+
         </NftInfo>
       </MetadataContainer>
       <ContractInfoContainer>

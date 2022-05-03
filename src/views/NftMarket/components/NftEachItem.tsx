@@ -4,10 +4,13 @@ import styled from 'styled-components'
 import Web3 from 'web3'
 import { fromWei, AbiItem } from 'web3-utils'
 import AirNfts from 'config/abi/AirNft.json'
+import CowNFT from 'config/abi/CowNFT.json'
+import BullNFT from 'config/abi/BullNFT.json'
+import LandNFT from 'config/abi/LandNFT.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
-import { getHappyCowAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getAirNftAddress, getCowNftAddress, getBullNftAddress, getLandNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
@@ -133,12 +136,28 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
   const airnftContract = useMemo(() => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
+  const cowContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+  const bullContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+  const landContract = useMemo(() => {
+    return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
+  }, [])
 
   const fetchNft = useCallback(async () => {
     let nftHash = null
     const isAIR = nftEachItem.nftContract === getAirNftAddress()
+    const isHappy = nftEachItem.nftContract == getHappyCowAddress();
+    const isCowNft = nftEachItem.nftContract === getCowNftAddress();
+    const isBullNft = nftEachItem.nftContract === getBullNftAddress();
+    const isLandNft = nftEachItem.nftContract === getLandNftAddress();
     if (isAIR) nftHash = await airnftContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
-    else nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if(isHappy) nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if(isCowNft) nftHash = await cowContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if(isBullNft) nftHash = await bullContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else nftHash = await landContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
     if (nftEachItem.seller === account) {
       setFlgMyNft(true)
     }
@@ -147,15 +166,20 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
 
     let imageUrl = json.image
     if (isAIR) {
-      setImage(imageUrl)
-    } else {
-      imageUrl = imageUrl.slice(7)
+      setImage(imageUrl);
+      setName(json.name)
+    } else if(isHappy) {
+      imageUrl = imageUrl.slice(7);
+      setName(json.name)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else {
+      setImage(imageUrl);
+      setName(json.name + "#"+nftEachItem.tokenId.toString())
     }
-    setName(json.name)
+    
 
     setMilkPrice(cakePriceUsd.toNumber())
-  }, [account, happyCowsContract, airnftContract, nftEachItem, cakePriceUsd])
+  }, [account, happyCowsContract, airnftContract, nftEachItem, cakePriceUsd, bullContract, cowContract, landContract])
 
   useEffect(() => {
     fetchNft()

@@ -1,12 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState,useMemo, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 import useTheme from 'hooks/useTheme'
+import Web3 from "web3";
+import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
+import { getLandNftAddress } from 'utils/addressHelpers'
+import LandNFT from 'config/abi/LandNFT.json';
 
 export interface CardInterface {
     title?: string;
     value?: string;
+    tokenIds?: number[];
 }
+const web3 = new Web3(Web3.givenProvider);
 
 const Container = styled.div`
     width: 100%;
@@ -71,9 +77,26 @@ const TableContainer = styled.div`
         text-align: center;
     }
 `
-const LandCard = ({title, value}: CardInterface) => {
+const LandCard = ({title, value, tokenIds}: CardInterface) => {
     const [isModalOpen, setModalOpen] = useState(false)
     const { isDark } = useTheme();
+    const [landData, setLandData] = useState([[]])
+    const [isMounted, setMounted] = useState(false);
+    const landContract = new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress());
+    const landInfo = useEffect(() => {
+        async function loadData() {
+            const temp = Array(5).fill(0).map(row => new Array(5).fill(0));
+            tokenIds.map(async(id) =>{
+                let metadata = await landContract.methods.attrOf(id).call()
+                let rarity = parseInt(metadata.rarity);
+                let kind = parseInt(metadata.landType);
+                temp[kind][rarity] +=1; 
+            });
+            setLandData(temp)
+        }
+        loadData();
+    },[tokenIds]);
+
     return (
         <Container>    
             <TitleContainer>
@@ -110,7 +133,7 @@ const LandCard = ({title, value}: CardInterface) => {
                         {title}
                     </ModalTitleContainer>
                     <TableContainer>
-                        <table>
+                        <table style = {{fontSize:20}}>
                             <tr>
                                 <td />
                                 <td><img src="/images/svgs/common.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
@@ -121,43 +144,43 @@ const LandCard = ({title, value}: CardInterface) => {
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/mountains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                {
+                                    landData[0]&&landData[0].map(item =>{
+                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    })
+                                }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/plains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                {
+                                    landData[1]&&landData[1].map(item =>{
+                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    })
+                                }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/woods.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                {
+                                    landData[2]&&landData[2].map(item =>{
+                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    })
+                                }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/jungle.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                {
+                                    landData[3]&&landData[3].map(item =>{
+                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    })
+                                }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/hills.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                {
+                                    landData[4]&&landData[4].map(item =>{
+                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    })
+                                }
                             </tr>
                         </table>
                     </TableContainer>

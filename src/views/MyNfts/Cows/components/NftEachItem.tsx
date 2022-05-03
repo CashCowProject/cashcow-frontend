@@ -2,9 +2,11 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Web3 from 'web3'
+import { AbiItem } from 'web3-utils';
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
-
+import CowNFT from 'config/abi/CowNFT.json';
+import { getCowNftAddress } from 'utils/addressHelpers';
 const NftEachItemContainer = styled.div`
   cursor: pointer;
   min-width: 230px;
@@ -112,13 +114,29 @@ export interface NftItemInterface {
 const NftEachItem = ({ itemInfo }: NftItemInterface) => {
   const { account } = useWallet()
   const { isDark } = useTheme()
+  const [image, setImage] = useState('');
+  const nftContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
+  }, [])
 
+  const fetchNftItems = useCallback(async () => {
+    let nftHash = null;
+    nftHash = await nftContract.methods.tokenURI(itemInfo.tokenId).call({from: account})
+    const res = await fetch(nftHash);
+    const json = await res.json();
+    let imageUrl = json.image;
+    setImage(imageUrl);
+  }, [])
+
+  useEffect(() => {
+    fetchNftItems();
+  }, [fetchNftItems])
   return (
     <Link to={`/cows/${itemInfo.tokenId}`}>
       <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
         <ItemTop>
           <NftImageContainer>
-            <NftImage style={{ backgroundImage: `url(/images/nftindividuals/cows.png)` }} />
+            <NftImage style={{ backgroundImage: `url(${image})` }} />
           </NftImageContainer>
           <Title>
             <TitleText style={{ color: isDark ? 'white' : '' }}>

@@ -68,6 +68,7 @@ const Harvest = ({title, value}: CardInterface) => {
             setLoading(true);
             // let estimatedGas = farmContract.methods.harvest().estimateGas({from: account});
             await farmContract.methods.harvest().send({ from: account });
+            setLoading(false);
           } else {
             connect('injected');
           }

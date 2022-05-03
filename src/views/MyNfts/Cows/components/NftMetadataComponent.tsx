@@ -8,9 +8,15 @@ import CowNFT from 'config/abi/CowNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
-import { getCowNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
+
+import NftFarming from 'config/abi/NftFarming.json'
+import NftBreeding from 'config/abi/NftBreeding.json'
+import NftSale from 'config/abi/NftSale.json'
+import Market from 'config/abi/Market.json'
+import { getCowNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress, getMarketAddress } from 'utils/addressHelpers'
+import { provider } from 'web3-core'
 
 const Container = styled.div`
     position: relative;
@@ -125,6 +131,10 @@ const ContractInfoContainer = styled.div`
     justify-content: center;
   }
 `
+
+const ActionContainer = styled.div`
+  margin-top: 24px;
+`
 const web3 = new Web3(Web3.givenProvider)
 
 export interface NftDataLeftComponentInterface {
@@ -144,6 +154,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const [nftAttrs, setNftAttrs] = useState([])
   const [nftBirth, setNftBirth] = useState(0)
   const { setLoading } = useContext(LoadingContext)
+  const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
@@ -161,6 +172,32 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   useEffect(() => {
     fetchNftInfo()
   }, [fetchNftInfo])
+  const marketContract = useMemo(() => {
+    return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
+  }, [])
+  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
+  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
+  const farmActionHandler = async (_tokenId: string) =>{
+    try{
+      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
+    }catch (error) {
+      console.log(error)
+    }
+  }
+
+  const saleActionHandler = async (_tokenId: string) =>{
+    try{
+      setLoading(true);
+      console.log(toWei("50"));
+      await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
+      await marketContract.methods.createMarketItem(getCowNftAddress(), _tokenId, toBN(toWei("500"))).send({ from: account });
+      setLoading(false);
+    }catch (error) {
+      setLoading(false);
+    }    
+  }
 
   return (
     <Container style={{background: isDark ? "#27262c" : ''}}>
@@ -171,6 +208,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
         </ImageContainer>
         <NftInfo>
           <TitleContainer style={{ color: isDark ? 'white' : '' }}>Cow #{tokenId}</TitleContainer>
+
           <AttributesContainer
             style={{
               background: isDark ? '#16151a' : '',
@@ -200,8 +238,15 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
             </NftAttributes>
           </AttributesContainer>
           <div style={{ flex: 1 }} />
-        </NftInfo>
+
+          <ActionContainer>
+          <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
+            <Button style={{marginRight: "10px"}} onClick = {()=> saleActionHandler(tokenId)}>Move to Sale</Button>
+          </ActionContainer>
+
+       </NftInfo>
       </MetadataContainer>
+
       <ContractInfoContainer>
         <span style={{marginRight: '8px', color:'#689330'}}>Contract Address</span>
         { getCowNftAddress() }

@@ -8,9 +8,14 @@ import LandNFT from 'config/abi/LandNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
-import { getLandNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
+
+import NftFarming from 'config/abi/NftFarming.json'
+import NftBreeding from 'config/abi/NftBreeding.json'
+import NftSale from 'config/abi/NftSale.json'
+import { getLandNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
+import { provider } from 'web3-core'
 
 const Container = styled.div`
     position: relative;
@@ -137,6 +142,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const [nftImage, setNftImage] = useState('')
   const [nftAttrs, setNftAttrs] = useState([])
   const { setLoading } = useContext(LoadingContext)
+  const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
@@ -153,6 +159,27 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   useEffect(() => {
     fetchNftInfo()
   }, [fetchNftInfo])
+
+  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
+  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
+  const farmActionHandler = async (_tokenId: string) =>{
+    try{
+      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositLand(_tokenId).send({ from: account });
+    }catch (error) {
+      console.log(error)
+    }
+  }
+
+  const saleActionHandler = async (_tokenId: string) =>{
+    try{
+
+    }catch (error) {
+      
+    }    
+  }
+
 
   return (
     <Container style={{background: isDark ? "#27262c" : ''}}>
@@ -184,8 +211,8 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
           </AttributesContainer>
           <div style={{ flex: 1 }} />
           <ActionContainer>
-            <Button style={{marginRight: "10px"}}>Stake to Farm</Button>
-            <Button style={{marginRight: "10px"}}>Stake to Breed</Button>
+            <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
+            <Button style={{marginRight: "10px"}}>Move to Sale</Button>
           </ActionContainer>
         </NftInfo>
       </MetadataContainer>

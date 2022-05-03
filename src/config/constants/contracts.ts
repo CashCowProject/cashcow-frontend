@@ -71,14 +71,14 @@ export default {
   },
   nftsale: {
     56: '',
-    97: '0xebA46964a02E4b811636B344D009a28fD0374BF8'
+    97: '0x24e10d61593C75902574b85bC8affd0F1e5d7Cc8'
   },
   nftfarming: {
     56: '',
-    97: '0xC6a3f514d7539fcFc228BCaa63E60cB578B72E40'
+    97: '0x6023B942C38021eC7380F19afED8b96AEE9BEe1E'
   },
   nftbreeding: {
     56: '',
-    97: '0x82b967ad7a2F503af12B89C83Db3635D0864c545'
+    97: '0x6D96755A0924418289EE3ba8755195d8c6496422'
   },
 }
