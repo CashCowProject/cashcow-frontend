@@ -47,6 +47,7 @@ const NftMarket = lazy(() => import('./views/NftMarket'))
 const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
 const MyNfts = lazy(() => import('./views/MyNfts'))
 const MyNftsDetail = lazy(() => import('./views/MyNfts/MyNftsDeatail'))
+const LandManage = lazy(() => import('./views/Game/Management/Land'))
 // This config is required for number formating
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
@@ -163,6 +164,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/MyNfts/:myTokenId">
               <MyNftsDetail />
+            </Route>
+            <Route path="/management/land">
+              <LandManage />
             </Route>
             {/* <Route path="/ifo"> */}
             {/*  <Ifos /> */}

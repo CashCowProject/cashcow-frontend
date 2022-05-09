@@ -14,7 +14,7 @@ import CowTokenABI from 'config/abi/cow.json'
 import MasterChefABI from 'config/abi/masterchef.json'
 import GENESIS_NFT_IDS from 'config/constants/airnfts'
 import HAPPY_COW_BREEDS from 'config/constants/happycowbreeds'
-import { getAirNftAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress, getHappyCowAddress } from 'utils/addressHelpers'
+import { getNftSaleAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress, getHappyCowAddress } from 'utils/addressHelpers'
 import StaticCard from './StaticCard'
 import CattleCard from './CattleCard'
 import LandCard from './LandCard'
@@ -39,6 +39,7 @@ const Blank = styled.div`
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
+  flex: auto auto auto;
   flex-wrap: wrap;
   & > * {
     min-width: 270px;
@@ -109,49 +110,49 @@ const FarmDashboard = () => {
       fetchInfo();
     },[account])
 
-    // useEffect( () => {
-    //   async function fetchGenesisInfo() {
+    /* useEffect( () => {
+      async function fetchGenesisInfo() {
           
-    //       const contractInstance = new web3.eth.Contract(AirNft.abi as AbiItem[], getAirNftAddress());
+          const contractInstance = new web3.eth.Contract(AirNft.abi as AbiItem[], getAirNftAddress());
 
-    //       const promises = []
-    //       for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
-    //           promises.push(contractInstance.methods.ownerOf(GENESIS_NFT_IDS[i]).call())
-    //       }
-    //       const nftOwners = await Promise.all(promises)
-    //       for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
-    //         if(nftOwners[i] === account) {
-    //           setGenesisNftStatus(true);
-    //           return;
-    //         }
-    //       }
-    //       setGenesisNftStatus(false)
-    //   }
+          const promises = []
+          for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
+              promises.push(contractInstance.methods.ownerOf(GENESIS_NFT_IDS[i]).call())
+          }
+          const nftOwners = await Promise.all(promises)
+          for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
+            if(nftOwners[i] === account) {
+              setGenesisNftStatus(true);
+              return;
+            }
+          }
+          setGenesisNftStatus(false)
+      }
 
-    //   fetchGenesisInfo();
-    // },[account])
+      fetchGenesisInfo();
+    },[account])
 
-    // useEffect( () => {
-    //   async function fetchHappyCowInfo() {
+    useEffect( () => {
+      async function fetchHappyCowInfo() {
           
-    //       const contractInstance = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+          const contractInstance = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
 
-    //       const promises = []
-    //       for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
-    //           promises.push(contractInstance.methods.ownerOf(i+1).call())
-    //       }
-    //       const nftOwners = await Promise.all(promises)
-    //       const hcs = [false, false, false, false, false]; 
-    //       for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
-    //         if(nftOwners[i] === account) {
-    //           hcs[HAPPY_COW_BREEDS[i]] = true;
-    //         }
-    //       }
-    //       setHappyCowStatus(hcs)
-    //   }
+          const promises = []
+          for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
+              promises.push(contractInstance.methods.ownerOf(i+1).call())
+          }
+          const nftOwners = await Promise.all(promises)
+          const hcs = [false, false, false, false, false]; 
+          for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
+            if(nftOwners[i] === account) {
+              hcs[HAPPY_COW_BREEDS[i]] = true;
+            }
+          }
+          setHappyCowStatus(hcs)
+      }
 
-    //   fetchHappyCowInfo();
-    // },[account])
+      fetchHappyCowInfo();
+    },[account]) */
 
     useEffect( () => {
       async function fetchCowTokenInfo() {

@@ -15,7 +15,8 @@ import NftFarming from 'config/abi/NftFarming.json'
 import NftBreeding from 'config/abi/NftBreeding.json'
 import NftSale from 'config/abi/NftSale.json'
 import { getLandNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
-import { provider } from 'web3-core'
+import { provider } from 'web3-core';
+import {CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from "config/constants/nfts"
 
 const Container = styled.div`
     position: relative;
@@ -140,29 +141,36 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const { isDark } = useTheme()
   const history = useHistory()
   const [nftImage, setNftImage] = useState('')
-  const [nftAttrs, setNftAttrs] = useState([])
+  const [cowCapacity, setCowCapacity] = useState(0)
+  const [bullCapacity, setBullCapacity] = useState(0)
+  const [rarityName, setRarity] = useState("")
+  const [kindName, setKind] = useState("")
   const { setLoading } = useContext(LoadingContext)
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
+  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
+  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
 
   const fetchNftInfo = useCallback(async () => {
-    const attrs = await nftContract.methods.attrOf(tokenId).call()
-    const uri = await nftContract.methods.tokenURI(tokenId).call()
-    const metadata = await axios.get(uri)
-    setNftImage(metadata.data.image)
-    setNftAttrs(metadata.data.attributes)
+    const attrs = await nftContract.methods.attrOf(tokenId).call();
+    const _cowCapacity = await NFTFarmingContract.methods.cowLimitPerLand(attrs.rarity).call();
+    const _bullCapacity = await NFTFarmingContract.methods.bullLimitPerLand(attrs.rarity).call();
+    let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attrs.rarity)] + "-" + LAND_KIND[parseInt(attrs.landType)] + ".png";
+    setNftImage(_image);
+    setCowCapacity(_cowCapacity);
+    setBullCapacity(_bullCapacity);
+    setRarity(LAND_RARITY[parseInt(attrs.rarity)]);
+    setKind(LAND_KIND[parseInt(attrs.landType)]);
   }, [nftContract, tokenId])
 
   useEffect(() => {
     fetchNftInfo()
   }, [fetchNftInfo])
 
-  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
-  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
-  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
   const farmActionHandler = async (_tokenId: string) =>{
     try{
       await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
@@ -189,7 +197,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
           <NftImage style={{ backgroundImage: `url(${nftImage})` }} />
         </ImageContainer>
         <NftInfo>
-          <TitleContainer style={{ color: isDark ? 'white' : '' }}>Land #{tokenId}</TitleContainer>
+          <TitleContainer style={{ color: isDark ? 'white' : '' }}>{kindName?kindName:"land"} #{tokenId}</TitleContainer>
           <AttributesContainer
             style={{
               background: isDark ? '#16151a' : '',
@@ -197,16 +205,40 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
             }}
           >
             <NftAttributes>
-              {nftAttrs.map((attrItem) => {
-                return <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
-                        <img
-                          style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                          src={`/images/svgs/${attrItem.value}.svg`}
-                          alt="Token Icon"
-                        />
-                        { attrItem.trait_type } : { attrItem.value}
-                      </NftAttributeItem>
-              })}
+              <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                <img
+                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                  src={`/images/svgs/femenino.svg`}
+                  alt=""
+                />
+                { "CAPACITY" } : { cowCapacity}
+              </NftAttributeItem>
+
+              <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                <img
+                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                  src={`/images/svgs/masculino.svg`}
+                  alt=""
+                />
+                { "CAPACITY" } : { bullCapacity}
+              </NftAttributeItem>
+              <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                <img
+                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                  src={`/images/svgs/${kindName}.svg`}
+                  alt=""
+                />
+                { "LAND" } : { kindName}
+              </NftAttributeItem>
+              <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                <img
+                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                  src={`/images/svgs/${rarityName}.svg`}
+                  alt=""
+                />
+                { "RARITY" } : { rarityName}
+              </NftAttributeItem>
+
             </NftAttributes>
           </AttributesContainer>
           <div style={{ flex: 1 }} />

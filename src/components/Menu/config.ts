@@ -63,16 +63,30 @@ const config: MenuEntry[] = [
         href: '/farm/map',
       },
       {
-        label: 'Management',
-        href: '/farm/management',
-      },
-      {
         label: 'Breeding',
         href: '/farm/breeding',
       }
     ]
   },
+  { 
+    label: "FARM MANAGE",
+    icon: 'TicketIcon',
+    items: [
+      {
+        label:"COW",
+        href:"/management/cow"
+      },
+      {
+        label:"BULL",
+        href:"/management/bull"
+      },
+      {
+        label:"LAND",
+        href:"/management/land"
+      }
 
+    ]
+  },
   {
     label: 'NFT Staking',
     icon: 'TicketIcon',

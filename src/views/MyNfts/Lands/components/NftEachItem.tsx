@@ -2,9 +2,12 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Web3 from 'web3'
+import { AbiItem } from 'web3-utils';
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
-
+import landNFT from 'config/abi/LandNFT.json';
+import { getLandNftAddress } from 'utils/addressHelpers';
+import {CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from 'config/constants/nfts';
 const NftEachItemContainer = styled.div`
   cursor: pointer;
   min-width: 230px;
@@ -86,13 +89,29 @@ export interface NftItemInterface {
 const NftEachItem = ({ itemInfo }: NftItemInterface) => {
   const { account } = useWallet()
   const { isDark } = useTheme()
+  const [image, setImage] = useState('');
+  const nftContract = useMemo(() => {
+    return new web3.eth.Contract(landNFT.abi as AbiItem[], getLandNftAddress());
+  }, [])
+
+  const fetchNftItems = useCallback(async () => {
+    let attr = await nftContract.methods.attrOf(itemInfo.tokenId).call({from: account})
+    // const res = await fetch(nftHash);
+    // const json = await res.json();
+    let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attr.rarity)] + "-" + LAND_KIND[parseInt(attr.landType)] + ".png";
+    setImage(_image);
+  }, [])
+  
+  useEffect(() => {
+    fetchNftItems();
+  }, [fetchNftItems])
 
   return (
     <Link to={`/lands/${itemInfo.tokenId}`}>
       <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
         <ItemTop>
           <NftImageContainer>
-            <NftImage style={{ backgroundImage: `url(/images/nftindividuals/lands.png)` }} />
+            <NftImage style={{ backgroundImage: `url(${image})` }} />
           </NftImageContainer>
           <Title>
             <TitleText style={{ color: isDark ? 'white' : '' }}>

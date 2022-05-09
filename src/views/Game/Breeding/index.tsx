@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import {Link, useParams} from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Page from 'components/layout/Page'
 import { Heading, Button } from 'cashcow-uikit'
@@ -30,7 +30,7 @@ const StyledHero = styled.div`
 const BreedingContainer = styled.div`
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   & > * {
     min-width: 270px;
     max-width: 31.5%;
@@ -65,7 +65,7 @@ const BreedingListContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   & > * {
-    min-width: 270px;
+    min-width: 370px;
     max-width: 31.5%;
     width: 100%;
     margin: 0 8px;
@@ -76,94 +76,136 @@ const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
 const FarmBreeding = () => {
-    const { setLoading } = useContext(LoadingContext);
-    const { account, connect } = useWallet()
-    const { index } = useParams<boxParam>();
-    const { isDark } = useTheme();
-    const [selectedCowTokenId, setSelectedCowTokenId] = useState(0)
-    const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
+  const { setLoading } = useContext(LoadingContext);
+  const { account, connect } = useWallet()
+  const { index } = useParams<boxParam>();
+  const { isDark } = useTheme();
+  const [selectedCowTokenId, setSelectedCowTokenId] = useState(0)
+  const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
+  const [currentBlockTimestamp, setCurrentBlockTimeStamp] = useState(0);
+  const [userBreedingItems, setUserItems] = useState({
+    0:[],
+    1:[],
+    2:[],
+    3:[],
+    4:[],
+    5:[]
+  });
+  const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
 
-    const handleStartBreeding = async () => {
-      
-      // Checking breeding condition
-      const cowNftContract = new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
-      const bullNftContract = new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress());
+  const handleStartBreeding = async () => {
+    setLoading(true);
+    // Checking breeding condition
+    const cowNftContract = new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
+    const bullNftContract = new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress());
 
-      const attrOfCow = await cowNftContract.methods.attrOf(selectedCowTokenId).call();
-      const attrOfBull = await bullNftContract.methods.attrOf(selectedBullTokenId).call();
-      
-      if(attrOfCow.rarity === attrOfBull.rarity) {
-        setLoading(true);
-        try {
-          const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
-          const breedingPrice = breedingContract.methods.breedingPrice().call();
-          const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
-          const allowance = await milkTokenContract.methods.allowance(account, getNftBreedingAddress()).call();
-          if(parseInt(allowance.toString()) < parseInt(breedingPrice))
-              await milkTokenContract.methods.approve(getNftBreedingAddress(), breedingPrice).send({ from: account });
-        
-        
-          await breedingContract.methods
-              .breed(selectedCowTokenId, selectedBullTokenId)
-              .send({from: account})
-              .on('transactionHash', function() {
-                  toast.success('Transaction submitted');
-              })
-              .on('receipt', function(receipt) {
-                  console.log(receipt);
-                  setLoading(false);
-                  toast.success('Breeding started');
-              })
-        } catch (err: unknown) {
-            console.log("ERROR: ", err);
+    const attrOfCow = await cowNftContract.methods.attrOf(selectedCowTokenId).call();
+    const attrOfBull = await bullNftContract.methods.attrOf(selectedBullTokenId).call();
+
+    if (attrOfCow.rarity === attrOfBull.rarity) {
+      try {
+        const breedingPrice = await breedingContract.methods.breedingPrice().call();
+        const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
+        const allowance = await milkTokenContract.methods.allowance(account, getNftBreedingAddress()).call();
+        console.log(breedingPrice);
+        await cowNftContract.methods.approve(getNftBreedingAddress() , selectedCowTokenId).send({from: account});
+        await bullNftContract.methods.approve(getNftBreedingAddress(),selectedBullTokenId).send({from: account});
+        if (parseInt(allowance.toString()) < parseInt(breedingPrice))
+          await milkTokenContract.methods.approve(getNftBreedingAddress(), breedingPrice.toString()).send({ from: account });
+
+        await breedingContract.methods
+          .breed(selectedCowTokenId, selectedBullTokenId)
+          .send({ from: account })
+          .on('transactionHash', function () {
+            toast.success('Transaction submitted');
+          })
+          .on('receipt', function (receipt) {
+            console.log(receipt);
+            fetchInfo();
             setLoading(false);
-
-            const { message } = err as Error
-            toast.error(message);
-        }
-      } else {
-        toast.error('Cannot breed between Cow and Bull with different rarities')
+            toast.success('Breeding started');
+          })
+          
+      } catch (err: unknown) {
+        console.log("ERROR: ", err);
+        setLoading(false);
+        
+        const { message } = err as Error
+        toast.error(message);
       }
+    } else {
+      toast.error('Cannot breed between Cow and Bull with different rarities')
     }
-    /* useEffect( () => {
-      async function fetchInfo() {
+  }
+  async function fetchInfo() {
+    try {
+      setLoading(true)
+      let userItems = await breedingContract.methods.getBreedingItems(account).call();
+      let currentBlock = await web3.eth.getBlock("latest");
+      let currentTime = currentBlock.timestamp;
+      setCurrentBlockTimeStamp(currentTime);
+      console.log(userItems);
+      setUserItems(userItems)
+      setLoading(false);
+    } catch (error) {
+      console.log(error)
+      setLoading(false);
+    }
+  }
 
-      }
-
-      fetchInfo();
-    },[account]) */
-    return (
-        <Page style={{
-            backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',}}
-        >
-          <StyledHero>
-            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
-              BREEDING
-            </Heading>
-          </StyledHero>
-          <Heading as="h1" size="no" color="primary" mb="20px" style={{color: isDark ? "white" : ''}}>
-            TOTAL BREEDING FEES : 90 MILK
-          </Heading>
-          <BreedingContainer>
-            <CowCard selectTokenId={setSelectedCowTokenId}/>
-            <ActionContainer>
-              <ImageContainer>
-                <img src='/images/heartsf.png' alt="" />
-              </ImageContainer>
-              <ButtonContainer>
-                  <Button disabled={selectedCowTokenId === 0 || selectedBullTokenId === 0} onClick={handleStartBreeding}>BING BANG</Button>
-              </ButtonContainer>
-            </ActionContainer>
-            <BullCard selectTokenId={setSelectedBullTokenId}/>
-          </BreedingContainer>
-          <BreedingListContainer>
-            <BreedingCard />
-          </BreedingListContainer>
-        </Page>
-    )
+  useEffect(() => {
+    fetchInfo();
+  }, [account])
+  return (
+    <Page style={{
+      backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <StyledHero>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+          BREEDING
+        </Heading>
+      </StyledHero>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        TOTAL BREEDING FEES : 90 MILK
+      </Heading>
+      <BreedingContainer>
+        <CowCard selectTokenId={setSelectedCowTokenId} />
+        <ActionContainer>
+          <ImageContainer>
+            <img src='/images/heartsf.png' alt="" />
+          </ImageContainer>
+          <ButtonContainer>
+            <Button disabled={selectedCowTokenId === 0 || selectedBullTokenId === 0} onClick={handleStartBreeding}>BING BANG</Button>
+          </ButtonContainer>
+        </ActionContainer>
+        <BullCard selectTokenId={setSelectedBullTokenId} />
+      </BreedingContainer>
+      <BreedingListContainer>
+        {
+          userBreedingItems["0"].map((cowId, idx) =>{ //0:cowid, 1: rarity,2:cowbreed,3:bullid, 4:bullbreed,5:locktime
+            let restTime = (userBreedingItems[5][idx] - currentBlockTimestamp ) / 3600;
+            let _bullId = userBreedingItems[3][idx];
+            let _cowBreed = userBreedingItems[2][idx];
+            let _bullBreed = userBreedingItems[4][idx];
+            let _rarity = userBreedingItems[1][idx];
+            console.log(restTime);
+            return <BreedingCard 
+                        unLockTime={Math.round(restTime)}
+                        cowId = {cowId} 
+                        bullId = {_bullId} 
+                        rarity = {_rarity}
+                        cowBreed = {_cowBreed}
+                        bullBreed = {_bullBreed}
+                    />
+          })
+        }
+      </BreedingListContainer>
+    </Page>
+  )
 }
 
 export default FarmBreeding

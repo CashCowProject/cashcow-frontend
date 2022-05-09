@@ -228,7 +228,6 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
 
           <ActionContainer>
             <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
-            <Button style={{marginRight: "10px"}}>Stake to Breed</Button>
             <Button style={{marginRight: "10px"}}>Move to Sale</Button>
           </ActionContainer>
 

@@ -143,7 +143,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                                 <td><img src="/images/svgs/holy.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                             </tr>
                             <tr>
-                                <td><img src="/images/svgs/mountains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
+                                <td><img src="/images/svgs/mountain.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
                                     landData[0]&&landData[0].map(item =>{
                                         return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>

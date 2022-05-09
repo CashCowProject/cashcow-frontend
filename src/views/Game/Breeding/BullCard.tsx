@@ -7,6 +7,7 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 import { getBullNftAddress } from 'utils/addressHelpers'
+import {CATTLE_RARITY, BULL_BREED, CASH_BULLNFT_IMAGE_BASEURI } from "config/constants/nfts";
 
 
 const Container = styled.div`
@@ -92,6 +93,7 @@ const BullCard = ({selectTokenId}) => {
             promises.push(nftContract.methods.attrOf(tokenIds[i]).call())
         }
         const attrs = await Promise.all(promises)
+        console.log(attrs)
         const filteredItems = []
         for (let i = 0; i < tokenIds.length;i ++) {
             const nftItem = {
@@ -99,6 +101,7 @@ const BullCard = ({selectTokenId}) => {
                 tokenId: tokenIds[i],
                 rarity: attrs[i].rarity,
                 breed: attrs[i].breed,
+                image:CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attrs[i].rarity)] +"-"+ BULL_BREED[parseInt(attrs[i].breed)] + ".png"
             };
             filteredItems.push(nftItem);
         }
@@ -107,7 +110,7 @@ const BullCard = ({selectTokenId}) => {
     
     useEffect(() => {
         fetchNftItems()
-    }, [fetchNftItems])
+    }, [account,nftContract])
     return (
         <Container>    
             <TitleContainer>
@@ -128,7 +131,7 @@ const BullCard = ({selectTokenId}) => {
                     marginRight: '-50%',
                     transform: 'translate(-50%, -50%)',
                     minWidth: '30vw',
-                    maxWidth: '70vw',
+                    maxWidth: '50vw',
                     borderRadius: '15px',
                     background: isDark ? '#27262c' : 'white',
                     zindex: 15,
@@ -140,7 +143,7 @@ const BullCard = ({selectTokenId}) => {
                 <ModalNftsContainer>
                     {selectedNfts.map((nftEachItem) => {
                         return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)}>
-                            <img src="/images/svgs/masculino.svg" alt=""  style={{width: "32px",  height: "32px"}} key={nftEachItem.tokenId} />
+                            <img src= {nftEachItem.image} alt=""  style={{width: "52px",  height: "52px"}} key={nftEachItem.tokenId} />
                         </NftItemContainer>
                     })}
                 </ModalNftsContainer>

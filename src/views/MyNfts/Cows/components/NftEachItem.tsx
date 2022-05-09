@@ -2,17 +2,21 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils';
+import { AbiItem, toBN } from 'web3-utils';
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
 import CowNFT from 'config/abi/CowNFT.json';
 import { getCowNftAddress } from 'utils/addressHelpers';
+import {BASE_MILKPOWER, CATTLE_RARITY, COW_BREED,BULL_BREED, CASH_COWNFT_IMAGE_BASEURI, CASH_BULLNFT_IMAGE_BASEURI }  from "config/constants/nfts";
+
 const NftEachItemContainer = styled.div`
   cursor: pointer;
   min-width: 230px;
   max-width: calc(25% - 30px);
   flex: 1;
   margin: 30px 15px 0;
+  padding-left:10px;
+  padding-right:10px;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
@@ -50,6 +54,7 @@ const Title = styled.div`
   padding: 0 24px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `
 
 const TitleText = styled.div`
@@ -79,31 +84,26 @@ const ItemBottom = styled.div`
   padding: 12px 24px 20px;
   margin: 0;
 `
+const TopDetailContainer = styled.div`
+  display : flex;
+  flex-wrap: nowrap;
+  font-size: 18px;
+  color: rgb(104,147,49);
+  padding-top: 10px;
+  padding-bottom: 10px;
 
-const ItemTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #694f4e;
 `
-
-const ItemValue = styled.div`
+const MilkPowerContainer = styled.div`
+  display: flex;
+  flex: auto;
+  justify-content:center;
   align-items: center;
-  color: #431216;
-  margin-top: 5px;
-  display: flex;
-  justify-content: space-between;
 `
-
-const ItemValueText = styled.div`
-  font-size: 22px;
-  font-weight: 700;
-`
-
-const ItemValueToken = styled.div`
-  display: flex;
+const BirthContainer = styled.div`
+  display:flex;
+  flex:auto;
+  justify-content:center;
   align-items: center;
-  font-size: 14px;
 `
 const web3 = new Web3(Web3.givenProvider)
 
@@ -115,17 +115,31 @@ const NftEachItem = ({ itemInfo }: NftItemInterface) => {
   const { account } = useWallet()
   const { isDark } = useTheme()
   const [image, setImage] = useState('');
+  const [milkPower, setMilkPower] = useState("0");
+  const [birthDay, setBirthDay] = useState("0");
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
   }, [])
 
   const fetchNftItems = useCallback(async () => {
     let nftHash = null;
-    nftHash = await nftContract.methods.tokenURI(itemInfo.tokenId).call({from: account})
-    const res = await fetch(nftHash);
-    const json = await res.json();
-    let imageUrl = json.image;
-    setImage(imageUrl);
+    // nftHash = await nftContract.methods.tokenURI(itemInfo.tokenId).call({from: account});
+    let currentNumber = await web3.eth.getBlock("latest");
+    let currentTime = currentNumber.timestamp;
+    let attr = await nftContract.methods.attrOf(itemInfo.tokenId).call();
+    let birthday = attr.birth;
+    let _old = toBN(currentTime).sub(toBN(birthday)).divRound(toBN(3600)).divRound(toBN(24))
+    let rarity = attr.rarity;
+    let breed = attr.breed;
+    let milkpower = BASE_MILKPOWER[rarity];
+    let cowImage = CASH_COWNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(rarity)] +"-"+ COW_BREED[parseInt(breed)] + ".png";
+    setImage(cowImage);
+    setMilkPower(milkpower)
+    setBirthDay(_old.toString())
+    // const res = await fetch(nftHash);
+    // const json = await res.json();
+    // let imageUrl = json.image;
+    
   }, [])
 
   useEffect(() => {
@@ -135,6 +149,24 @@ const NftEachItem = ({ itemInfo }: NftItemInterface) => {
     <Link to={`/cows/${itemInfo.tokenId}`}>
       <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
         <ItemTop>
+          <TopDetailContainer>
+            <MilkPowerContainer >
+              <img
+                style={{ width: '30px', height: '30px', marginRight: '8px' }}
+                src={`/images/svgs/vida.svg`}
+                alt="Token Icon"
+              />
+              {milkPower}
+            </MilkPowerContainer>
+            <BirthContainer >
+              <img
+                  style={{ width: '30px', height: '30px', marginRight: '8px' }}
+                  src={`/images/svgs/edad.svg`}
+                  alt="Token Icon"
+                />
+                {birthDay}
+            </BirthContainer>
+          </TopDetailContainer>
           <NftImageContainer>
             <NftImage style={{ backgroundImage: `url(${image})` }} />
           </NftImageContainer>
@@ -147,9 +179,9 @@ const NftEachItem = ({ itemInfo }: NftItemInterface) => {
           </Title>
         </ItemTop>
         <ItemSeperation />
-        <ItemBottom>
+        {/* <ItemBottom>
           Description
-        </ItemBottom>
+        </ItemBottom> */}
       </NftEachItemContainer>
     </Link>
   )
