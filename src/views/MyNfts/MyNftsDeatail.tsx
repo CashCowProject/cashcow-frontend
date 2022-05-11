@@ -14,7 +14,7 @@ import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/ad
 import airNFTs from 'config/constants/airnfts'
 import MyNftData from './components/MyNftData'
 import MyNftDetailHeader from './components/MyNftDetailHeader'
-
+ 
 const StyledHero = styled.div`
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 20px;

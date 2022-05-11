@@ -8,8 +8,8 @@ import { getNftFarmingAddress } from 'utils/addressHelpers'
 import NftFarming from 'config/abi/NftFarming.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
-
 import Web3 from "web3";
+
 export interface CardInterface {
     title?: string;
     value?: string;

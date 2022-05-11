@@ -114,6 +114,7 @@ const CattleCard = ({ title, value, tokenIds, isCowNFT }: CardInterface) => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setModalOpen(false)}
+                iaHideApp={false}
                 style={{
                     content: {
                         top: '50%',

@@ -81,21 +81,20 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
     const [isModalOpen, setModalOpen] = useState(false)
     const { isDark } = useTheme();
     const [landData, setLandData] = useState([[]])
-    const [isMounted, setMounted] = useState(false);
     const landContract = new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress());
     const landInfo = useEffect(() => {
         async function loadData() {
             const temp = Array(5).fill(0).map(row => new Array(5).fill(0));
-            tokenIds.map(async(id) =>{
-                let metadata = await landContract.methods.attrOf(id).call()
-                let rarity = parseInt(metadata.rarity);
-                let kind = parseInt(metadata.landType);
+            for(let id of tokenIds) {
+                const metadata = await landContract.methods.attrOf(id).call()
+                const rarity = parseInt(metadata.rarity);
+                const kind = parseInt(metadata.landType);
                 temp[kind][rarity] +=1; 
-            });
+            };
             setLandData(temp)
         }
         loadData();
-    },[tokenIds]);
+    },[tokenIds,landContract]);
 
     return (
         <Container>    
@@ -111,6 +110,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setModalOpen(false)}
+                iaHideApp={false}
                 style={{
                     content: {
                     top: '50%',
@@ -154,7 +154,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                                 <td><img src="/images/svgs/plains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
                                     landData[1]&&landData[1].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
@@ -162,7 +162,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                                 <td><img src="/images/svgs/woods.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
                                     landData[2]&&landData[2].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
@@ -170,7 +170,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                                 <td><img src="/images/svgs/jungle.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
                                     landData[3]&&landData[3].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
@@ -178,7 +178,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                                 <td><img src="/images/svgs/hills.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
                                     landData[4]&&landData[4].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>

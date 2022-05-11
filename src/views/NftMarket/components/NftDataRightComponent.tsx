@@ -131,7 +131,7 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
     setIsAIR(isTokenAir)
     setDna(json.dna)
     setAttr(json.attributes)
-  }, [account, marketContract, airnftContract, itemId, happyCowsContract])
+  }, [account, marketContract,CowContract,BullContract,LandContract, airnftContract, itemId, happyCowsContract])
 
   useEffect(() => {
     fetchNft()

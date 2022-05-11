@@ -35,7 +35,7 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={closeDialog}
-      iaHideApp={false}
+      ariaHideApp={false}
       style={{
         content: {
           top: '50%',
@@ -57,7 +57,7 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
       <div style={{display: 'flex', justifyContent: 'center', position: 'relative'}}>
           <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center', width: "600px" }}>
             <BoxShadow style={{borderRadius: '16px', padding: '24px'}}>
-              {TranslateString(10013, 'LAND NFT Farming')}
+              {TranslateString(10013, 'BULL NFT Farming')}
             </BoxShadow>
           </Heading>
           <div style={{cursor: 'pointer', position:'absolute', right: 0}} onClick={closeDialog} onKeyDown={closeDialog} role = "button" tabIndex={0}>
@@ -67,7 +67,12 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
       
       <div style={{display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', maxHeight: "400px", overflow:'auto'}}>
         {_.map(myNfts, nft=>(
-            <img src={nft.image} alt="" style={{cursor:'pointer', width: "30%", marginRight: '8px', marginTop: '10px'}} onClick = {() =>actionHandler(nft.tokenId)}/>
+            <img 
+              src={nft.image} alt="" 
+              style={{cursor:'pointer', width: "30%", marginRight: '8px', marginTop: '10px'}} 
+              onClick = {() =>actionHandler(nft.tokenId)}
+              key = {nft.tokenId}
+            />
         ))}
       </div>
     </Modal>

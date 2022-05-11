@@ -1,22 +1,20 @@
 import React, { useState, useMemo, useCallback, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { Button } from 'cashcow-uikit'
+import { Button, Input } from 'cashcow-uikit'
 import LandNFT from 'config/abi/LandNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
+import { AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 
 import NftFarming from 'config/abi/NftFarming.json'
-import NftBreeding from 'config/abi/NftBreeding.json'
-import NftSale from 'config/abi/NftSale.json'
-import { getLandNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
+import Market from 'config/abi/Market.json'
+import { getLandNftAddress, getNftFarmingAddress, getMarketAddress } from 'utils/addressHelpers'
 import { provider } from 'web3-core';
-import {CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from "config/constants/nfts"
+import { CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from "config/constants/nfts"
 
 const Container = styled.div`
     position: relative;
@@ -131,6 +129,19 @@ const ContractInfoContainer = styled.div`
     justify-content: center;
   }
 `
+
+const PriceInfoContainer = styled.div`
+  display: flex;
+  padding: 16px 32px;
+  flex-wrap: nowrap;
+  align-items: center;
+  color: #0c5569;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+`
+
 const web3 = new Web3(Web3.givenProvider)
 
 export interface NftDataLeftComponentInterface {
@@ -147,57 +158,86 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const [kindName, setKind] = useState("")
   const { setLoading } = useContext(LoadingContext)
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
-
+  const [salePrice, setSalePrice] = useState(0);
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
-  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
-  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
-  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
+  const NFTFarmingContract = useMemo(() => {
+    return new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  }, [])
+
+  const marketContract = useMemo(() => {
+    return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
+  }, [])
 
   const fetchNftInfo = useCallback(async () => {
     const attrs = await nftContract.methods.attrOf(tokenId).call();
     const _cowCapacity = await NFTFarmingContract.methods.cowLimitPerLand(attrs.rarity).call();
     const _bullCapacity = await NFTFarmingContract.methods.bullLimitPerLand(attrs.rarity).call();
-    let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attrs.rarity)] + "-" + LAND_KIND[parseInt(attrs.landType)] + ".png";
+    const _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attrs.rarity)] + "-" + LAND_KIND[parseInt(attrs.landType)] + ".png";
     setNftImage(_image);
     setCowCapacity(_cowCapacity);
     setBullCapacity(_bullCapacity);
     setRarity(LAND_RARITY[parseInt(attrs.rarity)]);
     setKind(LAND_KIND[parseInt(attrs.landType)]);
-  }, [nftContract, tokenId])
+  }, [nftContract, NFTFarmingContract, tokenId])
 
   useEffect(() => {
     fetchNftInfo()
   }, [fetchNftInfo])
 
-  const farmActionHandler = async (_tokenId: string) =>{
-    try{
-      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+  const farmActionHandler = async (_tokenId: string) => {
+    try {
+      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account });
       await NFTFarmingContract.methods.depositLand(_tokenId).send({ from: account });
-    }catch (error) {
+      history.push('/lands')
+      toast.success('Successfully staking')
+
+    } catch (error) {
       console.log(error)
     }
   }
-
-  const saleActionHandler = async (_tokenId: string) =>{
+  const burnActionHandler = async (tokenId) =>{
     try{
-
-    }catch (error) {
-      
-    }    
+      setLoading(true)
+      await nftContract.methods.burn(tokenId).send({ from: account });
+      toast.success("successfully burned.")
+    }catch(error) {
+      toast.error("failed burn")
+    }
+  }
+  const priceChangeHandler = (e) =>{
+    const _price = e.target.value;
+    setSalePrice(_price);
   }
 
+  const saleActionHandler = async (_tokenId: string) => {
+    try {
+      if (salePrice <= 0) {
+        toast.error("Please input the NFT price")
+        return;
+      }
+      setLoading(true);
+      await nftContract.methods.approve(getMarketAddress(), _tokenId).send({ from: account });
+      await marketContract.methods.createMarketItem(getLandNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
+      setLoading(false);
+      history.push('/lands')
+      toast.success('Successfully listed NFT')
+
+    } catch (error) {
+      setLoading(false);
+    }
+  }
 
   return (
-    <Container style={{background: isDark ? "#27262c" : ''}}>
+    <Container style={{ background: isDark ? "#27262c" : '' }}>
       <GradientBack />
       <MetadataContainer>
         <ImageContainer>
           <NftImage style={{ backgroundImage: `url(${nftImage})` }} />
         </ImageContainer>
         <NftInfo>
-          <TitleContainer style={{ color: isDark ? 'white' : '' }}>{kindName?kindName:"land"} #{tokenId}</TitleContainer>
+          <TitleContainer style={{ color: isDark ? 'white' : '' }}>{kindName ? kindName : "land"} #{tokenId}</TitleContainer>
           <AttributesContainer
             style={{
               background: isDark ? '#16151a' : '',
@@ -211,7 +251,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                   src={`/images/svgs/femenino.svg`}
                   alt=""
                 />
-                { "CAPACITY" } : { cowCapacity}
+                {"CAPACITY"} : {cowCapacity}
               </NftAttributeItem>
 
               <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
@@ -220,7 +260,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                   src={`/images/svgs/masculino.svg`}
                   alt=""
                 />
-                { "CAPACITY" } : { bullCapacity}
+                {"CAPACITY"} : {bullCapacity}
               </NftAttributeItem>
               <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
                 <img
@@ -228,7 +268,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                   src={`/images/svgs/${kindName}.svg`}
                   alt=""
                 />
-                { "LAND" } : { kindName}
+                {"LAND"} : {kindName}
               </NftAttributeItem>
               <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
                 <img
@@ -236,21 +276,33 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                   src={`/images/svgs/${rarityName}.svg`}
                   alt=""
                 />
-                { "RARITY" } : { rarityName}
+                {"RARITY"} : {rarityName}
               </NftAttributeItem>
 
             </NftAttributes>
           </AttributesContainer>
           <div style={{ flex: 1 }} />
+
+          <PriceInfoContainer>
+            <span style={{ marginRight: '8px', color: '#689330' }}>Sale Price</span>
+            <Input
+              type="number"
+              onChange={(e) => priceChangeHandler(e)}
+              style={{ flex: "auto", width: "60%" }}
+            />
+            <div style={{ flex: 2, marginLeft: 10 }}>MILK</div>
+          </PriceInfoContainer>
+
           <ActionContainer>
-            <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
-            <Button style={{marginRight: "10px"}}>Move to Sale</Button>
+            <Button style={{ marginRight: "10px" }} onClick={() => farmActionHandler(tokenId)}>Stake to Farm</Button>
+            <Button style={{ marginRight: "10px" }} onClick={() => saleActionHandler(tokenId)}>Move to Sale</Button>
+            <Button style={{ marginRight: "10px" }} onClick={() => burnActionHandler(tokenId)}>DELETE</Button>
           </ActionContainer>
         </NftInfo>
       </MetadataContainer>
       <ContractInfoContainer>
-        <span style={{marginRight: '8px', color:'#689330'}}>Contract Address</span>
-        { getLandNftAddress() }
+        <span style={{ marginRight: '8px', color: '#689330' }}>Contract Address</span>
+        {getLandNftAddress()}
       </ContractInfoContainer>
     </Container>
   )

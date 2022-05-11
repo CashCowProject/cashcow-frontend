@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import styled, { useTheme } from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
@@ -9,10 +9,9 @@ const StyledHero = styled.div`
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 20px;
 `
-const LandManage = () => {
+const CowManage = () => {
 
     const { isDark } = useTheme();
-    const [itemCount, setItemCount] = useState(0);
     return (
         <Page
             style={{
@@ -24,7 +23,7 @@ const LandManage = () => {
         >
             <StyledHero>
                 <Heading as="h1" size="lg" color="text" mb="20px">
-                    MANAGEMENT - LANDS
+                    MANAGEMENT - COWS
                 </Heading>
             </StyledHero>
             <NftHeader />
@@ -33,4 +32,4 @@ const LandManage = () => {
     )
 }
 
-export default LandManage
+export default CowManage

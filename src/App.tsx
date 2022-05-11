@@ -22,7 +22,8 @@ const Stakes = lazy(() => import('./views/Stakes'))
 const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
-const Blindbox = lazy(() => import('./views/Blindbox2'))
+const BlindboxCow = lazy(() => import('./views/Blindbox2'))
+const Blindbox = lazy(() => import('./views/Blindbox'))
 const BlindboxPack = lazy(() => import('./views/Blindbox2/NftPack'))
 const BlindboxPackCommon = lazy(() => import('./views/Blindbox2/NftPack/Common'))
 const BlindboxPackUncommon = lazy(() => import('./views/Blindbox2/NftPack/Uncommon'))
@@ -48,6 +49,8 @@ const NftMarketDetail = lazy(() => import('./views/NftMarket/NftMarketDetail'))
 const MyNfts = lazy(() => import('./views/MyNfts'))
 const MyNftsDetail = lazy(() => import('./views/MyNfts/MyNftsDeatail'))
 const LandManage = lazy(() => import('./views/Game/Management/Land'))
+const CowManage = lazy(() => import('./views/Game/Management/Cow'))
+const BullManage = lazy(() => import('./views/Game/Management/Bull'))
 // This config is required for number formating
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
@@ -102,6 +105,9 @@ const App: React.FC = () => {
             <Route exact path="/blind-box">
               <Blindbox />
             </Route>
+            <Route exact path="/blind-box/2">
+              <BlindboxCow />
+            </Route>
             <Route path="/blind-box/common-pack">
               <BlindboxPackCommon />
             </Route>
@@ -126,9 +132,9 @@ const App: React.FC = () => {
             <Route path="/blind-box/individual">
               <BlindboxIndividual />
             </Route>
-            {/* <Route path="/blind-box/:index">
+            <Route path="/blind-box/:index">
               <BlindboxDetail />
-            </Route> */}
+            </Route>
             <Route exact path="/lands/:tokenId">
               <LandDetail />
             </Route>
@@ -167,6 +173,12 @@ const App: React.FC = () => {
             </Route>
             <Route path="/management/land">
               <LandManage />
+            </Route>
+            <Route path="/management/cow">
+              <CowManage />
+            </Route>
+            <Route path="/management/bull">
+              <BullManage />
             </Route>
             {/* <Route path="/ifo"> */}
             {/*  <Ifos /> */}

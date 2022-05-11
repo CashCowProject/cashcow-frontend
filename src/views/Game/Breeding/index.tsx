@@ -143,7 +143,7 @@ const FarmBreeding = () => {
       let userItems = await breedingContract.methods.getBreedingItems(account).call();
       let currentBlock = await web3.eth.getBlock("latest");
       let currentTime = currentBlock.timestamp;
-      setCurrentBlockTimeStamp(currentTime);
+      setCurrentBlockTimeStamp(Number(currentTime));
       console.log(userItems);
       setUserItems(userItems)
       setLoading(false);

@@ -149,7 +149,7 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
   const fetchNft = useCallback(async () => {
     let nftHash = null
     const isAIR = nftEachItem.nftContract === getAirNftAddress()
-    const isHappy = nftEachItem.nftContract == getHappyCowAddress();
+    const isHappy = nftEachItem.nftContract === getHappyCowAddress();
     const isCowNft = nftEachItem.nftContract === getCowNftAddress();
     const isBullNft = nftEachItem.nftContract === getBullNftAddress();
     const isLandNft = nftEachItem.nftContract === getLandNftAddress();
@@ -174,7 +174,7 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
     } else {
       setImage(imageUrl);
-      setName(json.name + "#"+nftEachItem.tokenId.toString())
+      setName(json.name +"#"+nftEachItem.tokenId.toString())
     }
     
 

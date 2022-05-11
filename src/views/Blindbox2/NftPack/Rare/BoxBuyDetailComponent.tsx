@@ -106,10 +106,17 @@ const BoxBuyDetailComponent = () => {
         const busdTokenContract = new web3.eth.Contract(BUSD.abi as AbiItem[], getBusdAddress());
         const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
         const allowance = await busdTokenContract.methods.allowance(account, getNftSaleAddress()).call();
-        if(parseInt(allowance.toString()) < parseInt(price))
-            await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });
-
+        const busdBalance = await busdTokenContract.methods.balanceOf(account).call();
+        if(toBN(busdBalance).gt(toBN(price))) {
+            setLoading(false);
+            toast.error("busd balance is insufficient. you must have " + fromWei(price) + " busd in your wallet")
+            return;
+        }
         try {
+
+            if(parseInt(allowance.toString()) < parseInt(price))
+                await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });
+
             /* const estimatedGas = await saleContract.methods
                 .buyCommonPack()
                 .estimateGas({from: account}); */

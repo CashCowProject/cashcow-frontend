@@ -4,15 +4,16 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { provider } from 'web3-core'
 import toast from 'react-hot-toast'
-import { Button } from 'cashcow-uikit'
+import { Button, Input } from 'cashcow-uikit'
 import BullNFT from 'config/abi/BullNFT.json'
 import NftFarming from 'config/abi/NftFarming.json'
 import NftBreeding from 'config/abi/NftBreeding.json'
+import Market from 'config/abi/Market.json';
 import NftSale from 'config/abi/NftSale.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
-import { getBullNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
+import { getBullNftAddress, getNftFarmingAddress, getMarketAddress, getNftSaleAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 
@@ -129,6 +130,17 @@ const ContractInfoContainer = styled.div`
     justify-content: center;
   }
 `
+const PriceInfoContainer = styled.div`
+  display: flex;
+  padding: 16px 32px;
+  flex-wrap: nowrap;
+  align-items: center;
+  color: #0c5569;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+`
 const web3 = new Web3(Web3.givenProvider)
 
 export interface NftDataLeftComponentInterface {
@@ -149,11 +161,33 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const [nftAttrs, setNftAttrs] = useState([])
   const [nftBirth, setNftBirth] = useState(0)
   const { setLoading } = useContext(LoadingContext)
+  const [salePrice, setSalePrice] = useState(0);
 
+  const priceChangeHandler = (e) =>{
+    const _price = e.target.value;
+    setSalePrice(_price);
+  }
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
+  const marketContract = useMemo(() => {
+    return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
+  }, [])
 
+  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+  const farmActionHandler = async (_tokenId: string) =>{
+    try{
+      setLoading(true);
+      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
+      setLoading(false);
+      history.push('/bulls')
+      toast.success('Successfully bought NFT.')
+
+    }catch (error) {
+      setLoading(false)
+    }
+  }
   const fetchNftInfo = useCallback(async () => {
     const attrs = await nftContract.methods.attrOf(tokenId).call()
     const uri = await nftContract.methods.tokenURI(tokenId).call()
@@ -167,24 +201,30 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
     fetchNftInfo()
   }, [fetchNftInfo])
 
-  const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
-  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
-  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
-  const farmActionHandler = async (_tokenId: string) =>{
-    try{
-      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
-      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
-    }catch (error) {
-
-    }
-  }
-
   const saleActionHandler = async (_tokenId: string) =>{
     try{
-
+      if(salePrice <= 0) {
+        toast.error("Please input the NFT price")
+        return;
+      }
+      setLoading(true);
+      await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
+      await marketContract.methods.createMarketItem(getBullNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
+      history.push('/bulls')
+      toast.success('Successfully bought NFT.')
+      setLoading(false);
     }catch (error) {
-      
+      setLoading(false);
     }    
+  }
+  const burnActionHandler = async (tokenId) =>{
+    try{
+      setLoading(true)
+      await nftContract.methods.burn(tokenId).send({ from: account });
+      toast.success("successfully burned.")
+    }catch(error) {
+      toast.error("failed burn")
+    }
   }
 
   return (
@@ -226,9 +266,20 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
           </AttributesContainer>
           <div style={{ flex: 1 }} />
 
+          <PriceInfoContainer>
+            <span style={{marginRight: '8px', color:'#689330'}}>Sale Price</span>
+            <Input 
+              type = "number" 
+              onChange={(e) => priceChangeHandler(e)}
+              style = {{flex: "auto", width:"60%"}}
+            />
+            <div style = {{ flex: 2, marginLeft:10 }}>MILK</div>
+          </PriceInfoContainer>       
+
           <ActionContainer>
             <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
-            <Button style={{marginRight: "10px"}}>Move to Sale</Button>
+            <Button style={{marginRight: "10px"}} onClick = {()=> saleActionHandler(tokenId)}>Move to Sale</Button>
+            <Button style={{marginRight: "10px"}} onClick = {()=> burnActionHandler(tokenId)}>DELETE</Button>
           </ActionContainer>
 
         </NftInfo>

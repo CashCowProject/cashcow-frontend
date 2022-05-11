@@ -4,20 +4,21 @@ import React, { useState, useMemo, useCallback, useEffect, useContext } from 're
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
-import Select from '../../../../../components/Select/Select'
 import { Button } from 'cashcow-uikit'
 import { useSelector } from 'react-redux'
 import { State } from 'state/types'
-import LandNFT from 'config/abi/LandNFT.json'
+import CowNFT from 'config/abi/CowNFT.json'
 import NftFarming from 'config/abi/NftFarming.json'
-import { getLandNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress } from 'utils/addressHelpers'
+import { getCowNftAddress, getNftFarmingAddress } from 'utils/addressHelpers'
 import Web3 from 'web3'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import SelectNFT from "./SelectNFT"
-import { CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND} from 'config/constants/nfts'
+import { CASH_COWNFT_IMAGE_BASEURI, CATTLE_RARITY, COW_BREED} from 'config/constants/nfts'
 import { LoadingContext } from 'contexts/LoadingContext'
-import {setLandNftCount, updating } from 'state/landManagement'
+import { updating } from 'state/cowManagement'
+import Select from '../../../../../components/Select/Select'
+
 const NftHeaderContainer = styled.div`
   display: flex;
   align-items: center;
@@ -81,15 +82,15 @@ const web3 = new Web3(Web3.givenProvider)
 
 const NftHeader = () => {
   const dispatch = useDispatch()
-  const updated = useSelector((state: State) => state.land.updated)
+  const updated = useSelector((state: State) => state.cow.updated)
   const { isDark } = useTheme()
-  const itemCount = useSelector((state: State) => state.land.landItemCount)
+  const itemCount = useSelector((state: State) => state.cow.cowItemCount)
   const { account }: { account: string;} = useWallet()
   const [isOpen, setIsOpen] = useState(false);
   const [myNfts, setMyNfts] = useState([]);
   const {setLoading } = useContext(LoadingContext);
   const nftContract = useMemo(() => {
-    return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
   }, [])
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
 
@@ -98,7 +99,7 @@ const NftHeader = () => {
       setLoading(true);
       setIsOpen(false);
       await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
-      await NFTFarmingContract.methods.depositLand(_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
       dispatch(updating(!updated))
       setLoading(false)
     }catch (error) {
@@ -112,9 +113,9 @@ const NftHeader = () => {
     for(let i = 0 ; i< tokenIds.length; i++) {
       let temp = {};
       let attr = await nftContract.methods.attrOf(tokenIds[i]).call();
-      let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attr.rarity)] + "-" + LAND_KIND[parseInt(attr.landType)] + ".png";
-      let _rarity = LAND_RARITY[parseInt(attr.rarity)];
-      let _name = LAND_KIND[parseInt(attr.landType)];
+      let _image = CASH_COWNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attr.rarity)] + "-" + COW_BREED[parseInt(attr.breed)] + ".png";
+      let _rarity = CATTLE_RARITY[parseInt(attr.rarity)];
+      let _name = COW_BREED[parseInt(attr.breed)];
       let _data = _name + _rarity;
       temp['data'] = _data;
       temp["image"] = _image;
@@ -133,12 +134,12 @@ const NftHeader = () => {
     <NftHeaderContainer>
       <LeftContainer style={{ color: isDark ? 'white' : '#035569', fontWeight: 'bold', background:'white' }}>
         <Total>
-          TOTAL LANDS: {itemCount}
+          TOTAL COWS: {itemCount}
         </Total>
         <Blank />
         <ButtonContainer>
           <Button onClick = {()=>setIsOpen(true)}>
-            ADD LAND
+            ADD COW
           </Button>
         </ButtonContainer>
       </LeftContainer>

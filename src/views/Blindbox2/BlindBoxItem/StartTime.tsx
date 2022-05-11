@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const StartTimeContainer = styled.div`
-    margin-top: 20px;
+    position: relative;
+    left: 45%;
+    top: 20%;
+    border: solid 1px white;
+    border-radius: 10px;
+    padding:10px;
+    width: fit-content;
     
 `
 

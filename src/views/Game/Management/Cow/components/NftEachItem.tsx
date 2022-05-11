@@ -11,7 +11,8 @@ import toast from 'react-hot-toast'
 import { LoadingContext } from 'contexts/LoadingContext'
 import { useSelector,useDispatch } from 'react-redux';
 import { State } from 'state/types'
-import {setLandNftCount, updating } from 'state/landManagement'
+import { setCowNftCount, updating } from 'state/cowManagement'
+
 const web3 = new Web3(Web3.givenProvider);
 const NftEachItemContainer = styled.div`
   cursor: pointer;
@@ -92,8 +93,8 @@ const NftEachItem = ({ image,  tokenId, rarity}) => {
   const { account } = useWallet()
   const { isDark } = useTheme()
   const { setLoading } = useContext(LoadingContext)
-  const itemCount = useSelector((state: State) => state.land.landItemCount);
-  const updated = useSelector((state: State) => state.land.updated);
+  const itemCount = useSelector((state: State) => state.cow.cowItemCount);
+  const updated = useSelector((state: State) => state.cow.updated);
   const dispatch = useDispatch();
   const removeItemHandler =async () =>{
     try{
@@ -114,9 +115,9 @@ const NftEachItem = ({ image,  tokenId, rarity}) => {
         toast.error("Plese withdraw the Bull NFTs first.")
       }
       
-      await farmContract.methods.withdrawLand(tokenId).send({ from: account });
-      toast.success("success withdrawing a Land NFT")
-      dispatch(setLandNftCount(itemCount - 1))
+      await farmContract.methods.withdrawCow(tokenId).send({ from: account });
+      toast.success("success withdrawing a Cow NFT")
+      dispatch(setCowNftCount(itemCount - 1))
       dispatch(updating(!updated))
       setLoading(false)
     }catch(error) {

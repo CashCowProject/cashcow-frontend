@@ -50,6 +50,15 @@ export interface PoolsState {
 }
 export interface LandState {
   landItemCount: number
+  updated: boolean
+}
+export interface CowState {
+  cowItemCount: number
+  updated: boolean
+}
+export interface BullState {
+  bullItemCount: number
+  updated: boolean
 }
 
 // Global state
@@ -59,5 +68,7 @@ export interface State {
   farms: FarmsState
   pools: PoolsState
   markets: MarketState
-  land: Landstate
+  land: LandState
+  cow: CowState
+  bull: BullState
 }

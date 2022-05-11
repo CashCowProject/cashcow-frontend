@@ -3,6 +3,8 @@ import farmsReducer from './farms'
 import poolsReducer from './pools'
 import marketsReducer from './markets'
 import landReducer from './landManagement'
+import cowReducer from './cowManagement'
+import bullReducer from './bullManagement'
 
 export default configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -10,6 +12,8 @@ export default configureStore({
     farms: farmsReducer,
     pools: poolsReducer,
     markets: marketsReducer,
-    land:landReducer
+    land:landReducer,
+    cow:cowReducer,
+    bull: bullReducer
   },
 })

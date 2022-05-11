@@ -26,7 +26,7 @@ const BlindBoxItem = ({itemId, background, itemTitle}: BlindBoxItemInterface) =>
     const ItemBackground = styled.div`
         width: 100%;
         height: 100%;
-        background-image : url(images/${background});
+        background-image : url(/images/${background});
         background-size: cover;
         background-position: 0;
         background-repeat: no-repeat;

@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import NftFarming from 'config/abi/NftFarming.json'
-import LandNFT from 'config/abi/LandNFT.json'
+import BullNFT from 'config/abi/BullNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 import { useSelector } from 'react-redux'
-import { getNftFarmingAddress, getLandNftAddress } from 'utils/addressHelpers'
+import { getNftFarmingAddress, getBullNftAddress } from 'utils/addressHelpers'
 import NftEachItem from './NftEachItem'
 import { State } from 'state/types'
-import {CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from 'config/constants/nfts'
+import {CASH_BULLNFT_IMAGE_BASEURI, CATTLE_RARITY, BULL_BREED } from 'config/constants/nfts'
 
 import { useDispatch } from 'react-redux'
-import { setLandNftCount  } from 'state/landManagement'
+import { setBullNftCount  } from 'state/bullManagement'
 import { LoadingContext } from "contexts/LoadingContext"
 
 const NftItemContainer = styled.div`
@@ -28,21 +28,21 @@ const NftItems = () => {
   const [nftItems, setNftItems] = useState([])
   const {setLoading } = useContext(LoadingContext);
   const dispatch = useDispatch()
-  const updated = useSelector((state: State) => state.land.updated)
+  const updated = useSelector((state: State) => state.bull.updated)
   const farmContract = useMemo(() => {
     return new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
   }, [])
   const nftContract = useMemo(() =>{
-    return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [account])
   const fetchNftItems = useCallback(async () => {
     setLoading(true);
     try{
-      const landTokenIds = await farmContract.methods.landTokenIdsOf(account).call({ from: account });
+      const bullTokenIds = await farmContract.methods.bullTokenIdsOf(account).call({ from: account });
       let items = [];
-      for(let id of landTokenIds){
+      for(let id of bullTokenIds){
         let attr = await nftContract.methods.attrOf(id).call();
-        let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attr.rarity)] + "-" + LAND_KIND[parseInt(attr.landType)] + ".png";
+        let _image = CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attr.rarity)] + "-" + BULL_BREED[parseInt(attr.breed)] + ".png";
         let item = {
           "image": _image,
           "tokenId": id,
@@ -51,7 +51,7 @@ const NftItems = () => {
         items.push(item);
       }
       setLoading(false)
-      dispatch(setLandNftCount(items.length))
+      dispatch(setBullNftCount(items.length))
       setNftItems(items)
     } catch(error) {
       setLoading(false);

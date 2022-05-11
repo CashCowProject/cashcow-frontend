@@ -172,6 +172,7 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
         isHappyCow = marketItems[i].nftContract === getHappyCowAddress();
         isCowToken = marketItems[i].nftContract === getCowNftAddress();
         isLandToken = marketItems[i].nftContract ===getLandNftAddress();
+        isBullToken = marketItems[i].nftContract ===getBullNftAddress();
         tokenId = marketItems[i].tokenId
         setSalePrice(fromWei(marketItems[i].price, 'ether'))
         if (marketItems[i].seller === account) {

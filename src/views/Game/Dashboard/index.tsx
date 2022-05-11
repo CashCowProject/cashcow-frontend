@@ -1,27 +1,23 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import {Link, useParams} from 'react-router-dom'
+import { useParams} from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from "web3";
-import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
+import { fromWei, AbiItem } from "web3-utils";
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
-import AirNft from 'config/abi/AirNft.json'
-import HappyCows from 'config/abi/HappyCows.json'
 import NftFarming from 'config/abi/NftFarming.json'
 import CowTokenABI from 'config/abi/cow.json'
 import MasterChefABI from 'config/abi/masterchef.json'
-import GENESIS_NFT_IDS from 'config/constants/airnfts'
-import HAPPY_COW_BREEDS from 'config/constants/happycowbreeds'
-import { getNftSaleAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress, getHappyCowAddress } from 'utils/addressHelpers'
+import { getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import StaticCard from './StaticCard'
 import CattleCard from './CattleCard'
 import LandCard from './LandCard'
 import GenesisCard from './GenesisCard'
 import HappyCowCard from './HappyCowCard'
 import Harvest from './Harvest'
-
+import { LoadingContext } from 'contexts/LoadingContext'
 type boxParam = {
   index: string;
 };
@@ -52,6 +48,7 @@ const CardContainer = styled.div`
 const web3 = new Web3(Web3.givenProvider);
 const FarmDashboard = () => {
     const { account, connect } = useWallet()
+    const { setLoading } = useContext(LoadingContext)
     const { index } = useParams<boxParam>();
     const { isDark } = useTheme();
     const [milkPower, setMilkPower] = useState(0)
@@ -67,44 +64,50 @@ const FarmDashboard = () => {
     const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
     useEffect( () => {
       async function fetchInfo() {
-          const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress());
-          const vMilkPower = await farmingContract.methods.milkPowerOf(account).call();
-          const vGameMilkPower = await farmingContract.methods.milkPowerOfGame().call();
-          const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
-          const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call();
-          const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call();
-          setMilkPower(vMilkPower);
-          setGameMilkPower(vGameMilkPower);
-          let rewardAmount = await masterChefContract.methods.pendingMilk(5, getNftFarmingAddress()).call({from: account});
-          let _x = parseInt(fromWei(rewardAmount));
-          setMilkReward(_x.toString());
-
-          // let userInfo = await masterChefContract.methods.userInfo(5, getNftFarmingAddress()).call({from: account});
-          let poolInfo = await masterChefContract.methods.poolInfo(5).call({from:account});
-          let milkPerBlock = await masterChefContract.methods.MilkPerBlock().call({ from: account});
-          let totalAllocPoint = await masterChefContract.methods.totalAllocPoint().call({ from: account});
-
-          let accMilkPerShare = poolInfo.accMilkPerShare;
-          let _m = parseInt(fromWei(milkPerBlock));
-          let allocpoint = parseInt(poolInfo.allocPoint) ;
-          let _t = parseInt(totalAllocPoint);
-          let _y = 3600 * 24 *_m * allocpoint / _t/3; //3s per block
-
-          if(parseInt(vGameMilkPower) === 0) {
-            setMilkPerDay(0);
-          } else {
-            const vMilkPerDay = _y * parseInt(vMilkPower) / parseInt(vGameMilkPower);
-            console.log(vMilkPerDay);
-            setMilkPerDay( parseInt(vMilkPerDay.toString()) );
-          }
-
-
-          setCowAmount(cowNFTIds);
-          setBullAmount(bullNFTIds);
-          if(landTokenIds) {
-            console.log("AAA")
-            setLandAmount(landTokenIds);
-          }
+          try {
+              setLoading(true);
+              const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress());
+              const vMilkPower = await farmingContract.methods.milkPowerOf(account).call();
+              const vGameMilkPower = await farmingContract.methods.milkPowerOfGame().call();
+              const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
+              const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call();
+              const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call();
+              setMilkPower(vMilkPower);
+              setGameMilkPower(vGameMilkPower);
+              const rewardAmount = await masterChefContract.methods.pendingMilk(5, getNftFarmingAddress()).call({from: account});
+              const _x = parseInt(fromWei(rewardAmount));
+              setMilkReward(_x.toString());
+    
+              // let userInfo = await masterChefContract.methods.userInfo(5, getNftFarmingAddress()).call({from: account});
+              const poolInfo = await masterChefContract.methods.poolInfo(5).call({from:account});
+              let milkPerBlock = await masterChefContract.methods.MilkPerBlock().call({ from: account});
+              let totalAllocPoint = await masterChefContract.methods.totalAllocPoint().call({ from: account});
+    
+              let accMilkPerShare = poolInfo.accMilkPerShare;
+              let _m = parseInt(fromWei(milkPerBlock));
+              let allocpoint = parseInt(poolInfo.allocPoint) ;
+              let _t = parseInt(totalAllocPoint);
+              let _y = 3600 * 24 *_m * allocpoint / _t/3; //3s per block
+    
+              if(parseInt(vGameMilkPower) === 0) {
+                setMilkPerDay(0);
+              } else {
+                const vMilkPerDay = _y * parseInt(vMilkPower) / parseInt(vGameMilkPower);
+                console.log(vMilkPerDay);
+                setMilkPerDay( parseInt(vMilkPerDay.toString()) );
+              }
+    
+    
+              setCowAmount(cowNFTIds);
+              setBullAmount(bullNFTIds);
+              if(landTokenIds) {
+                console.log("AAA")
+                setLandAmount(landTokenIds);
+              }
+              setLoading(false);
+            } catch(error) {
+              setLoading(false);
+          } 
       }
 
       fetchInfo();
