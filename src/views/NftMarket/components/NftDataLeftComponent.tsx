@@ -219,11 +219,27 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
   const cancelList = async (tokenId) =>{
     try {
       setLoading(true);
-      if(isAIR) await marketContract.methods.unlistMarketItem(getAirNftAddress(), tokenId).send({ from: account });
-      if(isHappy) await marketContract.methods.unlistMarketItem(getHappyCowAddress(), tokenId).send({ from: account });
-      if(isCowNFT) await marketContract.methods.unlistMarketItem(getCowNftAddress(), tokenId).send({ from: account });
-      if(isBullNFT) await marketContract.methods.unlistMarketItem(getBullNftAddress(), tokenId).send({ from: account });
-      if(isLandNFT) await marketContract.methods.unlistMarketItem(getLandNftAddress(), tokenId).send({ from: account });
+      if(isAIR) {
+        await marketContract.methods.unlistMarketItem(getAirNftAddress(), tokenId).send({ from: account });
+        history.push('/market/airnft')
+      }
+      if(isHappy) {
+        await marketContract.methods.unlistMarketItem(getHappyCowAddress(), tokenId).send({ from: account });
+        history.push('./market/HappyCows')
+      }
+      if(isCowNFT) {
+        await marketContract.methods.unlistMarketItem(getCowNftAddress(), tokenId).send({ from: account });
+        history.push('./market/cow')
+      }
+      if(isBullNFT) {
+        await marketContract.methods.unlistMarketItem(getBullNftAddress(), tokenId).send({ from: account });
+        history.push('./market/bull')
+      }
+      if(isLandNFT) {
+        await marketContract.methods.unlistMarketItem(getLandNftAddress(), tokenId).send({ from: account });
+        history.push('./market/land');
+      }
+     
       setLoading(false);
     } catch(error) {
       setLoading(false);

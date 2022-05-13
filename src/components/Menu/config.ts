@@ -125,9 +125,29 @@ const config: MenuEntry[] = [
   // },
   {
     label: 'NFT Market',
-    // icon: 'NftIcon',
     icon: 'TicketIcon',
-    href: '/nft-market'
+    items:[
+      {
+        label: "HAPPY COWS",
+        href: '/market/HappyCows'  
+      },
+      {
+        label: "GENESIS",
+        href: '/market/airnft'  
+      },
+      {
+        label: "LANDS",
+        href: '/market/land'  
+      },
+      {
+        label: "COWS",
+        href: '/market/cow'  
+      },
+      {
+        label: "BULLS",
+        href: '/market/bull'  
+      }
+    ]
   },
   {
     label: 'My NFTs',

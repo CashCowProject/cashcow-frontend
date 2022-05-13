@@ -159,9 +159,23 @@ const App: React.FC = () => {
             <Route exact path="/farm/breeding">
               <FarmBreeding />
             </Route>
-            <Route exact path="/nft-market">
-              <NftMarket />
+            
+            <Route exact path="/market/HappyCows">
+              <NftMarket collection = "HappyCows"/>
             </Route>
+            <Route exact path="/market/land">
+              <NftMarket collection = "land"/>
+            </Route>
+            <Route exact path="/market/airnft">
+              <NftMarket collection = "airnft"/>
+            </Route>
+            <Route exact path="/market/cow">
+              <NftMarket collection = "cow"/>
+            </Route>
+            <Route exact path="/market/bull">
+              <NftMarket collection = "bull"/>
+            </Route>
+
             <Route path="/nft-market/:itemId">
               <NftMarketDetail />
             </Route>

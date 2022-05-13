@@ -68,7 +68,7 @@ export default {
   
   nftminter: {
     56: '',
-    97: '0x6f05f0dd825Efdf24Eed5A3eFcDD3a121e295d04'
+    97: '0x84282B818700a97706e761E33c3712DF895a5231'
   },
   nftsale: {
     56: '',

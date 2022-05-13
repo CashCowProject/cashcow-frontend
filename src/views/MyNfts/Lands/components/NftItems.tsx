@@ -13,6 +13,8 @@ const NftItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: 0 -15px;
+  align-items: center;
+  justify-content: center;
 `
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)

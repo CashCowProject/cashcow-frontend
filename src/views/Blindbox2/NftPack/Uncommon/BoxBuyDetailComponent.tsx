@@ -106,7 +106,7 @@ const BoxBuyDetailComponent = () => {
         const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
         const allowance = await busdTokenContract.methods.allowance(account, getNftSaleAddress()).call();
         const busdBalance = await busdTokenContract.methods.balanceOf(account).call();
-        if(toBN(busdBalance).gt(toBN(price))) {
+        if(toBN(busdBalance).lt(toBN(price))) {
             setLoading(false);
             toast.error("busd balance is insufficient. you must have " + fromWei(price) + " busd in your wallet")
             return;

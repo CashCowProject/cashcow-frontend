@@ -96,7 +96,7 @@ const NftHeader = () => {
     <NftHeaderContainer>
       <LeftContainer style={{ color: isDark ? 'white' : '#035569', fontWeight: 'bold' }}>NFT MARKETPLACE</LeftContainer>
       <RightContainer>
-        <Select
+        {/* <Select
           options={sortByItems}
           onOptionChange={(option) => dispatch(setSortOrder(option.value))}
           style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
@@ -105,7 +105,7 @@ const NftHeader = () => {
           options={filterByCollection}
           onOptionChange={(option) => dispatch(setCollectionType(option.value))}
           style={{ marginRight: '15px' }}
-        />
+        /> */}
         {/* <SearchBox>
           <InputTag placeholder="Please enter keywords to search" />
           <LinkTag>

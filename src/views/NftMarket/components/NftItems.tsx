@@ -18,7 +18,7 @@ const NftItemContainer = styled.div`
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
-const NftItems = () => {
+const NftItems = ({collection}) => {
   const { account } = useWallet()
   const [marketItems, setMarketItems] = useState([])
   const sortOrder = useSelector((state: State) => state.markets.sortOrder)
@@ -38,7 +38,7 @@ const NftItems = () => {
     }
     let filteredMarketItems = []
     let index = 0
-    switch (collectionType.field) {
+    switch (collection) {
       case 'All':
         filteredMarketItems = filteredTmpMarketItems
         break
@@ -50,9 +50,33 @@ const NftItems = () => {
           }
         }
         break
-      case 'AirNFT':
+      case 'airnft':
         for (let i = 0; i < filteredTmpMarketItems.length; i++) {
           if (filteredTmpMarketItems[i].nftContract === addresses.airnft[chainId]) {
+            filteredMarketItems[index] = filteredTmpMarketItems[i]
+            index++
+          }
+        }
+        break
+      case 'land':
+        for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+          if (filteredTmpMarketItems[i].nftContract === addresses.landnft[chainId]) {
+            filteredMarketItems[index] = filteredTmpMarketItems[i]
+            index++
+          }
+        }
+        break
+      case 'cow':
+        for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+          if (filteredTmpMarketItems[i].nftContract === addresses.cownft[chainId]) {
+            filteredMarketItems[index] = filteredTmpMarketItems[i]
+            index++
+          }
+        }
+        break
+      case 'bull':
+        for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+          if (filteredTmpMarketItems[i].nftContract === addresses.bullnft[chainId]) {
             filteredMarketItems[index] = filteredTmpMarketItems[i]
             index++
           }
@@ -101,11 +125,11 @@ const NftItems = () => {
         break
     }
     setMarketItems(filteredMarketItems)
-  }, [account, marketContract, collectionType, sortOrder])
+  }, [account, marketContract, collectionType, sortOrder, collection])
 
   useEffect(() => {
     fetchNftItems()
-  }, [fetchNftItems])
+  }, [fetchNftItems, collection])
 
   return (
     <NftItemContainer>

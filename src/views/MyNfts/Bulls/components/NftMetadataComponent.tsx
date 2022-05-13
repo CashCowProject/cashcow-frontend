@@ -7,13 +7,12 @@ import toast from 'react-hot-toast'
 import { Button, Input } from 'cashcow-uikit'
 import BullNFT from 'config/abi/BullNFT.json'
 import NftFarming from 'config/abi/NftFarming.json'
-import NftBreeding from 'config/abi/NftBreeding.json'
 import Market from 'config/abi/Market.json';
-import NftSale from 'config/abi/NftSale.json'
+import Minter from 'config/abi/NftMinter.json';
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
-import { getBullNftAddress, getNftFarmingAddress, getMarketAddress, getNftSaleAddress } from 'utils/addressHelpers'
+import { getBullNftAddress, getNftFarmingAddress, getMarketAddress, getNftMinterAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 
@@ -173,6 +172,9 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
+  const minterContract = useMemo(() => {
+    return new web3.eth.Contract(Minter.abi as AbiItem[], getNftMinterAddress())
+  }, [])
 
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
   const farmActionHandler = async (_tokenId: string) =>{
@@ -211,7 +213,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
       await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
       await marketContract.methods.createMarketItem(getBullNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
       history.push('/bulls')
-      toast.success('Successfully bought NFT.')
+      toast.success('Successfully list NFT.')
       setLoading(false);
     }catch (error) {
       setLoading(false);
@@ -220,9 +222,11 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const burnActionHandler = async (tokenId) =>{
     try{
       setLoading(true)
-      await nftContract.methods.burn(tokenId).send({ from: account });
+      await minterContract.methods.burnBull(tokenId).send({ from: account });
+      history.push('/bulls')
       toast.success("successfully burned.")
     }catch(error) {
+      setLoading(false);
       toast.error("failed burn")
     }
   }
@@ -242,12 +246,14 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
               boxShadow: isDark ? '0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)' : '',
             }}
           >
-            <NftAttributes>
+          {
+            nftAttrs.length >0 &&
+              <NftAttributes>
               {nftAttrs.map((attrItem) => {
                 return <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
                         <img
                           style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                          src={`/images/svgs/${attrItem.value}.svg`}
+                          src={`/images/svgs/${attrItem.value.toLowerCase()}.svg`}
                           alt="Token Icon"
                         />
                         { attrItem.trait_type } : { attrItem.value}
@@ -263,6 +269,11 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                 Birth : { timestampToStr(nftBirth) }
               </NftAttributeItem>
             </NftAttributes>
+          }
+          { 
+            nftAttrs.length ===0 && <div style = {{fontSize: 20}}>Loading ...</div>
+          }
+
           </AttributesContainer>
           <div style={{ flex: 1 }} />
 

@@ -18,6 +18,7 @@ const StyledHero = styled.div`
 
 const NftDetailContainer = styled.div`
     margin-top: 32px;
+    max-width: fit-content;
 `
 
 const NftDetail = () => {

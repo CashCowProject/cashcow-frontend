@@ -197,15 +197,8 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
       console.log(error)
     }
   }
-  const burnActionHandler = async (tokenId) =>{
-    try{
-      setLoading(true)
-      await nftContract.methods.burn(tokenId).send({ from: account });
-      toast.success("successfully burned.")
-    }catch(error) {
-      toast.error("failed burn")
-    }
-  }
+  
+
   const priceChangeHandler = (e) =>{
     const _price = e.target.value;
     setSalePrice(_price);
@@ -296,7 +289,6 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
           <ActionContainer>
             <Button style={{ marginRight: "10px" }} onClick={() => farmActionHandler(tokenId)}>Stake to Farm</Button>
             <Button style={{ marginRight: "10px" }} onClick={() => saleActionHandler(tokenId)}>Move to Sale</Button>
-            <Button style={{ marginRight: "10px" }} onClick={() => burnActionHandler(tokenId)}>DELETE</Button>
           </ActionContainer>
         </NftInfo>
       </MetadataContainer>

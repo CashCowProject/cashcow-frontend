@@ -40,10 +40,12 @@ const Blindbox = () => {
         const endTime = await saleContract.methods.packSaleEnd().call()
         const startTIme = await saleContract.methods.packSaleStart().call()
         const currentTime = (await web3.eth.getBlock("latest")).timestamp;
-        if(currentTime <= startTIme ) {
+        if(toBN(currentTime.toString()).lt( startTIme ) ) {
             setPackState(0);
-        } else if(currentTime  > endTime) {
+        } else if(toBN(currentTime.toString()).gt( endTime ) ) {
             setPackState(2);
+        } else {
+            setPackState(1);
         }
     },[]);
     useEffect(() =>{

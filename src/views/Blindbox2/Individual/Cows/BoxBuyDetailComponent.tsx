@@ -96,7 +96,7 @@ const BoxBuyDetailComponent = () => {
         setLoading(true);
         const busdTokenContract = new web3.eth.Contract(BUSD.abi as AbiItem[], getBusdAddress());
         const busdBalance = await busdTokenContract.methods.balanceOf(account).call();
-        if(toBN(busdBalance).gt(toBN(price))) {
+        if(toBN(busdBalance).lt(toBN(price))) {
             setLoading(false);
             toast.error("busd balance is insufficient. you must have " + fromWei(price) + " busd in your wallet")
             return;

@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { Button, Input } from 'cashcow-uikit'
 import CowNFT from 'config/abi/CowNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
+import { AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
@@ -15,7 +15,8 @@ import NftFarming from 'config/abi/NftFarming.json'
 import NftBreeding from 'config/abi/NftBreeding.json'
 import NftSale from 'config/abi/NftSale.json'
 import Market from 'config/abi/Market.json'
-import { getCowNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress, getMarketAddress } from 'utils/addressHelpers'
+import Minter from 'config/abi/NftMinter.json'
+import { getCowNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress, getMarketAddress, getNftMinterAddress } from 'utils/addressHelpers'
 import { provider } from 'web3-core'
 
 const Container = styled.div`
@@ -187,14 +188,18 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
+  const minterContract = useMemo(() => {
+    return new web3.eth.Contract(Minter.abi as AbiItem[], getNftMinterAddress())
+  }, [])
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
-  const NFTBreedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress())
-  const NFTSaleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress())
   const farmActionHandler = async (_tokenId: string) =>{
     try{
+      setLoading(true);
       await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
       await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
+      setLoading(false)
     }catch (error) {
+      setLoading(false)
       console.log(error)
     }
   }
@@ -209,6 +214,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
       console.log(toWei("50"));
       await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
       await marketContract.methods.createMarketItem(getCowNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
+      history.push('/cows')
       setLoading(false);
     }catch (error) {
       setLoading(false);
@@ -221,9 +227,11 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const burnActionHandler = async (tokenId) =>{
     try{
       setLoading(true)
-      await nftContract.methods.burn(tokenId).send({ from: account });
+      await minterContract.methods.burnCow(tokenId).send({ from: account });
+      history.push('/cows')
       toast.success("successfully burned.")
     }catch(error) {
+      setLoading(false)
       toast.error("failed burn")
     }
   }
@@ -244,27 +252,34 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
               boxShadow: isDark ? '0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)' : '',
             }}
           >
-            <NftAttributes>
-              {nftAttrs.map((attrItem) => {
-                return <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
-                        <img
-                          style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                          src={`/images/svgs/${attrItem.value}.svg`}
-                          alt="Token Icon"
-                        />
-                        { attrItem.trait_type } : { attrItem.value}
-                      </NftAttributeItem>
-              })}
+            { 
+              nftAttrs.length >0 &&
+                  <NftAttributes>
+                  {nftAttrs.map((attrItem) => {
+                    return <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                            <img
+                              style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                              src={`/images/svgs/${attrItem.value.toLowerCase()}.svg`}
+                              alt="Token Icon"
+                            />
+                            { attrItem.trait_type } : { attrItem.value.toLowerCase()}
+                          </NftAttributeItem>
+                  })}
 
-              <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
-                <img
-                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                  src='/images/svgs/reloj.svg'
-                  alt="Token Icon"
-                />
-                Birth : { timestampToStr(nftBirth) }
-              </NftAttributeItem>
-            </NftAttributes>
+                  <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                    <img
+                      style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                      src='/images/svgs/reloj.svg'
+                      alt="Token Icon"
+                    />
+                    Birth : { timestampToStr(nftBirth) }
+                  </NftAttributeItem>
+                </NftAttributes>
+
+            }
+            { 
+              nftAttrs.length ===0 && <div style = {{fontSize: 20}}>Loading ...</div>
+            }
           </AttributesContainer>
           <div style={{ flex: 1 }} />
 
