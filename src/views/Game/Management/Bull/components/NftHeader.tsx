@@ -99,7 +99,7 @@ const NftHeader = () => {
       setLoading(true);
       setIsOpen(false);
       await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
-      await NFTFarmingContract.methods.depositLand(_tokenId).send({ from: account });
+      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
       dispatch(updating(!updated))
       setLoading(false)
     }catch (error) {
@@ -134,7 +134,7 @@ const NftHeader = () => {
     <NftHeaderContainer>
       <LeftContainer style={{ color: isDark ? 'white' : '#035569', fontWeight: 'bold', background:'white' }}>
         <Total>
-          TOTAL LANDS: {itemCount}
+          TOTAL BULLS: {itemCount}
         </Total>
         <Blank />
         <ButtonContainer>

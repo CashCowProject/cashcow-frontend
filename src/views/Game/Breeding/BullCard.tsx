@@ -122,6 +122,7 @@ const BullCard = ({selectTokenId}) => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setModalOpen(false)}
+                ariaHideApp={false}
                 style={{
                     content: {
                     top: '50%',
@@ -143,7 +144,7 @@ const BullCard = ({selectTokenId}) => {
                 <ModalNftsContainer>
                     {selectedNfts.map((nftEachItem) => {
                         return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)}>
-                            <img src= {nftEachItem.image} alt=""  style={{width: "52px",  height: "52px"}} key={nftEachItem.tokenId} />
+                            <img src= {nftEachItem.image} alt=""  style={{width: "160px",  height: "160px"}} key={nftEachItem.tokenId} />
                         </NftItemContainer>
                     })}
                 </ModalNftsContainer>

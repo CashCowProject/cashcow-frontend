@@ -55,31 +55,32 @@ export default {
   },
   landnft: {
     56: '',
-    97: '0xe5edd1B60fe0036E5D6A8Fd10898f031bc0AB52F'
+    97: '0x91d06D792dcafEeab4714305CeAFF2bAa4AFd9b1'
   },
   cownft: {
     56: '',
-    97: '0x4973b26663DF2cFD22f5Ce7B05Aa8d41ACb5CA24'
+    // 97: '0x4973b26663DF2cFD22f5Ce7B05Aa8d41ACb5CA24'
+    97:'0x09456F2341f0aa8f05E5d5f6CFFd67610f2F6e18'
   },
   bullnft: {
     56: '',
-    97: '0xaabb086c19CC23f8FC74C7dBF1D95eCA58A8783a'
+    97: '0x5C4D9D3e26345728e9077A9c6Db83189070f510E'
   },
   
   nftminter: {
     56: '',
-    97: '0x84282B818700a97706e761E33c3712DF895a5231'
+    97: '0x31B6ac268F8c9A0Fe586397DF2C03c7CC47756E0'
   },
   nftsale: {
     56: '',
-    97: '0x24e10d61593C75902574b85bC8affd0F1e5d7Cc8'
+    97: '0xC53499b7b8DD917D5F29B83EBF8472E458dAa429'
   },
   nftfarming: {
     56: '',
-    97: '0xE823966c07D2b108a306d98Bb57d435a00b3Eb82'
+    97: '0x95d4a1dFF55515f2331D88026427c0bf3C205F78'
   },
   nftbreeding: {
     56: '',
-    97: '0x353EeEf96F716Be18e33FAeaf93c7C185EE7e978'
+    97: '0x7ebf6e9b52E267355f1dF1De791811B95Ee08DDd'
   },
 }

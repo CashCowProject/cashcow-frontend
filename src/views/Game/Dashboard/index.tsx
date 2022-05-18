@@ -75,8 +75,8 @@ const FarmDashboard = () => {
               setMilkPower(vMilkPower);
               setGameMilkPower(vGameMilkPower);
               const rewardAmount = await masterChefContract.methods.pendingMilk(5, getNftFarmingAddress()).call({from: account});
-              const _x = parseInt(fromWei(rewardAmount));
-              setMilkReward(_x.toString());
+              const _x = parseInt(fromWei(rewardAmount)) * parseInt(vMilkPower) / parseInt(vGameMilkPower);
+              setMilkReward(Math.round(_x).toString());
     
               // let userInfo = await masterChefContract.methods.userInfo(5, getNftFarmingAddress()).call({from: account});
               const poolInfo = await masterChefContract.methods.poolInfo(5).call({from:account});

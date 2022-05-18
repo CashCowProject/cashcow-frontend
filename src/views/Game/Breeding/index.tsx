@@ -105,9 +105,16 @@ const FarmBreeding = () => {
     if (attrOfCow.rarity === attrOfBull.rarity) {
       try {
         const breedingPrice = await breedingContract.methods.breedingPrice().call();
+        console.log(breedingPrice)
         const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
+        const userBalance  = await milkTokenContract.methods.balanceOf(account).call();
+        console.log(userBalance)
+        if(toBN(userBalance).lt(toBN(breedingPrice))) {
+          toast.error("You must have " + fromWei(breedingPrice, 'ether') + "MILK to breed")
+          return;
+        }
         const allowance = await milkTokenContract.methods.allowance(account, getNftBreedingAddress()).call();
-        console.log(breedingPrice);
+
         await cowNftContract.methods.approve(getNftBreedingAddress() , selectedCowTokenId).send({from: account});
         await bullNftContract.methods.approve(getNftBreedingAddress(),selectedBullTokenId).send({from: account});
         if (parseInt(allowance.toString()) < parseInt(breedingPrice))
