@@ -26,7 +26,6 @@ const BoxInfoMainContainer = styled.div`
 
 const BlindBoxDetailInfo = () => {
     const { isDark } = useTheme()
-
     return (
         <BoxInfo style={{background: isDark ? '#16151a' : '', boxShadow: isDark ? "0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)" : ''}}>
             <BoxInfoContainer>

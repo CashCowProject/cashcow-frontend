@@ -6,7 +6,7 @@ export default {
   masterChef: {
     56: '0x94098E24FCf4701237CF58ef2A222C1cF5003c86', // COW MasterChef address here
     97: '0xB11C302675FD4a0bD725ecB7e0c3b9F6a3caEa8b', // COW MasterChef address here
-  },
+  }, 
   lottery: {
     56: '',
     97: '',

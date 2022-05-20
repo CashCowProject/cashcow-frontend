@@ -5,7 +5,7 @@ import { Button } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import NftSale from 'config/abi/NftSale.json'
 import BUSD from 'config/abi/BUSD.json'
-import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
+import { fromWei, AbiItem, toBN } from "web3-utils";
 import { LoadingContext } from 'contexts/LoadingContext'
 import { getNftSaleAddress, getBusdAddress } from 'utils/addressHelpers'
 import Web3 from "web3";
