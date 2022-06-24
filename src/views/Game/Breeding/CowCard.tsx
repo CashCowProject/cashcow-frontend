@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import useTheme from 'hooks/useTheme'
 import CowNFT from 'config/abi/CowNFT.json'
+import NftFarming from 'config/abi/NftFarming.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 import { LoadingContext } from 'contexts/LoadingContext'
-import { getCowNftAddress } from 'utils/addressHelpers'
+import { getCowNftAddress, getNftFarmingAddress } from 'utils/addressHelpers'
 import {CATTLE_RARITY, COW_BREED,CASH_COWNFT_IMAGE_BASEURI } from "config/constants/nfts";
 
 const Container = styled.div`
@@ -67,7 +68,7 @@ const NftItemContainer = styled.div`
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
-const CowCard = ({selectTokenId}) => {
+const CowCard = ({selectTokenId, updateFlag}) => {
     const [isModalOpen, setModalOpen] = useState(false)
     const { setLoading } = useContext(LoadingContext);
     const [selectedTokenId, setSelectedTokenId] = useState(0)
@@ -77,6 +78,7 @@ const CowCard = ({selectTokenId}) => {
     const nftContract = useMemo(() => {
         return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
       }, [])
+    const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
     
     const handleSelectNft = (tid : any) => {
         setModalOpen(false)
@@ -86,7 +88,8 @@ const CowCard = ({selectTokenId}) => {
 
     const fetchNftItems = useCallback(async () => {
         // setLoading(true);
-        const tokenIds = await nftContract.methods.tokenIdsOf(account).call()
+        // const tokenIds = await nftContract.methods.tokenIdsOf(account).call()
+        const tokenIds = await farmingContract.methods.breedingCowTokenIdsOf(account).call({from:account});
         const promises = []
         for (let i = 0; i < tokenIds.length;i ++) {
             promises.push(nftContract.methods.attrOf(tokenIds[i]).call())
@@ -105,11 +108,11 @@ const CowCard = ({selectTokenId}) => {
             filteredItems.push(nftItem);
         }
         setSelectedNfts(filteredItems);
-    }, [account, nftContract])
+    }, [account, nftContract, updateFlag])
     
     useEffect(() => {
         fetchNftItems()
-    }, [fetchNftItems])
+    }, [fetchNftItems,updateFlag])
     
     return (
         <Container>    
@@ -142,8 +145,8 @@ const CowCard = ({selectTokenId}) => {
                 >
                 <ModalTitleContainer>My Cows</ModalTitleContainer>
                 <ModalNftsContainer>
-                    {selectedNfts.map((nftEachItem) => {
-                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)}>
+                    {selectedNfts.map((nftEachItem, idx) => {
+                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)} key = {nftEachItem.tokenId + "_" + idx}>
                             <img src={nftEachItem.image} alt="" style={{width: "160px",  height: "160px"}} key={nftEachItem.tokenId} />
                         </NftItemContainer>
                         

@@ -24,7 +24,7 @@ const LandManage = () => {
         >
             <StyledHero>
                 <Heading as="h1" size="lg" color="text" mb="20px">
-                    MANAGEMENT - LANDS
+                    Management - Lands
                 </Heading>
             </StyledHero>
             <NftHeader />

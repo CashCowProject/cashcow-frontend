@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { Button } from 'cashcow-uikit'
+import { Button, Input } from 'cashcow-uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import NftSale from 'config/abi/NftSale.json'
 import BUSD from 'config/abi/BUSD.json'
@@ -47,13 +47,19 @@ const PriceDetailContainer = styled.div`
         margin-left: auto; 
         margin-right: 0;
         width: 160px;
+        @media (max-width: 768px) {
+            width: 30%;
+        }
     }
 `
 
 const BuyNowBtnContainer = styled.div`
     margin-top: 40px;
 `
-
+const AmountInput = styled.div`
+    margin-right: 16px;
+    width: 20%;
+`
 const BoxBuyDetailComponent = () => {
 
     const { setLoading } = useContext(LoadingContext);
@@ -61,6 +67,7 @@ const BoxBuyDetailComponent = () => {
     const { account, connect } = useWallet()
     const [mintingState, setMintingState] = useState(true);
     const [price, setPrice] = useState("0");
+    const [amount, setAmount] = useState(1);
 
     /** Styles Div */
 
@@ -104,15 +111,22 @@ const BoxBuyDetailComponent = () => {
         
         try {
             const allowance = await busdTokenContract.methods.allowance(account, getNftSaleAddress()).call();
-            if(parseInt(allowance.toString()) < parseInt(price))
-                await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });
+            if(parseInt(allowance.toString()) < parseInt(price)){
+                const _approveAmount = toBN(price).mul(toBN(100));
+                await busdTokenContract.methods.approve(getNftSaleAddress(), _approveAmount).send({ from: account });
+            }
 
-            /* const estimatedGas = await saleContract.methods
-                .buyCommonPack()
-                .estimateGas({from: account}); */
+            // const estimatedGas = await saleContract.methods
+            //     .buyCommonCow()
+            //     .estimateGas({from: account});
+            let seed = [];
+            for(let i = 0 ; i < amount ; i++) {
+                let _temp = Math.floor(Math.random() * 1000);
+                seed.push(_temp);
+            }            
             await saleContract.methods
-                .buyCommonCow()
-                .send({from: account/* , gasLimit: estimatedGas */})
+                .buyCommonCow(amount, seed)
+                .send({from: account})
                 .on('transactionHash', function() {
                     toast.success('Transaction submitted');
                 })
@@ -132,7 +146,17 @@ const BoxBuyDetailComponent = () => {
         }
         // setMintingState(true);
     }
-
+    const changeAmountHandler = (e) =>{
+        let value = e.target.value;
+        if(value <=0 ) {
+            setAmount(1);
+        } else if (value >= 20) {
+            setAmount(20)
+            toast.success("You can buy up to 20 NFTS at once")
+        } else {
+            setAmount(value);
+        }
+    }
     return (
         <div>
             <BoxTitle style={{color: isDark ? "white" : ""}}>
@@ -145,8 +169,11 @@ const BoxBuyDetailComponent = () => {
                 <BoxPriceContainer style={{color: isDark ? "white" : ""}}>
                     Price
                     <PriceDetailContainer style={{color: isDark ? "white" : ""}}>
+                        <AmountInput>
+                            <Input type = "Number" value = {amount} onChange = {(e)=>changeAmountHandler(e)}></Input>
+                        </AmountInput>
                         <img src="/images/tokens/busd.png" alt="" style={{width: "24px",  height: "24px", marginRight: '8px'}}/>
-                        {fromWei(price, 'ether')}
+                        {fromWei(toBN(price).mul(toBN(amount)), 'ether')}
                         <span style={{fontSize: "14px", color: isDark ? 'white' : '#694f4e', fontWeight:400, marginLeft: "4px"}}>{` ≈ $${fromWei(price, 'ether')}`}</span>
                         {
                             account && mintingState === true ? 

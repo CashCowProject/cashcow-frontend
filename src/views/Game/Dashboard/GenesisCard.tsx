@@ -19,7 +19,7 @@ const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
     margin-bottom: 16px;
-    font-size: 27px;
+    font-size: 1.6vw;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;
@@ -28,7 +28,7 @@ const TitleContainer = styled.div`
     `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 24px;
+    font-size: 1.6vw;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;

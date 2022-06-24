@@ -271,7 +271,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
             </NftAttributes>
           }
           { 
-            nftAttrs.length ===0 && <div style = {{fontSize: 20}}>Loading ...</div>
+            nftAttrs.length ===0 && <div style = {{fontSize: 20, color: isDark ? 'white' : '', padding: '30px' }}>Loading ...</div>
           }
 
           </AttributesContainer>

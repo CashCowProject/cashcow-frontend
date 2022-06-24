@@ -32,7 +32,7 @@ const StyledHero = styled.div`
 const Blindbox = () => {
 
     const { isDark } = useTheme()
-    const [packState, setPackState] = useState(1);
+    const [packState, setPackState] = useState(2);
     const saleContract = useMemo(() =>{
         return new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
     },[]) 
@@ -73,6 +73,7 @@ const Blindbox = () => {
             {
                 packState == 2 && <Link key={2} to={`/blind-box/individual`}><BlindBoxItem background="BANNER-FARM.png" itemId={0} itemTitle="" /></Link>
             }            
+
         </Page>
     )
 }

@@ -10,7 +10,14 @@ import BackLoader from 'components/BackLoader'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import PageLoader from './components/PageLoader'
-
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 // import NftGlobalNotification from './views/Nft/components/NftGlobalNotification'
 
 // Route-based code splitting
@@ -71,149 +78,139 @@ const App: React.FC = () => {
   useFetchPublicData()
 
   return (
-    <Router>
-      <ResetCSS />
-      <GlobalStyle />
-      {loading &&
-        <BackLoader/>
-      }
-      <Toaster 
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          duration: 5000,
-        }}
-      />
-      <Menu>
-        <Suspense fallback={<PageLoader />}>
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/farms">
-              <Farms />
-            </Route>
-            <Route path="/stakes/:index">
-              <Stakes />
-            </Route>
-            <Route path="/milkbar">
-              <Farms tokenMode />
-            </Route>
-            <Route path="/pools">
-              <Pools />
-            </Route>
-            <Route exact path="/blind-box">
-              <Blindbox />
-            </Route>
-            <Route exact path="/blind-box/2">
-              <BlindboxCow />
-            </Route>
-            <Route path="/blind-box/common-pack">
-              <BlindboxPackCommon />
-            </Route>
-            <Route path="/blind-box/uncommon-pack">
-              <BlindboxPackUncommon />
-            </Route>
-            <Route path="/blind-box/rare-pack">
-              <BlindboxPackRare />
-            </Route>
-            <Route path="/blind-box/pack">
-              <BlindboxPack />
-            </Route>
-            <Route path="/blind-box/land">
-              <BlindboxIndividualLand />
-            </Route>
-            <Route path="/blind-box/cow">
-              <BlindboxIndividualCow />
-            </Route>
-            <Route path="/blind-box/bull">
-              <BlindboxIndividualBull />
-            </Route>
-            <Route path="/blind-box/individual">
-              <BlindboxIndividual />
-            </Route>
-            <Route path="/blind-box/:index">
-              <BlindboxDetail />
-            </Route>
-            <Route exact path="/lands/:tokenId">
-              <LandDetail />
-            </Route>
-            <Route exact path="/lands">
-              <Lands />
-            </Route>
-            <Route exact path="/cows/:tokenId">
-              <CowDetail />
-            </Route>
-            <Route exact path="/cows">
-              <Cows />
-            </Route>
-            <Route exact path="/bulls/:tokenId">
-              <BullDetail />
-            </Route>
-            <Route exact path="/bulls">
-              <Bulls />
-            </Route>
-            <Route exact path="/farm/dashboard">
-              <FarmDashboard />
-            </Route>
-            <Route exact path="/farm/breeding">
-              <FarmBreeding />
-            </Route>
-            
-            <Route exact path="/market/HappyCows">
-              <NftMarket collection = "HappyCows"/>
-            </Route>
-            <Route exact path="/market/land">
-              <NftMarket collection = "land"/>
-            </Route>
-            <Route exact path="/market/airnft">
-              <NftMarket collection = "airnft"/>
-            </Route>
-            <Route exact path="/market/cow">
-              <NftMarket collection = "cow"/>
-            </Route>
-            <Route exact path="/market/bull">
-              <NftMarket collection = "bull"/>
-            </Route>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <ResetCSS />
+        <GlobalStyle />
+        {loading &&
+          <BackLoader/>
+        }
+        <Toaster 
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            duration: 5000,
+          }}
+        />
+        <Menu>
+          <Suspense fallback={<PageLoader />}>
+            <Switch>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route path="/farms">
+                <Farms />
+              </Route>
+              <Route path="/stakes/:index">
+                <Stakes />
+              </Route>
+              <Route path="/milkbar">
+                <Farms tokenMode />
+              </Route>
+              <Route path="/pools">
+                <Pools />
+              </Route>
+              <Route exact path="/blind-box">
+                <Blindbox />
+              </Route>
+              <Route exact path="/blind-box/2">
+                <BlindboxCow />
+              </Route>
+              <Route path="/blind-box/common-pack">
+                <BlindboxPackCommon />
+              </Route>
+              <Route path="/blind-box/uncommon-pack">
+                <BlindboxPackUncommon />
+              </Route>
+              <Route path="/blind-box/rare-pack">
+                <BlindboxPackRare />
+              </Route>
+              <Route path="/blind-box/pack">
+                <BlindboxPack />
+              </Route>
+              <Route path="/blind-box/land">
+                <BlindboxIndividualLand />
+              </Route>
+              <Route path="/blind-box/cow">
+                <BlindboxIndividualCow />
+              </Route>
+              <Route path="/blind-box/bull">
+                <BlindboxIndividualBull />
+              </Route>
+              <Route path="/blind-box/individual">
+                <BlindboxIndividual />
+              </Route>
+              <Route path="/blind-box/:index">
+                <BlindboxDetail />
+              </Route>
+              <Route exact path="/lands/:tokenId">
+                <LandDetail />
+              </Route>
+              <Route exact path="/lands">
+                <Lands />
+              </Route>
+              <Route exact path="/cows/:tokenId">
+                <CowDetail />
+              </Route>
+              <Route exact path="/cows">
+                <Cows />
+              </Route>
+              <Route exact path="/bulls/:tokenId">
+                <BullDetail />
+              </Route>
+              <Route exact path="/bulls">
+                <Bulls />
+              </Route>
+              <Route exact path="/farm/dashboard">
+                <FarmDashboard />
+              </Route>
+              <Route exact path="/farm/breeding">
+                <FarmBreeding />
+              </Route>
+              
+              <Route exact path="/market">
+                <NftMarket/>
+              </Route>
 
-            <Route path="/nft-market/:itemId">
-              <NftMarketDetail />
-            </Route>
-            <Route exact path="/MyNfts">
-              <MyNfts />
-            </Route>
-            <Route path="/MyNfts/:myTokenId">
-              <MyNftsDetail />
-            </Route>
-            <Route path="/management/land">
-              <LandManage />
-            </Route>
-            <Route path="/management/cow">
-              <CowManage />
-            </Route>
-            <Route path="/management/bull">
-              <BullManage />
-            </Route>
-            {/* <Route path="/ifo"> */}
-            {/*  <Ifos /> */}
-            {/* </Route> */}
-            {/* <Route path="/nft"> */}
-            {/*  <Nft /> */}
-            {/* </Route> */}
-            {/* Redirect */}
-            {/* <Route path="/staking"> */}
-            {/*  <Redirect to="/pools" /> */}
-            {/* </Route> */}
-            {/* <Route path="/syrup"> */}
-            {/*  <Redirect to="/pools" /> */}
-            {/* </Route> */}
-            {/* 404 */}
-            <Route component={NotFound} />
-            
-          </Switch>
-        </Suspense>
-      </Menu>
-    </Router>
+              <Route path="/nft-market/:itemId">
+                <NftMarketDetail />
+              </Route>
+              <Route exact path="/MyNfts">
+                <MyNfts />
+              </Route>
+              <Route path="/MyNfts/:myTokenId">
+                <MyNftsDetail />
+              </Route>
+              <Route path="/management/land">
+                <LandManage />
+              </Route>
+              <Route path="/management/cow">
+                <CowManage />
+              </Route>
+              <Route path="/management/bull">
+                <BullManage />
+              </Route>
+              {/* <Route path="/ifo"> */}
+              {/*  <Ifos /> */}
+              {/* </Route> */}
+              {/* <Route path="/nft"> */}
+              {/*  <Nft /> */}
+              {/* </Route> */}
+              {/* Redirect */}
+              {/* <Route path="/staking"> */}
+              {/*  <Redirect to="/pools" /> */}
+              {/* </Route> */}
+              {/* <Route path="/syrup"> */}
+              {/*  <Redirect to="/pools" /> */}
+              {/* </Route> */}
+              {/* 404 */}
+              <Route component={NotFound} />
+              
+            </Switch>
+          </Suspense>
+        </Menu>
+      </Router>
+    </QueryClientProvider>
   )
 }
 

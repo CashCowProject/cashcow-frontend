@@ -82,9 +82,9 @@ const ItemMainContainer = ({itemId, itemTitle}: ItemMainContainerInterface) => {
 
     return (
         <MainContainer>
-            <PhaseContainer>
+            {/* <PhaseContainer>
                 Collection #{itemId}
-            </PhaseContainer>
+            </PhaseContainer> */}
             <TitleContainer>
                 {itemTitle}
             </TitleContainer>

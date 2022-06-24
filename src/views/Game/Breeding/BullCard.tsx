@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import useTheme from 'hooks/useTheme'
 import BullNFT from 'config/abi/BullNFT.json'
+import NftFarming from 'config/abi/NftFarming.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
-import { getBullNftAddress } from 'utils/addressHelpers'
-import {CATTLE_RARITY, BULL_BREED, CASH_BULLNFT_IMAGE_BASEURI } from "config/constants/nfts";
+import { getBullNftAddress, getNftBreedingAddress, getNftFarmingAddress } from 'utils/addressHelpers'
+import { CATTLE_RARITY, BULL_BREED, CASH_BULLNFT_IMAGE_BASEURI } from "config/constants/nfts";
 
 
 const Container = styled.div`
@@ -68,14 +69,14 @@ const NftItemContainer = styled.div`
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
-const BullCard = ({selectTokenId}) => {
+const BullCard = ({ selectTokenId, updateFlag }) => {
     const [isModalOpen, setModalOpen] = useState(false)
     const [selectedTokenId, setSelectedTokenId] = useState(0)
     const { isDark } = useTheme();
     const { account } = useWallet()
     const [selectedNfts, setSelectedNfts] = useState([])
 
-    const handleSelectNft = (tid : any) => {
+    const handleSelectNft = (tid: any) => {
         setModalOpen(false)
         setSelectedTokenId(tid)
         selectTokenId(tid)
@@ -83,41 +84,44 @@ const BullCard = ({selectTokenId}) => {
 
     const nftContract = useMemo(() => {
         return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
-      }, [])
-      
+    }, [])
+    const farmingContract = useMemo(() => {
+        return new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
+    }, [])
+
     const fetchNftItems = useCallback(async () => {
-        const tokenIds = await nftContract.methods.tokenIdsOf(account).call()
-        
+        const tokenIds = await farmingContract.methods.breedingBullTokenIdsOf(account).call({from: account})
+
         const promises = []
-        for (let i = 0; i < tokenIds.length;i ++) {
+        for (let i = 0; i < tokenIds.length; i++) {
             promises.push(nftContract.methods.attrOf(tokenIds[i]).call())
         }
         const attrs = await Promise.all(promises)
         console.log(attrs)
         const filteredItems = []
-        for (let i = 0; i < tokenIds.length;i ++) {
+        for (let i = 0; i < tokenIds.length; i++) {
             const nftItem = {
                 collectionName: "Cow",
                 tokenId: tokenIds[i],
                 rarity: attrs[i].rarity,
                 breed: attrs[i].breed,
-                image:CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attrs[i].rarity)] +"-"+ BULL_BREED[parseInt(attrs[i].breed)] + ".png"
+                image: CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attrs[i].rarity)] + "-" + BULL_BREED[parseInt(attrs[i].breed)] + ".png"
             };
             filteredItems.push(nftItem);
         }
         setSelectedNfts(filteredItems);
-    }, [account, nftContract])
-    
+    }, [account, nftContract, updateFlag])
+
     useEffect(() => {
         fetchNftItems()
-    }, [account,nftContract])
+    }, [account, nftContract, updateFlag])
     return (
-        <Container>    
+        <Container>
             <TitleContainer>
-                <img src="/images/svgs/masculino.svg" alt="" style={{width: "200px",  height: "200px"}}/>
+                <img src="/images/svgs/masculino.svg" alt="" style={{ width: "200px", height: "200px" }} />
             </TitleContainer>
             <ActionContainer onClick={(e) => setModalOpen(true)}>
-                { selectedTokenId === 0 ? "ADD NFT" : "CHANGE NFT" }
+                {selectedTokenId === 0 ? "ADD NFT" : "CHANGE NFT"}
             </ActionContainer>
             <Modal
                 isOpen={isModalOpen}
@@ -125,26 +129,26 @@ const BullCard = ({selectTokenId}) => {
                 ariaHideApp={false}
                 style={{
                     content: {
-                    top: '50%',
-                    left: '50%',
-                    right: 'auto',
-                    bottom: 'auto',
-                    marginRight: '-50%',
-                    transform: 'translate(-50%, -50%)',
-                    minWidth: '30vw',
-                    maxWidth: '50vw',
-                    borderRadius: '15px',
-                    background: isDark ? '#27262c' : 'white',
-                    zindex: 15,
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        minWidth: '30vw',
+                        maxWidth: '50vw',
+                        borderRadius: '15px',
+                        background: isDark ? '#27262c' : 'white',
+                        zindex: 15,
                     }
                 }}
                 contentLabel="Example Modal"
-                >
+            >
                 <ModalTitleContainer>Bulls</ModalTitleContainer>
                 <ModalNftsContainer>
-                    {selectedNfts.map((nftEachItem) => {
-                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)}>
-                            <img src= {nftEachItem.image} alt=""  style={{width: "160px",  height: "160px"}} key={nftEachItem.tokenId} />
+                    {selectedNfts.map((nftEachItem, idx) => {
+                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)} key = {nftEachItem.tokenId + "_" + idx}>
+                            <img src={nftEachItem.image} alt="" style={{ width: "160px", height: "160px" }} key={nftEachItem.tokenId} />
                         </NftItemContainer>
                     })}
                 </ModalNftsContainer>

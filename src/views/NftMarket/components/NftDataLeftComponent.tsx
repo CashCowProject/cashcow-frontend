@@ -194,9 +194,7 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
     const json = await res.json()
 
     let imageUrl = json.image
-    if (isAirToken) {
-      setImage(imageUrl)
-    } else if(isHappyCow) {
+    if(isHappyCow) {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
     } else{
@@ -221,25 +219,20 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
       setLoading(true);
       if(isAIR) {
         await marketContract.methods.unlistMarketItem(getAirNftAddress(), tokenId).send({ from: account });
-        history.push('/market/airnft')
       }
       if(isHappy) {
         await marketContract.methods.unlistMarketItem(getHappyCowAddress(), tokenId).send({ from: account });
-        history.push('./market/HappyCows')
       }
       if(isCowNFT) {
         await marketContract.methods.unlistMarketItem(getCowNftAddress(), tokenId).send({ from: account });
-        history.push('./market/cow')
       }
       if(isBullNFT) {
         await marketContract.methods.unlistMarketItem(getBullNftAddress(), tokenId).send({ from: account });
-        history.push('./market/bull')
       }
       if(isLandNFT) {
         await marketContract.methods.unlistMarketItem(getLandNftAddress(), tokenId).send({ from: account });
-        history.push('./market/land');
       }
-     
+      history.push('/market')
       setLoading(false);
     } catch(error) {
       setLoading(false);
@@ -250,16 +243,36 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
     setLoading(true)
 
     try {
-      const priceWei = toWei(toBN('10000000000000000000000000000000000000000'), 'ether')
       const allowance = await milkTokenContract.methods.allowance(account, getMarketAddress()).call()
-
-      if (parseInt(allowance.toString()) < parseInt(salePrice)) {
-        await milkTokenContract.methods.approve(getMarketAddress(), priceWei).send({ from: account })
+      const milkBalance = await milkTokenContract.methods.balanceOf(account).call();
+      console.log(milkBalance);
+      console.log(toWei(salePrice))
+      if(toBN(milkBalance).lt(toBN(toWei(salePrice) ))) {
+        toast.success('insufficient balance.')
+        setLoading(false)
+        return
+      }
+      if (toBN(allowance.toString()).lt(toBN(toWei(salePrice) ))) {
+        await milkTokenContract.methods.approve(getMarketAddress(), toWei(salePrice) ).send({ from: account })
         toast.success('Approved Milk token.')
       }
-      if (isAIR) await marketContract.methods.createMarketSale(getAirNftAddress(), itemId).send({ from: account })
-      else await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({ from: account })
-      history.push('/nft-market')
+      if(isAIR) {
+        await marketContract.methods.createMarketSale(getAirNftAddress(), itemId).send({ from: account });
+      }
+      if(isHappy) {
+        await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({ from: account });
+      }
+      if(isCowNFT) {
+        await marketContract.methods.createMarketSale(getCowNftAddress(), itemId).send({ from: account });
+      }
+      if(isBullNFT) {
+        await marketContract.methods.createMarketSale(getBullNftAddress(), itemId).send({ from: account });
+      }
+      if(isLandNFT) {
+        await marketContract.methods.createMarketSale(getLandNftAddress(), itemId).send({ from: account });
+      }     
+       history.push('/market')
+      
       toast.success('Successfully bought NFT.')
     } catch (error) {
       const { message } = error as Error

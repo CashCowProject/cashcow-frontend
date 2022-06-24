@@ -51,6 +51,7 @@ const Title = styled.div`
   padding: 0 24px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `
 
 const TitleText = styled.div`
@@ -122,9 +123,6 @@ const NftEachItem = ({ itemInfo }: NftItemInterface) => {
           </Title>
         </ItemTop>
         <ItemSeperation />
-        <ItemBottom>
-          Description
-        </ItemBottom>
       </NftEachItemContainer>
     </Link>
   )

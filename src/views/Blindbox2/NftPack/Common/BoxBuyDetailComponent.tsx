@@ -115,7 +115,8 @@ const BoxBuyDetailComponent = () => {
 
         try {
             if(parseInt(allowance.toString()) < parseInt(price)) {
-                await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });
+                const _approveAmount = toBN(price).mul(toBN(100));
+                await busdTokenContract.methods.approve(getNftSaleAddress(), _approveAmount).send({ from: account });
             }
             /* const estimatedGas = await saleContract.methods
                 .buyCommonPack()

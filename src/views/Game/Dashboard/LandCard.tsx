@@ -27,7 +27,7 @@ const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
     margin-bottom: 16px;
-    font-size: 27px;
+    font-size: 1.6vw;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;
@@ -36,7 +36,7 @@ const TitleContainer = styled.div`
     `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 24px;
+    font-size: 1.6vw;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;
@@ -94,7 +94,7 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
             setLandData(temp)
         }
         loadData();
-    },[tokenIds,landContract]);
+    },[tokenIds]);
 
     return (
         <Container>    
@@ -130,10 +130,12 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                 contentLabel="Example Modal"
                 >
                     <ModalTitleContainer>
-                        {title}
+                        <div style = {{color: isDark ? 'white' : '#694f4e' }}>
+                            {title}
+                        </div>
                     </ModalTitleContainer>
                     <TableContainer>
-                        <table style = {{fontSize:20}}>
+                        <table style = {{fontSize:20, color: isDark?"white":""}}>
                             <tr>
                                 <td />
                                 <td><img src="/images/svgs/common.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
@@ -145,40 +147,40 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
                             <tr>
                                 <td><img src="/images/svgs/mountain.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
-                                    landData[0]&&landData[0].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!=0?item:""}</td>
+                                    landData[0]&&landData[0].map((item,id) =>{
+                                        return <td style={{verticalAlign:'middle'}} key = {"0_" + id}>{item!=0?item:""}</td>
                                     })
                                 }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/plains.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
-                                    landData[1]&&landData[1].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
+                                    landData[1]&&landData[1].map((item,id) =>{
+                                        return <td style={{verticalAlign:'middle'}} key = {"1_" + id}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/woods.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
-                                    landData[2]&&landData[2].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
+                                    landData[2]&&landData[2].map((item,id) =>{
+                                        return <td style={{verticalAlign:'middle'}} key = {"2_" + id}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/jungle.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
-                                    landData[3]&&landData[3].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
+                                    landData[3]&&landData[3].map((item,id) =>{
+                                        return <td style={{verticalAlign:'middle'}} key = {"3_" + id}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>
                             <tr>
                                 <td><img src="/images/svgs/hills.svg" alt="" style={{width: "32px",  height: "32px"}}/></td>
                                 {
-                                    landData[4]&&landData[4].map(item =>{
-                                        return <td style={{verticalAlign:'middle'}}>{item!==0?item:""}</td>
+                                    landData[4]&&landData[4].map((item,id) =>{
+                                        return <td style={{verticalAlign:'middle'}} key = {"4_" + id}>{item!==0?item:""}</td>
                                     })
                                 }
                             </tr>

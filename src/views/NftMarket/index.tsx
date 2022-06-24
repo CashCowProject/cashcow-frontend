@@ -11,7 +11,7 @@ const StyledHero = styled.div`
   margin-bottom: 20px;
 `
 
-const NftMarket = ({collection}) => {
+const NftMarket = () => {
     const { isDark } = useTheme();
     
     return (
@@ -29,7 +29,7 @@ const NftMarket = ({collection}) => {
                 </Heading>
             </StyledHero>
             <NftHeader />
-            <NftItems collection = {collection}/>
+            <NftItems />
         </Page>
     )
 }

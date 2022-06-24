@@ -57,7 +57,7 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
       <div style={{display: 'flex', justifyContent: 'center', position: 'relative'}}>
           <Heading as="h1" size="lg" color="primary" mb="25px" style={{ textAlign: 'center', width: "600px" }}>
             <BoxShadow style={{borderRadius: '16px', padding: '24px'}}>
-              {TranslateString(10013, 'LAND NFT Farming')}
+              {TranslateString(10013, 'Cow NFT Farming')}
             </BoxShadow>
           </Heading>
           <div style={{cursor: 'pointer', position:'absolute', right: 0}} onClick={closeDialog} onKeyDown={closeDialog} role = "button" tabIndex={0}>

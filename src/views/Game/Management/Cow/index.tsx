@@ -23,7 +23,7 @@ const CowManage = () => {
         >
             <StyledHero>
                 <Heading as="h1" size="lg" color="text" mb="20px">
-                    MANAGEMENT - COWS
+                    Management - Cows
                 </Heading>
             </StyledHero>
             <NftHeader />

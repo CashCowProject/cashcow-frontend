@@ -211,7 +211,6 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
         return;
       }
       setLoading(true);
-      console.log(toWei("50"));
       await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
       await marketContract.methods.createMarketItem(getCowNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
       history.push('/cows')
@@ -229,10 +228,10 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
       setLoading(true)
       await minterContract.methods.burnCow(tokenId).send({ from: account });
       history.push('/cows')
-      toast.success("successfully burned.")
+      toast.success("successfully slaughtered.")
     }catch(error) {
       setLoading(false)
-      toast.error("failed burn")
+      toast.error("failed slaughtered")
     }
   }
 
@@ -262,7 +261,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
                               src={`/images/svgs/${attrItem.value.toLowerCase()}.svg`}
                               alt="Token Icon"
                             />
-                            { attrItem.trait_type } : { attrItem.value.toLowerCase()}
+                            { attrItem.trait_type } : { attrItem.value}
                           </NftAttributeItem>
                   })}
 
@@ -278,7 +277,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
 
             }
             { 
-              nftAttrs.length ===0 && <div style = {{fontSize: 20}}>Loading ...</div>
+              nftAttrs.length ===0 && <div style = {{fontSize: 20, color: isDark ? 'white' : '', padding: '30px' }}>Loading ...</div>
             }
           </AttributesContainer>
           <div style={{ flex: 1 }} />
@@ -296,7 +295,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
           <ActionContainer>
             <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
             <Button style={{marginRight: "10px"}} onClick = {()=> saleActionHandler(tokenId)}>Move to Sale</Button>
-            <Button style={{marginRight: "10px"}} onClick = {()=> burnActionHandler(tokenId)}>DELETE</Button>
+            <Button style={{marginRight: "10px"}} onClick = {()=> burnActionHandler(tokenId)}>Delete</Button>
           </ActionContainer>
        </NftInfo>
       </MetadataContainer>

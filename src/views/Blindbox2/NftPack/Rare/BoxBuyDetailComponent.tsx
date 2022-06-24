@@ -114,15 +114,19 @@ const BoxBuyDetailComponent = () => {
         }
         try {
 
-            if(parseInt(allowance.toString()) < parseInt(price))
-                await busdTokenContract.methods.approve(getNftSaleAddress(), price).send({ from: account });
+            if(parseInt(allowance.toString()) < parseInt(price)){
+                const _approveAmount = toBN(price).mul(toBN(100));
+                await busdTokenContract.methods.approve(getNftSaleAddress(), _approveAmount).send({ from: account });
+            }
 
-            /* const estimatedGas = await saleContract.methods
-                .buyCommonPack()
-                .estimateGas({from: account}); */
+            // const estimatedGas = await saleContract.methods
+            //     .buyRarePack()
+            //     .estimateGas({from: account});
+
+            let seed = Math.floor(Math.random() * 1000);
             await saleContract.methods
-                .buyRarePack()
-                .send({from: account/* , gasLimit: estimatedGas */})
+                .buyRarePack(seed)
+                .send({from: account })
                 .on('transactionHash', function() {
                     toast.success('Transaction submitted');
                 })

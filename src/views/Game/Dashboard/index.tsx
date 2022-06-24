@@ -9,8 +9,10 @@ import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
 import NftFarming from 'config/abi/NftFarming.json'
 import CowTokenABI from 'config/abi/cow.json'
+import HappyCows from 'config/abi/HappyCows.json'
+import happyCowBreeds from 'config/constants/happycowbreeds'
 import MasterChefABI from 'config/abi/masterchef.json'
-import { getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import {getHappyCowAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import StaticCard from './StaticCard'
 import CattleCard from './CattleCard'
 import LandCard from './LandCard'
@@ -18,6 +20,8 @@ import GenesisCard from './GenesisCard'
 import HappyCowCard from './HappyCowCard'
 import Harvest from './Harvest'
 import { LoadingContext } from 'contexts/LoadingContext'
+
+import useRewardAmountQuery from 'hooks/useRewardAmountQuery'
 type boxParam = {
   index: string;
 };
@@ -62,39 +66,26 @@ const FarmDashboard = () => {
     const [milkPerDay, setMilkPerDay] = useState(0);
     const [milkReward, setMilkReward] = useState("0");
     const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
+
+    const userReward = useRewardAmountQuery({account});
+    console.log(userReward)
     useEffect( () => {
       async function fetchInfo() {
           try {
               setLoading(true);
               const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress());
-              const vMilkPower = await farmingContract.methods.milkPowerOf(account).call();
-              const vGameMilkPower = await farmingContract.methods.milkPowerOfGame().call();
+              const vMilkPower = await farmingContract.methods.milkPowerOf(account).call({ from: account});
+              const vGameMilkPower = await farmingContract.methods.totalMilkPower().call();
+              // const vGameMilkPower = 1000;
               const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
               const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call();
               const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call();
               setMilkPower(vMilkPower);
               setGameMilkPower(vGameMilkPower);
-              const rewardAmount = await masterChefContract.methods.pendingMilk(5, getNftFarmingAddress()).call({from: account});
-              const _x = parseInt(fromWei(rewardAmount)) * parseInt(vMilkPower) / parseInt(vGameMilkPower);
-              setMilkReward(Math.round(_x).toString());
-    
-              // let userInfo = await masterChefContract.methods.userInfo(5, getNftFarmingAddress()).call({from: account});
-              const poolInfo = await masterChefContract.methods.poolInfo(5).call({from:account});
-              let milkPerBlock = await masterChefContract.methods.MilkPerBlock().call({ from: account});
-              let totalAllocPoint = await masterChefContract.methods.totalAllocPoint().call({ from: account});
-    
-              let accMilkPerShare = poolInfo.accMilkPerShare;
-              let _m = parseInt(fromWei(milkPerBlock));
-              let allocpoint = parseInt(poolInfo.allocPoint) ;
-              let _t = parseInt(totalAllocPoint);
-              let _y = 3600 * 24 *_m * allocpoint / _t/3; //3s per block
-    
-              if(parseInt(vGameMilkPower) === 0) {
-                setMilkPerDay(0);
-              } else {
-                const vMilkPerDay = _y * parseInt(vMilkPower) / parseInt(vGameMilkPower);
-                console.log(vMilkPerDay);
-                setMilkPerDay( parseInt(vMilkPerDay.toString()) );
+              if(vGameMilkPower != 0) {
+                const _dailyAmount = await farmingContract.methods.getUserDailyMilk().call({ from: account});
+  
+                setMilkPerDay( parseInt(fromWei(_dailyAmount)) );  
               }
     
     
@@ -106,6 +97,7 @@ const FarmDashboard = () => {
               }
               setLoading(false);
             } catch(error) {
+              console.log(error)
               setLoading(false);
           } 
       }
@@ -133,29 +125,29 @@ const FarmDashboard = () => {
       }
 
       fetchGenesisInfo();
-    },[account])
-
-    useEffect( () => {
-      async function fetchHappyCowInfo() {
-          
-          const contractInstance = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
-
-          const promises = []
-          for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
-              promises.push(contractInstance.methods.ownerOf(i+1).call())
-          }
-          const nftOwners = await Promise.all(promises)
-          const hcs = [false, false, false, false, false]; 
-          for (let i = 0; i < HAPPY_COW_BREEDS.length;i ++) {
-            if(nftOwners[i] === account) {
-              hcs[HAPPY_COW_BREEDS[i]] = true;
-            }
-          }
-          setHappyCowStatus(hcs)
-      }
-
-      fetchHappyCowInfo();
     },[account]) */
+
+    // useEffect( () => {
+    //   async function fetchHappyCowInfo() {
+          
+    //       const contractInstance = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+
+    //       const promises = []
+    //       for (let i = 0; i < happyCowBreeds.length;i ++) {
+    //           promises.push(contractInstance.methods.ownerOf(i+1).call())
+    //       }
+    //       const nftOwners = await Promise.all(promises)
+    //       const hcs = [false, false, false, false, false]; 
+    //       for (let i = 0; i < happyCowBreeds.length;i ++) {
+    //         if(nftOwners[i] === account) {
+    //           hcs[happyCowBreeds[i]] = true;
+    //         }
+    //       }
+    //       setHappyCowStatus(hcs)
+    //   }
+
+    //   fetchHappyCowInfo();
+    // },[account])
 
     useEffect( () => {
       async function fetchCowTokenInfo() {
@@ -178,7 +170,7 @@ const FarmDashboard = () => {
               My Farm Dashboard
             </Heading>
             <Blank />
-            <Harvest title = "MILK REWARD" value = {milkReward} />
+            <Harvest title = "MILK REWARD" value = {userReward.data?userReward.data.toString():"0"} />
           </StyledHero>
           <CardContainer>
             <StaticCard title='MY MILKPOWER' value={milkPower.toString()}/>

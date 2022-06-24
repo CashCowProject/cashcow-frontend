@@ -33,14 +33,14 @@ const ContentContainer = styled.div`
 `
 const Title = styled.div`
     width: 100%;
-    font-size: 22px;
+    font-size: 1.2vw;
     font-weight: 1000;
     line-height: 1.5;
     text-align: center;
     `
 const Value = styled.div`
     width: 100%;
-    font-size: 24px;
+    font-size: 1.2vw;
     font-weight: 1000;
     text-align: center;
 `
@@ -66,8 +66,8 @@ const Harvest = ({title, value}: CardInterface) => {
         try{
           if(account) {
             setLoading(true);
-            // let estimatedGas = farmContract.methods.harvest().estimateGas({from: account});
-            await farmContract.methods.harvest().send({ from: account });
+            // let estimatedGas = await farmContract.methods.harvest().estimateGas({from: account});
+            await farmContract.methods.harvest().send({ from: account});
             setLoading(false);
           } else {
             connect('injected');

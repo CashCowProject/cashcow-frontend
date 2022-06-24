@@ -8,12 +8,12 @@ import useTheme from 'hooks/useTheme'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
-import NftBreeding from 'config/abi/NftBreeding.json'
+import NftFarming from 'config/abi/NftFarming.json'
 import MilkToken from 'config/abi/MilkToken.json'
 import Web3 from "web3";
 import { fromWei, toWei, AbiItem, toBN } from "web3-utils";
 import { LoadingContext } from 'contexts/LoadingContext'
-import { getCowNftAddress, getBullNftAddress, getNftBreedingAddress, getMilkAddress } from 'utils/addressHelpers'
+import { getCowNftAddress, getBullNftAddress, getNftFarmingAddress, getMilkAddress } from 'utils/addressHelpers'
 import CowCard from './CowCard'
 import BullCard from './BullCard'
 import BreedingCard from './BreedingCard'
@@ -83,6 +83,7 @@ const FarmBreeding = () => {
   const [selectedCowTokenId, setSelectedCowTokenId] = useState(0)
   const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
   const [currentBlockTimestamp, setCurrentBlockTimeStamp] = useState(0);
+  const [breedingStarted, setBreedingStarted] = useState(false);
   const [userBreedingItems, setUserItems] = useState({
     0:[],
     1:[],
@@ -91,7 +92,7 @@ const FarmBreeding = () => {
     4:[],
     5:[]
   });
-  const breedingContract = new web3.eth.Contract(NftBreeding.abi as AbiItem[], getNftBreedingAddress());
+  const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
 
   const handleStartBreeding = async () => {
     setLoading(true);
@@ -104,7 +105,7 @@ const FarmBreeding = () => {
 
     if (attrOfCow.rarity === attrOfBull.rarity) {
       try {
-        const breedingPrice = await breedingContract.methods.breedingPrice().call();
+        const breedingPrice = await farmingContract.methods.breedingPrice().call();
         console.log(breedingPrice)
         const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
         const userBalance  = await milkTokenContract.methods.balanceOf(account).call();
@@ -113,14 +114,14 @@ const FarmBreeding = () => {
           toast.error("You must have " + fromWei(breedingPrice, 'ether') + "MILK to breed")
           return;
         }
-        const allowance = await milkTokenContract.methods.allowance(account, getNftBreedingAddress()).call();
+        const allowance = await milkTokenContract.methods.allowance(account, getNftFarmingAddress()).call();
 
-        await cowNftContract.methods.approve(getNftBreedingAddress() , selectedCowTokenId).send({from: account});
-        await bullNftContract.methods.approve(getNftBreedingAddress(),selectedBullTokenId).send({from: account});
+        // await cowNftContract.methods.approve(getNftBreedingAddress() , selectedCowTokenId).send({from: account});
+        // await bullNftContract.methods.approve(getNftBreedingAddress(),selectedBullTokenId).send({from: account});
         if (parseInt(allowance.toString()) < parseInt(breedingPrice))
-          await milkTokenContract.methods.approve(getNftBreedingAddress(), breedingPrice.toString()).send({ from: account });
+          await milkTokenContract.methods.approve(getNftFarmingAddress(), breedingPrice.toString()).send({ from: account });
 
-        await breedingContract.methods
+        await farmingContract.methods
           .breed(selectedCowTokenId, selectedBullTokenId)
           .send({ from: account })
           .on('transactionHash', function () {
@@ -130,6 +131,7 @@ const FarmBreeding = () => {
             console.log(receipt);
             fetchInfo();
             setLoading(false);
+            setBreedingStarted(!breedingStarted)
             toast.success('Breeding started');
           })
           
@@ -147,7 +149,7 @@ const FarmBreeding = () => {
   async function fetchInfo() {
     try {
       setLoading(true)
-      let userItems = await breedingContract.methods.getBreedingItems(account).call();
+      let userItems = await farmingContract.methods.getBreedingItems(account).call();
       let currentBlock = await web3.eth.getBlock("latest");
       let currentTime = currentBlock.timestamp;
       setCurrentBlockTimeStamp(Number(currentTime));
@@ -180,29 +182,42 @@ const FarmBreeding = () => {
         TOTAL BREEDING FEES : 90 MILK
       </Heading>
       <BreedingContainer>
-        <CowCard selectTokenId={setSelectedCowTokenId} />
+        <CowCard selectTokenId={setSelectedCowTokenId} updateFlag = {breedingStarted} key = "bullcard"/>
         <ActionContainer>
           <ImageContainer>
-            <img src='/images/heartsf.png' alt="" />
+            <img src='/images/hearsf.gif' alt="" />
           </ImageContainer>
           <ButtonContainer>
-            <Button disabled={selectedCowTokenId === 0 || selectedBullTokenId === 0} onClick={handleStartBreeding}>BING BANG</Button>
+            <Button disabled={selectedCowTokenId === 0 || selectedBullTokenId === 0} onClick={handleStartBreeding}>BIG BANG</Button>
           </ButtonContainer>
         </ActionContainer>
-        <BullCard selectTokenId={setSelectedBullTokenId} />
+        <BullCard selectTokenId={setSelectedBullTokenId} updateFlag = {breedingStarted}/>
       </BreedingContainer>
       <BreedingListContainer>
         {
           userBreedingItems["0"].map((cowId, idx) =>{ //0:cowid, 1: rarity,2:cowbreed,3:bullid, 4:bullbreed,5:locktime
-            let restTime = (userBreedingItems[5][idx] - currentBlockTimestamp ) / 3600;
+            let _restTime = (userBreedingItems[5][idx] - currentBlockTimestamp ) ;
+            let restTime = 0;
+            let unitTime = "S";
+            if(_restTime > 60 ) {
+              restTime = (userBreedingItems[5][idx] - currentBlockTimestamp) /60;
+              unitTime = "M"
+            }
+            
+            if(_restTime >3600) {
+              restTime = (userBreedingItems[5][idx] - currentBlockTimestamp) / 3600;
+              unitTime = "H";
+            } 
+            
             let _bullId = userBreedingItems[3][idx];
             let _cowBreed = userBreedingItems[2][idx];
             let _bullBreed = userBreedingItems[4][idx];
             let _rarity = userBreedingItems[1][idx];
             console.log(restTime);
             return <BreedingCard 
+                        key = {cowId + "_" + idx}
                         unLockTime={Math.round(restTime)}
-                        cowId = {cowId} 
+                        unit = {unitTime} 
                         bullId = {_bullId} 
                         rarity = {_rarity}
                         cowBreed = {_cowBreed}

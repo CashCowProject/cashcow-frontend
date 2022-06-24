@@ -5,12 +5,18 @@ import Market from 'config/abi/Market.json'
 import { fromWei, AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
-import { getMarketAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
-
-const NftEachItemContainer = styled.div`
+import { 
+  getHappyCowAddress, 
+  getMarketAddress, 
+  getAirNftAddress, 
+  getCowNftAddress,
+  getBullNftAddress,
+  getLandNftAddress
+ } from 'utils/addressHelpers'
+ const NftEachItemContainer = styled.div`
   cursor: pointer;
   flex: 1;
   margin-right: 15px;
@@ -143,11 +149,17 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
       const res = await fetch(eachMyToken.tokenHash)
       const json = await res.json()
       let imageUrl = json.image
-      if (!eachMyToken.isAIR) {
+      if (eachMyToken.collection == getHappyCowAddress()) {
         imageUrl = imageUrl.slice(7)
         setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`)
-      } else setImageIpfsHash(imageUrl)
-      setName(json.name)
+      } else {
+        setImageIpfsHash(imageUrl)
+      }
+      if(eachMyToken.collection == getHappyCowAddress()|| eachMyToken.collection == getAirNftAddress()) {
+        setName(json.name)
+      } else {
+        setName(json.name + " #" + eachMyToken.tokenId)
+      }
     } catch (e) {
       // console.log(e);
     }

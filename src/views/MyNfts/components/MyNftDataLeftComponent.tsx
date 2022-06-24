@@ -5,16 +5,27 @@ import { Button, Heading } from 'cashcow-uikit'
 import Market from 'config/abi/Market.json'
 import AirNfts from 'config/abi/AirNft.json'
 import HappyCows from 'config/abi/HappyCows.json'
+import Breeding from 'config/abi/NftBreeding.json'
+import ERC721 from 'config/abi/ERC721.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Modal from 'react-modal'
 import { usePriceCakeBusd } from 'state/hooks'
 import Web3 from 'web3'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { 
+  getHappyCowAddress, 
+  getMarketAddress, 
+  getAirNftAddress, 
+  getNftBreedingAddress,
+  getCowNftAddress, 
+  getBullNftAddress,
+  getLandNftAddress
+} from 'utils/addressHelpers'
 import { LoadingContext } from 'contexts/LoadingContext'
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
+import { useHistory } from 'react-router-dom'
 
 const NftMetaDataContainer = styled.div`
   display: flex;
@@ -130,13 +141,12 @@ const InputTag = styled.input`
     margin: 0;
   }
 `
+const ButtoneContainer = styled.div`
+
+`
 const customStyles = {}
 
 const web3 = new Web3(Web3.givenProvider)
-
-const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
-const marketContract = new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
-const airnftContract = new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
 
 export interface NftDataLeftComponentInterface {
   myToken?: any
@@ -158,9 +168,13 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
   const [flgButtonState, setFlgButtonState] = useState(true)
   const { setLoading } = useContext(LoadingContext)
   const cakePriceUsd = usePriceCakeBusd()
-
+  const history = useHistory()
   // const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
-
+  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
+  const marketContract = new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
+  const airnftContract = new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
+  const breedingContract = new web3.eth.Contract(Breeding.abi as AbiItem[], getNftBreedingAddress())
+  
   const fetchNft = useCallback(async () => {
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     if (!myToken) return
@@ -176,21 +190,27 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
 
     if (!tmpTokenId) return
     let nftHash = null
-    if (!myToken.isAIR) {
+    if (myToken.collection) {
       nftHash = await happyCowsContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     } else {
       nftHash = await airnftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     }
+    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection);
+    nftHash = await nftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     const res = await fetch(nftHash)
     const json = await res.json()
-    setTokenName(json.name)
-    setDescription(json.description)
+    setDescription(json.description?json.description:"")
 
     let imageUrl = json.image
-    if (!myToken.isAIR) {
+    if (myToken.collection == getHappyCowAddress()) {
+      setTokenName(json.name)
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else if(myToken.collection == getAirNftAddress()) {
+      setTokenName(json.name)
+      setImage(imageUrl)
     } else {
+      setTokenName(json.name + "#" + myToken.tokenId)
       setImage(imageUrl)
     }
   }, [account, myToken])
@@ -205,25 +225,18 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
     setFlgButtonState(false)
     setLoading(true)
     closeModal()
-
-    if (myToken.isAIR) {
-      const approvedAddress = await airnftContract.methods.getApproved(toBN(myToken.tokenId)).call()
-      if (approvedAddress !== getMarketAddress()) {
-        await airnftContract.methods.approve(getMarketAddress(), toBN(myToken.tokenId)).send({ from: account })
-        toast.success('Approved AirtNFT token.')
-      }
-    } else {
-      const isApproved = await happyCowsContract.methods.isApprovedForAll(account, getMarketAddress()).call()
-      if (!isApproved) {
-        await happyCowsContract.methods.setApprovalForAll(getMarketAddress(), true).send({ from: account })
-        toast.success('Approved Milk token.')
-      }
+    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
+    const approvedAddress = await nftContract.methods.getApproved(toBN(myToken.tokenId)).call()
+    if (approvedAddress !== getMarketAddress()) {
+      await nftContract.methods.approve(getMarketAddress(), toBN(myToken.tokenId)).send({ from: account })
+      toast.success('Approved AirtNFT token.')
     }
+
 
     try {
       await marketContract.methods
         .createMarketItem(
-          myToken.isAIR ? getAirNftAddress() : getHappyCowAddress(),
+          myToken.collection,
           toBN(myToken.tokenId),
           toWei(priceNft, 'ether'),
         )
@@ -236,6 +249,7 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
           setItemId(returnItemId)
           setSalePrice(priceNft)
           setFlgList(true)
+          history.push("/myNFTs")
           toast.success('Successfully listed NFT.')
         })
     } catch (e) {
@@ -253,13 +267,14 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
 
     try {
       await marketContract.methods
-        .unlistMarketItem(myToken.isAIR ? getAirNftAddress() : getHappyCowAddress(), itemId)
+        .unlistMarketItem(myToken.collection, itemId)
         .send({ from: account })
         .on('transactionHash', function () {
           toast.success('Transaction submitted.')
         })
         .on('receipt', function () {
           setFlgList(false)
+          history.push("/myNFTs")
           toast.success('Successfully unlisted NFT.')
         })
     } catch (e) {
@@ -270,6 +285,32 @@ const MyNftDataLeftComponent = ({ myToken }: NftDataLeftComponentInterface) => {
     setLoading(false)
   }
 
+  const moveToBreeding = async () =>{
+    try{
+      console.log("move to breeding")
+      setLoading(true);
+      if(myToken.collection == getHappyCowAddress() || myToken.collection == getAirNftAddress() || myToken.collection == getLandNftAddress()) {
+        toast.success('not available to stake for the breeding.')
+        setLoading(false)
+        return;
+      }
+      const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
+      const approvedAddress = await nftContract.methods.getApproved(toBN(myToken.tokenId)).call()
+      if(approvedAddress !== getNftBreedingAddress()) {
+        await nftContract.methods.approve(getNftBreedingAddress() ,toBN(myToken.tokenId)).send({ from: account })
+        toast.success("Approved successfully")
+      }
+      if(myToken.collection == getCowNftAddress() ) {
+        await breedingContract.methods.stakeCow(myToken.tokenId).send({ from: account });
+      } else if (myToken.collection == getBullNftAddress()) {
+        await breedingContract.methods.stakeBull(myToken.tokenId).send({ from: account });
+      }
+      setLoading(false);
+      history.push("/myNFTs")
+    }catch {
+      setLoading(false);
+    }
+  }
   const openModal = () => {
     setIsOpen(true)
   }
