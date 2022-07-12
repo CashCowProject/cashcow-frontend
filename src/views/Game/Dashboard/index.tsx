@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
 import { useParams} from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from "web3";
@@ -31,56 +30,12 @@ const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false];
 const StyledHero = styled.div`
     border-bottom: 0px solid #e8e8e8;
     margin-bottom: 20px;
-    background-color: rgb(11,51,75);
-    padding: 10px;
-    // width: 100%;
-    height: 30%;
     display: flex;
-    overflow: hidden;
-    border-radius: 25px;
-    align-items: center;
-    @media (max-width: 768px) {
-      height: 10%;
-      width: 90%;
-      min-width: 100px;
-      justify-content: space-around;
-    }
-`
+  `
 const Blank = styled.div`
     display: flex;
     flex: auto
 `
-const HomeButton = styled.div`
-    margin-left: 20px;
-    background-image: url(/images/farms/dashboard/buttons/botonmapgris.png);
-    background-repeat: no-repeat;
-    width: 80px;
-    height: 70px;
-    background-size: contain;
-    cursor:pointer;
-    &:hover {
-      background-image: url(/images/farms/dashboard/buttons/botonmapverde.png);
-    }
-    // height: 30%;
-    @media (max-width: 768px) {
-      height: 60px;
-      width: 70px;
-      margin-left:5px;
-      min-width: 10px;
-    }
-`
-const VideoContainer = styled.div`
-  display: flex;
-  flex: auto;
-  height: 130px;
-  margin-left: 10px;
-  @media (max-width: 768px) {
-    height: 40px;
-    margin-left:2px;
-    display: none;
-  }
-`
-
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -111,7 +66,7 @@ const FarmDashboard = () => {
     const [milkPerDay, setMilkPerDay] = useState(0);
     const [milkReward, setMilkReward] = useState("0");
     const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
-    const history = useHistory();
+
     const userReward = useRewardAmountQuery({account});
     console.log(userReward)
     useEffect( () => {
@@ -205,28 +160,28 @@ const FarmDashboard = () => {
     },[account])
     return (
         <Page style={{
-            backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+            backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',}}
         >
           <StyledHero>
-            <HomeButton onClick = {e => history.push('/farm/map')}/>
-            <VideoContainer>
-              <video autoPlay style = {{width: '100%', height: '100%'}} muted loop src='/images/farms/dashboard/illustrations/dashboard.mp4'></video>
-            </VideoContainer>
+            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
+              My Farm Dashboard
+            </Heading>
+            <Blank />
             <Harvest title = "MILK REWARD" value = {userReward.data?userReward.data.toString():"0"} />
           </StyledHero>
           <CardContainer>
-            <StaticCard title='MY MILKPOWER' value={milkPower.toString()} image = "/images/farms/dashboard/illustrations/milkpowrazul.png" />
-            <StaticCard title='TOTAL MILKPOWER' value={gameMilkPower.toString()} image = "/images/farms/dashboard/illustrations/milkpowrmorado.png" />
-            <StaticCard title='MY MILK/DAY' value={milkPerDay.toString()} image = "/images/farms/dashboard/illustrations/tokensmilkfondo.png" />
+            <StaticCard title='MY MILKPOWER' value={milkPower.toString()}/>
+            <StaticCard title='TOTAL MILKPOWER' value={gameMilkPower.toString()}/>
+            <StaticCard title='MY MILK/DAY' value={milkPerDay.toString()}/>
             <LandCard title='MY LANDS' value={landAmount.length.toString()} tokenIds = {landAmount}/>
             <CattleCard title='MY COWS' value={cowAmount.length.toString()} tokenIds = {cowAmount} isCowNFT = {true}/>
             <CattleCard title='MY BULLS' value={bullAmount.length.toString()} tokenIds = {bullAmount} isCowNFT = {false}/>
             <GenesisCard title='GENESIS NFT' hasGenesisNft={genesisNftStatus}/>
             <HappyCowCard title='HAPPY COW' value={happyCowStatus}/>
-            <StaticCard title='$COW Staked' value={cowTokenAmount} image = "/images/farms/dashboard/illustrations/tokenscowfondo.png" />
+            <StaticCard title='$COW IN WALLET' value={cowTokenAmount}/>
           </CardContainer>
         </Page>
     )

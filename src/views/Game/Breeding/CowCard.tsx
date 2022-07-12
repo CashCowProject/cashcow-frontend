@@ -10,13 +10,14 @@ import Web3 from 'web3'
 import { LoadingContext } from 'contexts/LoadingContext'
 import { getCowNftAddress, getNftFarmingAddress } from 'utils/addressHelpers'
 import {CATTLE_RARITY, COW_BREED,CASH_COWNFT_IMAGE_BASEURI } from "config/constants/nfts";
-import { MDBMask, MDBView, MDBContainer } from 'mdbreact';
+
 const Container = styled.div`
     max-width: 200px;
     overflow: hidden;
     position: relative;
-    
-`
+    border-radius: 32px;
+    background-color: white;
+    `
 
 const TitleContainer = styled.div`
     width: 100%;
@@ -24,26 +25,21 @@ const TitleContainer = styled.div`
     align-items: center;
     justify-content: center;
     padding: 24px;
-    border-radius: 22px;
-    background-color: rgb(11,51,75);
-`
+    `
 
 const ActionContainer = styled.div`
-    margin-top: 20px;
-    margin-left: 0px;
+    margin-left: 16px;
     margin-right: 16px;
     padding: 16px;
     font-size: 20px;
     font-weight: 1000;
     line-height: 1.5;
-    width: 100%;
     display: flex;
     align-items: center;
-    align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
+    border-top-style: solid;
+    border-top: 2px solid #689330;
     color: #689330;
-    background-color: rgb(11,51,75);
-    border-radius: 22px;
     cursor: pointer;
     `
 const ModalTitleContainer = styled.div`
@@ -68,9 +64,7 @@ const ModalNftsContainer = styled.div`
     `
 const NftItemContainer = styled.div`
     
-`
-
-
+    `
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
@@ -78,7 +72,6 @@ const CowCard = ({selectTokenId, updateFlag}) => {
     const [isModalOpen, setModalOpen] = useState(false)
     const { setLoading } = useContext(LoadingContext);
     const [selectedTokenId, setSelectedTokenId] = useState(0)
-    const [selectedImage, setTokenImage ] = useState('');
     const { isDark } = useTheme();
     const { account } = useWallet()
     const [selectedNfts, setSelectedNfts] = useState([])
@@ -87,10 +80,9 @@ const CowCard = ({selectTokenId, updateFlag}) => {
       }, [])
     const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
     
-    const handleSelectNft = (tid : any, imageUrl: string) => {
+    const handleSelectNft = (tid : any) => {
         setModalOpen(false)
         setSelectedTokenId(tid)
-        setTokenImage(imageUrl);
         selectTokenId(tid)
     }
 
@@ -116,7 +108,6 @@ const CowCard = ({selectTokenId, updateFlag}) => {
             filteredItems.push(nftItem);
         }
         setSelectedNfts(filteredItems);
-        setSelectedTokenId(0);
     }, [account, nftContract, updateFlag])
     
     useEffect(() => {
@@ -126,32 +117,10 @@ const CowCard = ({selectTokenId, updateFlag}) => {
     return (
         <Container>    
             <TitleContainer>
-                <MDBContainer className = "mt-1">
-                    {selectedTokenId == 0?
-                        <MDBView>
-                            <img src="/images/svgs/femenino.svg" alt="" style={{width: "200px",  height: "200px"}}/>
-                        </MDBView>
-                        :
-                        <MDBView rounded>
-                            <img src={selectedImage} alt="" style={{width: "200px",  height: "180px", borderRadius: '75px'}}/>
-                            <MDBMask className = 'flex-center' >
-                                <img src="/images/breeding/marcometal.png" alt="" />
-                            </MDBMask>
-                        </MDBView>
-                    }
-                </MDBContainer>
+                <img src="/images/svgs/femenino.svg" alt="" style={{width: "200px",  height: "200px"}}/>
             </TitleContainer>
             <ActionContainer onClick={(e) => setModalOpen(true)}>
                 {selectedTokenId === 0 ? "ADD NFT" : "CHANGE NFT"}
-                {selectedTokenId == 0?
-                    <div style = {{height: '30px'}}>
-                        <img src="/images/breeding/boton-gris.png" alt="" style = {{width: '30px'}}/>
-                    </div>
-                    :
-                    <div style = {{height: '30px'}}>
-                        <img src="/images/breeding/boton-verde.png" alt="" style = {{width: '30px'}}/>
-                    </div>
-                }
             </ActionContainer>
             <Modal
                 isOpen={isModalOpen}
@@ -177,7 +146,7 @@ const CowCard = ({selectTokenId, updateFlag}) => {
                 <ModalTitleContainer>My Cows</ModalTitleContainer>
                 <ModalNftsContainer>
                     {selectedNfts.map((nftEachItem, idx) => {
-                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId, nftEachItem.image)} key = {nftEachItem.tokenId + "_" + idx}>
+                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId)} key = {nftEachItem.tokenId + "_" + idx}>
                             <img src={nftEachItem.image} alt="" style={{width: "160px",  height: "160px"}} key={nftEachItem.tokenId} />
                         </NftItemContainer>
                         

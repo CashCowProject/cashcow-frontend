@@ -20,54 +20,35 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     border-radius: 32px;
-    background-color: rgb(11,51,75);
-    color: white;
-    display: flex;
+    background-color: white;
     `
-const ContentContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 50%;
-`
-const ImageContainer = styled.div`
-    display: flex;
-    padding: 20px;
-    flex: 50%;
-`
+
 const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
-    margin-bottom: 5px;
-    font-size: 1.5vw;
-    font-weight: 500;
-    line-height: 1.2;
+    margin-bottom: 16px;
+    font-size: 1.6vw;
+    font-weight: 1000;
+    line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
-`
+    `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 1.5vw;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: 1.6vw;
+    font-weight: 1000;
+    line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
     `
 const ActionContainer = styled.div`
     margin-left: 16px;
     margin-right: 16px;
     font-size: 20px;
-    font-weight: 500;
-    line-height: 1.2;
+    font-weight: 1000;
+    line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,24 +97,16 @@ const LandCard = ({title, value, tokenIds}: CardInterface) => {
     },[tokenIds]);
 
     return (
-        <Container> 
-            <ImageContainer>
-                <img src = "/images/farms/dashboard/illustrations/mylands.png" />
-            </ImageContainer>
-            <ContentContainer>
-                <TitleContainer>
-                    {title}
-                </TitleContainer>
-                <ValueContainer>
-                    {value}
-                </ValueContainer>
-                <ActionContainer onClick={(e) => setModalOpen(true)}>
-                    <img src ="/images/farms/dashboard/buttons/moreinfogray.png" 
-                        onMouseOver={e => e.currentTarget.src = "/images/farms/dashboard/buttons/moreinfo.png"}
-                        onMouseOut={e => e.currentTarget.src = "/images/farms/dashboard/buttons/moreinfogray.png"}
-                    />
-                </ActionContainer>
-            </ContentContainer>   
+        <Container>    
+            <TitleContainer>
+                {title}
+            </TitleContainer>
+            <ValueContainer>
+                {value}
+            </ValueContainer>
+            <ActionContainer onClick={(e) => setModalOpen(true)}>
+                MORE INFO
+            </ActionContainer>
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setModalOpen(false)}

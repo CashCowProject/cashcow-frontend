@@ -55,13 +55,13 @@ const config: MenuEntry[] = [
     icon: 'FarmIcon',
     items: [
       {
-        label: 'Map',
-        href: '/farm/map',
-      },
-      {
         label: 'Dashboard',
         href: '/farm/dashboard',
       },
+      // {
+      //   label: 'Map',
+      //   href: '/farm/map',
+      // },
       {
         label: 'Breeding',
         href: '/farm/breeding',
