@@ -13,7 +13,8 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     border-radius: 32px;
-    background-color: white;
+    background-color: rgb(11,51,75);
+    color: white;
     `
 
 const TitleContainer = styled.div`
@@ -26,6 +27,9 @@ const TitleContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+        font-size: 5vw;
+    }
     `
 const ValueContainer = styled.div`
     width: 100%;
@@ -35,6 +39,9 @@ const ValueContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+        font-size: 5vw;
+    }
     `
 const StatusContainer = styled.div`
     background-color: #689330;

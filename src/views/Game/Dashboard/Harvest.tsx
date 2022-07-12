@@ -16,20 +16,25 @@ export interface CardInterface {
 }
 
 const Container = styled.div`
-    width: 30%;
-    height: 60px;
+    width: 20%;
     overflow: hidden;
     display: flex;
     flex-wrap: nowrap;
     border-radius: 12px;
     background-color: white;
     align-items: center;
+    background-color: transparent;
+    flex-direction: column;
+    @media (max-width: 768px) {
+        width: 40%;
+    }
 `
 const ContentContainer = styled.div`
     display : flex;
-    flex: 60%;
+    // flex: 60%;
     flex-direction: column;
-    justify
+    color: white;
+    margin-bottom: 7px;
 `
 const Title = styled.div`
     width: 100%;
@@ -37,18 +42,28 @@ const Title = styled.div`
     font-weight: 1000;
     line-height: 1.5;
     text-align: center;
-    `
+    @media (max-width: 768px) {
+        font-size: 13px;
+        font-weight: 100;
+        line-height: 1.0;
+    }
+`
 const Value = styled.div`
     width: 100%;
     font-size: 1.2vw;
     font-weight: 1000;
     text-align: center;
+    @media (max-width: 768px) {
+        font-size: 13px;
+        font-weight: 100;
+
+    }
 `
 const ActionContainer = styled.div`
     font-size: 20px;
     color: #689330;
     cursor: pointer;
-    flex: 40%;
+    width: 70%;
 `
 
 const Harvest = ({title, value}: CardInterface) => {
@@ -90,7 +105,11 @@ const Harvest = ({title, value}: CardInterface) => {
             </ContentContainer>
 
             <ActionContainer >
-                <img src="/images/boton-harvest.png" alt="harvest image" style = {{width: "100%"}} onClick = {harvestController}/>
+                <img src="/images/farms/dashboard/buttons/harvestgray.png" alt="harvest image" style = {{width: "100%"}} 
+                    onClick = {harvestController}
+                    onMouseOver = {e => e.currentTarget.src = "/images/farms/dashboard/buttons/harvestgreen.png"}
+                    onMouseOut = {e => e.currentTarget.src = "/images/farms/dashboard/buttons/harvestgray.png"}
+                />
             </ActionContainer>
         </Container>
     )

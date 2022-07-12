@@ -15,19 +15,20 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     border-radius: 8px;
-    background-color: white;
+    background-color: rgb(11,51,75);
     `
 const ImageContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     padding: 4px;
     & > * {
-        margin: 8px;
+        margin: 1px;
     }
     `
 const TimeContainer = styled.div`
     cursor:pointer;
+    margin-left: 18px;
 `
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
@@ -42,12 +43,8 @@ const BreedingCard = ({unLockTime, unit, bullId, rarity, cowBreed,bullBreed}) =>
     const [isAvailable, setIsAvailable] = useState(false)
     const { setLoading } = useContext(LoadingContext);
     const [isClaimed, setIsClaimed ] = useState(false);
-    // const cowContract = new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress());
-    // const bullContract = new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress());
     const farmContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
     const fetchData = useCallback( async () =>{
-        // let cowData = await cowContract.methods.attrOf(cowId).call();
-        // let bullData = await cowContract.methods.attrOf(cowId).call();
         let cowImage = CASH_COWNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(rarity)] +"-"+ COW_BREED[parseInt(cowBreed)] + ".png";
         let bullImage = CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(rarity)] +"-"+ BULL_BREED[parseInt(bullBreed)] + ".png";
         setCowImage(cowImage);
@@ -63,7 +60,13 @@ const BreedingCard = ({unLockTime, unit, bullId, rarity, cowBreed,bullBreed}) =>
     const claimActionHandler =async (_bullId) =>{
         try{
             setLoading(true)
-            await farmContract.methods.claimCattle(_bullId).send({ from: account });
+            let _seed = [];
+            for(let i = 0 ; i < 3; i++) {
+                let _rand = Math.floor( Math.random() * 1000 );
+                _seed.push(_rand)
+            }
+            await farmContract.methods.claimCattle(_bullId, _seed).send({ from: account });
+            setIsClaimed(true);
             setLoading(false)
         }catch(error) {
             setLoading(false)
@@ -76,7 +79,7 @@ const BreedingCard = ({unLockTime, unit, bullId, rarity, cowBreed,bullBreed}) =>
             <Container>
                 <ImageContainer>
                     <img src={cowImage} alt="" style={{width: "80px",  height: "80px"}}/>
-                    <img src="/images/heartsf.png" alt="" style={{width: "50px",  height: "50px"}}/>
+                    <img src="/images/breeding/hearts.png" alt="" style={{width: "80px",  height: "80px"}}/>
                     <img src={bullImage} alt="" style={{width: "80px",  height: "80px"}}/>
                     {
                         !isAvailable?

@@ -24,35 +24,54 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     border-radius: 32px;
-    background-color: white;
+    background-color: rgb(11,51,75);
+    color: white;
+    display: flex;
     `
-
+const ContentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 50%;
+`
+const ImageContainer = styled.div`
+    display: flex;
+    padding: 20px;
+    flex: 50%;
+`
 const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
-    margin-bottom: 16px;
-    font-size: 1.6vw;
-    font-weight: 1000;
-    line-height: 1.5;
+    margin-bottom: 5px;
+    font-size: 1.5vw;
+    font-weight: 500;
+    line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+        font-size: 5vw;
+    }
     `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 1.6vw;
-    font-weight: 1000;
-    line-height: 1.5;
+    font-size: 1.5vw;
+    font-weight: 500;
+    line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+        font-size: 5vw;
+    }
     `
 const ActionContainer = styled.div`
     margin-left: 16px;
     margin-right: 16px;
     font-size: 20px;
-    font-weight: 1000;
-    line-height: 1.5;
+    font-weight: 500;
+    line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,15 +128,27 @@ const CattleCard = ({ title, value, tokenIds, isCowNFT }: CardInterface) => {
 
     return (
         <Container>
-            <TitleContainer>
-                {title}
-            </TitleContainer>
-            <ValueContainer>
-                {value} / {capacity}
-            </ValueContainer>
-            <ActionContainer onClick={(e) => setModalOpen(true)}>
-                MORE INFO
-            </ActionContainer>
+            <ImageContainer>
+                {isCowNFT?
+                <img src = "/images/farms/dashboard/illustrations/mycows.png" />
+                :
+                <img src = "/images/farms/dashboard/illustrations/mybulls.png" />
+            }
+            </ImageContainer>
+            <ContentContainer>
+                <TitleContainer>
+                    {title}
+                </TitleContainer>
+                <ValueContainer>
+                    {value} / {capacity}
+                </ValueContainer>
+                <ActionContainer onClick={(e) => setModalOpen(true)}>
+                    <img src ="/images/farms/dashboard/buttons/moreinfogray.png" 
+                            onMouseOver={e => e.currentTarget.src = "/images/farms/dashboard/buttons/moreinfo.png"}
+                            onMouseOut={e => e.currentTarget.src = "/images/farms/dashboard/buttons/moreinfogray.png"}
+                    />
+                </ActionContainer>
+            </ContentContainer>
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setModalOpen(false)}
