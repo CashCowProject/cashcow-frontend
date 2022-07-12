@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 import { Link, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Page from 'components/layout/Page'
@@ -17,15 +18,60 @@ import { getCowNftAddress, getBullNftAddress, getNftFarmingAddress, getMilkAddre
 import CowCard from './CowCard'
 import BullCard from './BullCard'
 import BreedingCard from './BreedingCard'
-
+import { MDBMask, MDBView, MDBContainer } from 'mdbreact';
 type boxParam = {
   index: string;
 };
 
 const StyledHero = styled.div`
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 0px solid #e8e8e8;
     margin-bottom: 20px;
-  `
+    background-color: rgb(11,51,75);
+    padding: 10px;
+    // width: 100%;
+    height: 30%;
+    display: flex;
+    overflow: hidden;
+    border-radius: 25px;
+    align-items: center;
+    justify-content: space-around;
+    @media (max-width: 768px) {
+      height: 10%;
+      width: 90vw;
+      min-width: 10px;
+      justify-content: space-around;
+    }
+`
+const HomeButton = styled.div`
+    margin-left: 20px;
+    background-image: url(/images/farms/dashboard/buttons/botonmapgris.png);
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    cursor:pointer;
+    &:hover {
+      background-image: url(/images/farms/dashboard/buttons/botonmapverde.png);
+    }
+    // height: 30%;
+    @media (max-width: 768px) {
+      height: 30px;
+      width: 30px;
+      margin-left:5px;
+      min-width: 10px;
+    }
+`
+
+const VideoContainer = styled.div`
+  display: flex;
+  flex: auto;
+  height: 150px;
+  margin-left: 10px;
+  @media (max-width: 768px) {
+    height: 40px;
+    margin-left:2px;
+  }
+`
 
 const BreedingContainer = styled.div`
   display: flex;
@@ -38,19 +84,27 @@ const BreedingContainer = styled.div`
     margin: 0 8px;
     margin-bottom: 32px;
   }
-  `
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`
 const ActionContainer = styled.div`
   min-width: 230px;
   max-width: calc(25% - 30px);
+  height: 40%;
+  padding : 5px;
   flex: 1;
-  
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
-  position: relative;
   display: flex;
   flex-direction: column;
   text-align: center;
   justify-content: center;
   align-items: center;
+  background-color: rgb(11,51,75);
+  border-radius: 20px;
+  @media (max-width: 768px) {
+    min-width: 230px;
+  }
 `
 const ImageContainer = styled.div`
   
@@ -71,6 +125,10 @@ const BreedingListContainer = styled.div`
     margin: 0 8px;
     margin-bottom: 32px;
   }
+  @media (max-width: 768px) {
+    min-width: 30px;
+    width: 90vw;
+  }
   `
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
@@ -84,6 +142,7 @@ const FarmBreeding = () => {
   const [selectedBullTokenId, setSelectedBullTokenId] = useState(0)
   const [currentBlockTimestamp, setCurrentBlockTimeStamp] = useState(0);
   const [breedingStarted, setBreedingStarted] = useState(false);
+  const history = useHistory();
   const [userBreedingItems, setUserItems] = useState({
     0:[],
     1:[],
@@ -128,10 +187,11 @@ const FarmBreeding = () => {
             toast.success('Transaction submitted');
           })
           .on('receipt', function (receipt) {
-            console.log(receipt);
             fetchInfo();
             setLoading(false);
             setBreedingStarted(!breedingStarted)
+            setSelectedCowTokenId(0);
+            setSelectedBullTokenId(0)
             toast.success('Breeding started');
           })
           
@@ -167,16 +227,17 @@ const FarmBreeding = () => {
   }, [account])
   return (
     <Page style={{
-      backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
       backgroundPosition: 'center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
     }}
     >
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
-          BREEDING
-        </Heading>
+        <VideoContainer>
+              <video autoPlay style = {{width: '100%', height: '100%'}} muted loop src='/images/breeding/breed.mp4'></video>
+        </VideoContainer>
+        <HomeButton onClick = {e => history.push('/farm/map')}/>
       </StyledHero>
       <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
         TOTAL BREEDING FEES : 90 MILK
@@ -184,11 +245,20 @@ const FarmBreeding = () => {
       <BreedingContainer>
         <CowCard selectTokenId={setSelectedCowTokenId} updateFlag = {breedingStarted} key = "bullcard"/>
         <ActionContainer>
-          <ImageContainer>
-            <img src='/images/hearsf.gif' alt="" />
-          </ImageContainer>
+            <MDBContainer className = "mt-1">
+                <MDBView rounded>
+                    <img src="/images/cow/1.png" alt="" style={{width: "200px",  height: "180px", borderRadius: '75px'}}/>
+                    <MDBMask className = 'flex-center' >
+                        <img src="/images/breeding/marcometal.png" alt="" />
+                    </MDBMask>
+                </MDBView>
+            </MDBContainer>
           <ButtonContainer>
-            <Button disabled={selectedCowTokenId === 0 || selectedBullTokenId === 0} onClick={handleStartBreeding}>BIG BANG</Button>
+              {(selectedCowTokenId === 0 || selectedBullTokenId === 0)?
+                <img src="/images/breeding/matchgray.png" style = {{maxWidth:"100%", height: "70px"}}/>
+                :
+                <img src="/images/breeding/match.png" style = {{maxWidth:"100%", height: "70px"}} onClick={handleStartBreeding}/>
+              }
           </ButtonContainer>
         </ActionContainer>
         <BullCard selectTokenId={setSelectedBullTokenId} updateFlag = {breedingStarted}/>

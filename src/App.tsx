@@ -49,6 +49,7 @@ const BullDetail = lazy(() => import('./views/MyNfts/Bulls/NftDetail'))
 
 const FarmDashboard = lazy(() => import('./views/Game/Dashboard'))
 const FarmBreeding = lazy(() => import('./views/Game/Breeding'))
+const Map = lazy(() => import('./views/Game/Map'))
 
 const BlindboxDetail = lazy(() => import('./views/Blindbox/BlindboxDetail'))
 const NftMarket = lazy(() => import('./views/NftMarket'))
@@ -160,6 +161,9 @@ const App: React.FC = () => {
               </Route>
               <Route exact path="/bulls">
                 <Bulls />
+              </Route>
+              <Route exact path="/farm/map">
+                <Map />
               </Route>
               <Route exact path="/farm/dashboard">
                 <FarmDashboard />
