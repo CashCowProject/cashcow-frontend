@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import HappyCows from 'config/abi/HappyCows.json'
 import AirNfts from 'config/abi/AirNft.json'
+import ERC721 from 'config/abi/ERC721.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem, toBN } from 'web3-utils'
 import Web3 from 'web3'
@@ -69,13 +69,9 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
   const [dna, setDna] = useState('')
   const [attr, setAttr] = useState([])
 
-  const happyCowsContract = useMemo(() => {
-    return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
-  }, [])
-
-  const airnftContract = useMemo(() => {
-    return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
-  }, [])
+  const nftContract = useMemo(() => {
+    return new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
+  }, [myToken])
 
   const fetchNft = useCallback(async () => {
     if (!myToken) return
@@ -84,17 +80,14 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
     if (!tmpTokenId) return
 
     let nftHash = null
-    if (!myToken.isAIR) {
-      nftHash = await happyCowsContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
-    } else {
-      nftHash = await airnftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
-    }
+    nftHash = await nftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
+    console.log(nftHash)
     const res = await fetch(nftHash)
     const json = await res.json()
     setDna(json.dna)
     setAttr(json.attributes)
     setTokenId(myToken.tokenId)
-  }, [myToken, account, happyCowsContract, airnftContract])
+  }, [myToken, account, nftContract])
 
   useEffect(() => {
     fetchNft()
@@ -123,10 +116,10 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
               <a
                 rel="noreferrer"
                 target="_blank"
-                href={`https://bscscan.com/address/${myToken.isAIR ? getAirNftAddress() : getHappyCowAddress()}`}
+                href={`https://bscscan.com/address/${myToken.collection}`}
                 style={{ textDecoration: 'underline', color: isDark ? 'white' : '#431216' }}
               >
-                {myToken.isAIR ? getAirNftAddress() : getHappyCowAddress()}
+                {myToken.collection}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>

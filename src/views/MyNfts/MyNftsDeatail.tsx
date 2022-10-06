@@ -10,11 +10,11 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMarketAddress, getAirNftAddress, getBullNftAddress, getCowNftAddress, getLandNftAddress } from 'utils/addressHelpers'
 import airNFTs from 'config/constants/airnfts'
 import MyNftData from './components/MyNftData'
 import MyNftDetailHeader from './components/MyNftDetailHeader'
-
+import ERC721 from 'config/abi/ERC721.json'
 const StyledHero = styled.div`
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 20px;
@@ -33,8 +33,8 @@ const MyNftsDeatail = () => {
   const { myTokenId } = useParams<boxParam>()
   const { account } = useWallet()
   const [myToken, setMyToken] = useState({})
-  const [isAIR, setIsAIR] = useState(false)
-
+  const [collectionName, setCollectionName] = useState('')
+  const [collectionAddress, setCollectionAddress] = useState("");
   const happyCowsContract = useMemo(() => {
     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
   }, [])
@@ -48,56 +48,84 @@ const MyNftsDeatail = () => {
   }, [])
 
   const getTokenHashes = useCallback(async () => {
-    const tmpMyTokens = []
-    const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({ from: account })
-    const tokenIds = []
-    _.map(happyCowTokens, (itm) => {
-      tokenIds.push({ tokenId: itm, isAIR: false })
-    })
+    // const tmpMyTokens = []
+    // const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({ from: account })
+    // const tokenIds = []
+    // _.map(happyCowTokens, (itm) => {
+    //   tokenIds.push({ tokenId: itm, isAIR: false })
+    // })
 
-    // retrieve my nft from air
-    const airNftOwners = []
-    _.map(airNFTs, (nft) => {
-      airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
-    })
-    const owners = await Promise.all(airNftOwners)
-    _.map(owners, (owner, idx) => {
-      if (owner !== account) return
+    // // retrieve my nft from air
+    // const airNftOwners = []
+    // _.map(airNFTs, (nft) => {
+    //   airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+    // })
+    // const owners = await Promise.all(airNftOwners)
+    // _.map(owners, (owner, idx) => {
+    //   if (owner !== account) return
 
-      tokenIds.push({ tokenId: airNFTs[idx], isAIR: true })
-    })
-    const items = await marketContract.methods.fetchItemsCreated().call({ from: account })
-    const tokenIdLength = tokenIds.length
-    for (let i = 0; i < tokenIdLength; i++) {
-      if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
-      tmpMyTokens[i].itemId = '0'
+    //   tokenIds.push({ tokenId: airNFTs[idx], isAIR: true })
+    // })
+    // const items = await marketContract.methods.fetchItemsCreated().call({ from: account })
+    // const tokenIdLength = tokenIds.length
+    // for (let i = 0; i < tokenIdLength; i++) {
+    //   if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
+    //   tmpMyTokens[i].itemId = '0'
+    // }
+    // let currentIndex = 0
+    // for (let i = 0; i < items.length; i++) {
+    //   if (items[i].isSold === false) {
+    //     tokenIds.push({ tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress() })
+    //     if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
+    //     tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
+    //     currentIndex++
+    //   }
+    // }
+
+    // const myTokenHashes = []
+    // for (let i = 0; i < tokenIds.length; i++) {
+    //   if (!tokenIds[i].isAIR) myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call())
+    //   else myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+    // }
+    // const result = await Promise.all(myTokenHashes)
+
+    // for (let i = 0; i < tokenIds.length; i++) {
+    //   if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
+    //   tmpMyTokens[i].tokenId = tokenIds[i].tokenId
+    //   tmpMyTokens[i].tokenHash = result[i]
+    //   tmpMyTokens[i].isAIR = tokenIds[i].isAIR
+    // }
+
+    const collectionAddress = localStorage.getItem('collection');
+    const marketItemId = localStorage.getItem('marketItemId');
+    console.log(collectionAddress)
+    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], collectionAddress);
+    const tokenhash =await nftContract.methods.tokenURI(myTokenId);
+    let collectionName = "";
+    if(collectionAddress == getAirNftAddress()) {
+      collectionName = "Air NFT"
+    } 
+    if(collectionAddress == getHappyCowAddress()) {
+      collectionName = "HappyCow"
+    } 
+    if(collectionAddress == getCowNftAddress()) {
+      collectionName = "Cow NFT"
+    } 
+    if(collectionAddress == getLandNftAddress()) {
+      collectionName = "Land NFT"
+    } 
+    if(collectionAddress == getBullNftAddress()) {
+      collectionName = "Bull NFT"
+    } 
+    const _temp = {
+      'tokenId': myTokenId,
+      'collection': collectionAddress,
+      'tokenHash': tokenhash,
+      'itemId': marketItemId,
     }
-    let currentIndex = 0
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].isSold === false) {
-        tokenIds.push({ tokenId: items[i].tokenId, isAIR: items[i].nftContract === getAirNftAddress() })
-        if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
-        tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
-        currentIndex++
-      }
-    }
+    setCollectionName(collectionName)
 
-    const myTokenHashes = []
-    for (let i = 0; i < tokenIds.length; i++) {
-      if (!tokenIds[i].isAIR) myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-    }
-    const result = await Promise.all(myTokenHashes)
-
-    for (let i = 0; i < tokenIds.length; i++) {
-      if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
-      tmpMyTokens[i].tokenId = tokenIds[i].tokenId
-      tmpMyTokens[i].tokenHash = result[i]
-      tmpMyTokens[i].isAIR = tokenIds[i].isAIR
-    }
-
-    setIsAIR(tmpMyTokens[myTokenId].isAIR)
-    setMyToken(tmpMyTokens[myTokenId])
+    setMyToken(_temp)
   }, [account, happyCowsContract, marketContract, airnftContract, myTokenId])
   useEffect(() => {
     getTokenHashes()
@@ -110,7 +138,7 @@ const MyNftsDeatail = () => {
           My NFT Detail
         </Heading>
       </StyledHero>
-      <MyNftDetailHeader collectionName={isAIR ? 'Air NFT' : 'HappyCow'} />
+      <MyNftDetailHeader collectionName={collectionName} />
       <NftDetailContainer>
         <MyNftData myToken={myToken} />
       </NftDetailContainer>

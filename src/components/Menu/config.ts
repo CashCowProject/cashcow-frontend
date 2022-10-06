@@ -43,13 +43,52 @@ const config: MenuEntry[] = [
   //   href: '/farms',
   // },
 
-  // {
-  //   label: 'NFT Blind Box',
-  //   // icon: 'NftIcon',
-  //   icon: 'TicketIcon',
-  //   href: '/blind-box'
-  // },
+  {
+    label: 'NFT Blind Box',
+    // icon: 'NftIcon',
+    icon: 'TicketIcon',
+    href: '/blind-box'
+  },
+  
+  {
+    label: 'My Farm',
+    icon: 'FarmIcon',
+    items: [
+      /*
+      {
+        label: 'Map',
+        href: '/farm/map',
+      },
+      */
+      {
+        label: 'Dashboard',
+        href: '/farm/dashboard',
+      },
+      {
+        label: 'Breeding',
+        href: '/farm/breeding',
+      }
+    ]
+  },
+  { 
+    label: "Farm Management",
+    icon: 'TicketIcon',
+    items: [
+      {
+        label:"Cows",
+        href:"/management/cow"
+      },
+      {
+        label:"Bulls",
+        href:"/management/bull"
+      },
+      {
+        label:"Lands",
+        href:"/management/land"
+      }
 
+    ]
+  },
   {
     label: 'NFT Staking',
     icon: 'TicketIcon',
@@ -88,15 +127,54 @@ const config: MenuEntry[] = [
   // },
   {
     label: 'NFT Market',
-    // icon: 'NftIcon',
     icon: 'TicketIcon',
-    href: '/nft-market'
+    href: '/market',
+    // items:[
+    //   {
+    //     label: "HAPPY COWS",
+    //     href: '/market/HappyCows'  
+    //   },
+    //   {
+    //     label: "GENESIS",
+    //     href: '/market/airnft'  
+    //   },
+    //   {
+    //     label: "LANDS",
+    //     href: '/market/land'  
+    //   },
+    //   {
+    //     label: "COWS",
+    //     href: '/market/cow'  
+    //   },
+    //   {
+    //     label: "BULLS",
+    //     href: '/market/bull'  
+    //   }
+    // ]
   },
   {
     label: 'My NFTs',
-    // icon: 'NftIcon',
-    icon: 'TicketIcon',
+    icon: 'NftIcon',
+    // icon: 'TicketIcon',
     href: '/myNFTs'
+    // items: [
+    //   {
+    //     label: 'My NFTs',
+    //     href: '/myNFTs'
+    //   },
+    //   {
+    //     label: 'My Lands',
+    //     href: '/lands',
+    //   },
+    //   {
+    //     label: 'My Cows',
+    //     href: '/cows',
+    //   },
+    //   {
+    //     label: 'My Bulls',
+    //     href: '/bulls',
+    //   }
+    // ]
   },
   
   {

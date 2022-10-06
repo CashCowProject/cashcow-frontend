@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect,useContext, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import Market from 'config/abi/Market.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
@@ -9,7 +9,7 @@ import { getMarketAddress } from 'utils/addressHelpers'
 import addresses from 'config/constants/contracts'
 import NftEachItem from './NftEachItem'
 import { State } from '../../../state/types'
-
+import { LoadingContext } from 'contexts/LoadingContext'
 const NftItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -23,84 +23,114 @@ const NftItems = () => {
   const [marketItems, setMarketItems] = useState([])
   const sortOrder = useSelector((state: State) => state.markets.sortOrder)
   const collectionType = useSelector((state: State) => state.markets.collectionType)
-
+  const { setLoading } = useContext(LoadingContext)
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
 
   const fetchNftItems = useCallback(async () => {
-    const tmpMarketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
-    const filteredTmpMarketItems = []
-    for (let i = 0; i < tmpMarketItems.length; i++) {
-      // if(tmpMarketItems[i].seller !== account) {
-      filteredTmpMarketItems.push(tmpMarketItems[i])
-      // }
-    }
-    let filteredMarketItems = []
-    let index = 0
-    switch (collectionType.field) {
-      case 'All':
-        filteredMarketItems = filteredTmpMarketItems
-        break
-      case 'HappyCows':
-        for (let i = 0; i < filteredTmpMarketItems.length; i++) {
-          if (filteredTmpMarketItems[i].nftContract === addresses.happycow[chainId]) {
-            filteredMarketItems[index] = filteredTmpMarketItems[i]
-            index++
-          }
+    try {
+        setLoading(true);
+        const tmpMarketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
+        const filteredTmpMarketItems = []
+        for (let i = 0; i < tmpMarketItems.length; i++) {
+          // if(tmpMarketItems[i].seller !== account) {
+          filteredTmpMarketItems.push(tmpMarketItems[i])
+          // }
         }
-        break
-      case 'AirNFT':
-        for (let i = 0; i < filteredTmpMarketItems.length; i++) {
-          if (filteredTmpMarketItems[i].nftContract === addresses.airnft[chainId]) {
-            filteredMarketItems[index] = filteredTmpMarketItems[i]
-            index++
-          }
-        }
-        break
-      default:
-        break
-    }
-
-    switch (sortOrder.field) {
-      case 'RecentlyListed':
-        for (let i = 0; i < filteredMarketItems.length - 1; i++) {
-          for (let j = i + 1; j < filteredMarketItems.length; j++) {
-            if (parseInt(filteredMarketItems[i].listedTime) < parseInt(filteredMarketItems[j].listedTime)) {
-              const tmp = filteredMarketItems[i]
-              filteredMarketItems[i] = filteredMarketItems[j]
-              filteredMarketItems[j] = tmp
+        let filteredMarketItems = []
+        let index = 0
+        switch (collectionType.field) {
+          case 'All':
+            filteredMarketItems = filteredTmpMarketItems
+            break
+          case 'HappyCows':
+            for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+              if (filteredTmpMarketItems[i].nftContract === addresses.happycow[chainId]) {
+                filteredMarketItems[index] = filteredTmpMarketItems[i]
+                index++
+              }
             }
-          }
-        }
-        break
-      case 'LowestPrice':
-        for (let i = 0; i < filteredMarketItems.length - 1; i++) {
-          for (let j = i + 1; j < filteredMarketItems.length; j++) {
-            if (parseInt(filteredMarketItems[i].price) > parseInt(filteredMarketItems[j].price)) {
-              const tmp = filteredMarketItems[i]
-              filteredMarketItems[i] = filteredMarketItems[j]
-              filteredMarketItems[j] = tmp
+            break
+          case 'airnft':
+            for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+              if (filteredTmpMarketItems[i].nftContract === addresses.airnft[chainId]) {
+                filteredMarketItems[index] = filteredTmpMarketItems[i]
+                index++
+              }
             }
-          }
-        }
-        break
-      case 'HighestPrice':
-        for (let i = 0; i < filteredMarketItems.length - 1; i++) {
-          for (let j = i + 1; j < filteredMarketItems.length; j++) {
-            if (parseInt(filteredMarketItems[i].price) < parseInt(filteredMarketItems[j].price)) {
-              const tmp = filteredMarketItems[i]
-              filteredMarketItems[i] = filteredMarketItems[j]
-              filteredMarketItems[j] = tmp
+            break
+          case 'land':
+            for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+              if (filteredTmpMarketItems[i].nftContract === addresses.landnft[chainId]) {
+                filteredMarketItems[index] = filteredTmpMarketItems[i]
+                index++
+              }
             }
-          }
+            break
+          case 'cow':
+            for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+              if (filteredTmpMarketItems[i].nftContract === addresses.cownft[chainId]) {
+                filteredMarketItems[index] = filteredTmpMarketItems[i]
+                index++
+              }
+            }
+            break
+          case 'bull':
+            for (let i = 0; i < filteredTmpMarketItems.length; i++) {
+              if (filteredTmpMarketItems[i].nftContract === addresses.bullnft[chainId]) {
+                filteredMarketItems[index] = filteredTmpMarketItems[i]
+                index++
+              }
+            }
+            break
+          default:
+            break
         }
-        break
-
-      default:
-        break
-    }
-    setMarketItems(filteredMarketItems)
+    
+        switch (sortOrder.field) {
+          case 'RecentlyListed':
+            for (let i = 0; i < filteredMarketItems.length - 1; i++) {
+              for (let j = i + 1; j < filteredMarketItems.length; j++) {
+                if (parseInt(filteredMarketItems[i].listedTime) < parseInt(filteredMarketItems[j].listedTime)) {
+                  const tmp = filteredMarketItems[i]
+                  filteredMarketItems[i] = filteredMarketItems[j]
+                  filteredMarketItems[j] = tmp
+                }
+              }
+            }
+            break
+          case 'LowestPrice':
+            for (let i = 0; i < filteredMarketItems.length - 1; i++) {
+              for (let j = i + 1; j < filteredMarketItems.length; j++) {
+                if (parseInt(filteredMarketItems[i].price) > parseInt(filteredMarketItems[j].price)) {
+                  const tmp = filteredMarketItems[i]
+                  filteredMarketItems[i] = filteredMarketItems[j]
+                  filteredMarketItems[j] = tmp
+                }
+              }
+            }
+            break
+          case 'HighestPrice':
+            for (let i = 0; i < filteredMarketItems.length - 1; i++) {
+              for (let j = i + 1; j < filteredMarketItems.length; j++) {
+                if (parseInt(filteredMarketItems[i].price) < parseInt(filteredMarketItems[j].price)) {
+                  const tmp = filteredMarketItems[i]
+                  filteredMarketItems[i] = filteredMarketItems[j]
+                  filteredMarketItems[j] = tmp
+                }
+              }
+            }
+            break
+    
+          default:
+            break
+        }
+        setMarketItems(filteredMarketItems)
+        setLoading(false)
+      } catch (e) {
+        setLoading(false)
+      }
   }, [account, marketContract, collectionType, sortOrder])
 
   useEffect(() => {

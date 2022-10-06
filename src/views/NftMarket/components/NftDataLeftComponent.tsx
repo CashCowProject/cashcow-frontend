@@ -6,12 +6,16 @@ import { Button } from 'cashcow-uikit'
 import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
 import HappyCows from 'config/abi/HappyCows.json'
+import CowNFT from 'config/abi/CowNFT.json'
+import BullNFT from 'config/abi/BullNFT.json'
+import LandNFT from 'config/abi/LandNFT.json'
+
 import MilkToken from 'config/abi/MilkToken.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import Web3 from 'web3'
 import { usePriceCakeBusd } from 'state/hooks'
-import { getHappyCowAddress, getMilkAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMilkAddress, getMarketAddress, getAirNftAddress, getCowNftAddress, getBullNftAddress, getLandNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
@@ -114,7 +118,12 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
   const { account } = useWallet()
   // const [selectedToken, setSelectedToken] = useState('Milk');
   const selectedToken = 'Milk'
-  const [isAIR, setIsAIR] = useState(false)
+  const [isAIR, setIsAIR] = useState(false);
+  const [isHappy, setIsHappy] = useState(false);
+  const [isCowNFT, setIsCowNFT] = useState(false);
+  const [isBullNFT, setIsBullNFT] = useState(false);
+  const [isLandNFT, setIsLandNFT] = useState(false);
+
   const [image, setImage] = useState('')
   const [name, setName] = useState('')
   const [salePrice, setSalePrice] = useState('')
@@ -136,15 +145,34 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
   const airnftContract = useMemo(() => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
+  const cowContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+
+  const bullContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+  const landContract = useMemo(() => {
+    return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
+  }, [])
+
   const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress())
 
   const fetchNft = useCallback(async () => {
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
-    let isAirToken = false
+    let isAirToken = false;
+    let isHappyCow = false;
+    let isCowToken = false;
+    let isBullToken = false;
+    let isLandToken = false;
     let tokenId = null
     for (let i = 0; i < marketItems.length; i++) {
       if (marketItems[i].itemId === itemId) {
         isAirToken = marketItems[i].nftContract === getAirNftAddress()
+        isHappyCow = marketItems[i].nftContract === getHappyCowAddress();
+        isCowToken = marketItems[i].nftContract === getCowNftAddress();
+        isLandToken = marketItems[i].nftContract ===getLandNftAddress();
+        isBullToken = marketItems[i].nftContract ===getBullNftAddress();
         tokenId = marketItems[i].tokenId
         setSalePrice(fromWei(marketItems[i].price, 'ether'))
         if (marketItems[i].seller === account) {
@@ -158,42 +186,93 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
 
     let nftHash = null
     if (isAirToken) nftHash = await airnftContract.methods.tokenURI(toBN(tokenId)).call({ from: account })
-    else nftHash = await happyCowsContract.methods.tokenURI(toBN(tokenId)).call({ from: account })
+    else if(isHappyCow) nftHash = await happyCowsContract.methods.tokenURI(toBN(tokenId)).call({ from: account })
+    else if(isCowToken) nftHash = await cowContract.methods.tokenURI(toBN(tokenId)).call({ from: account});
+    else if(isBullToken) nftHash = await bullContract.methods.tokenURI(toBN(tokenId)).call({ from: account});
+    else nftHash = await landContract.methods.tokenURI(toBN(tokenId)).call({ from: account});
     const res = await fetch(nftHash)
     const json = await res.json()
 
     let imageUrl = json.image
-    if (isAirToken) {
-      setImage(imageUrl)
-    } else {
+    if(isHappyCow) {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else{
+      setImage(imageUrl);
     }
-    setIsAIR(isAirToken)
+    setIsAIR(isAirToken);
+    setIsHappy(isHappyCow);
+    setIsCowNFT(isCowToken);
+    setIsBullNFT(isBullToken);
+    setIsLandNFT(isLandToken);
     setName(json.name)
-    setDescription(json.description)
+    setDescription(json.description?json.description:"")
 
     setMilkPrice(cakePriceUsd.toNumber())
   }, [account, marketContract, airnftContract, itemId, happyCowsContract, cakePriceUsd])
+
   useEffect(() => {
     fetchNft()
   }, [fetchNft])
-
+  const cancelList = async (tokenId) =>{
+    try {
+      setLoading(true);
+      if(isAIR) {
+        await marketContract.methods.unlistMarketItem(getAirNftAddress(), tokenId).send({ from: account });
+      }
+      if(isHappy) {
+        await marketContract.methods.unlistMarketItem(getHappyCowAddress(), tokenId).send({ from: account });
+      }
+      if(isCowNFT) {
+        await marketContract.methods.unlistMarketItem(getCowNftAddress(), tokenId).send({ from: account });
+      }
+      if(isBullNFT) {
+        await marketContract.methods.unlistMarketItem(getBullNftAddress(), tokenId).send({ from: account });
+      }
+      if(isLandNFT) {
+        await marketContract.methods.unlistMarketItem(getLandNftAddress(), tokenId).send({ from: account });
+      }
+      history.push('/market')
+      setLoading(false);
+    } catch(error) {
+      setLoading(false);
+    }
+  }
   const buyNft = async () => {
     setFlgButtonState(false)
     setLoading(true)
 
     try {
-      const priceWei = toWei(toBN('10000000000000000000000000000000000000000'), 'ether')
       const allowance = await milkTokenContract.methods.allowance(account, getMarketAddress()).call()
-
-      if (parseInt(allowance.toString()) < parseInt(salePrice)) {
-        await milkTokenContract.methods.approve(getMarketAddress(), priceWei).send({ from: account })
+      const milkBalance = await milkTokenContract.methods.balanceOf(account).call();
+      console.log(milkBalance);
+      console.log(toWei(salePrice))
+      if(toBN(milkBalance).lt(toBN(toWei(salePrice) ))) {
+        toast.success('insufficient balance.')
+        setLoading(false)
+        return
+      }
+      if (toBN(allowance.toString()).lt(toBN(toWei(salePrice) ))) {
+        await milkTokenContract.methods.approve(getMarketAddress(), toWei(salePrice) ).send({ from: account })
         toast.success('Approved Milk token.')
       }
-      if (isAIR) await marketContract.methods.createMarketSale(getAirNftAddress(), itemId).send({ from: account })
-      else await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({ from: account })
-      history.push('/nft-market')
+      if(isAIR) {
+        await marketContract.methods.createMarketSale(getAirNftAddress(), itemId).send({ from: account });
+      }
+      if(isHappy) {
+        await marketContract.methods.createMarketSale(getHappyCowAddress(), itemId).send({ from: account });
+      }
+      if(isCowNFT) {
+        await marketContract.methods.createMarketSale(getCowNftAddress(), itemId).send({ from: account });
+      }
+      if(isBullNFT) {
+        await marketContract.methods.createMarketSale(getBullNftAddress(), itemId).send({ from: account });
+      }
+      if(isLandNFT) {
+        await marketContract.methods.createMarketSale(getLandNftAddress(), itemId).send({ from: account });
+      }     
+       history.push('/market')
+      
       toast.success('Successfully bought NFT.')
     } catch (error) {
       const { message } = error as Error
@@ -265,8 +344,8 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
                 Buy NFT
               </Button>
             ) : (
-              <Button style={{ width: '100%' }} disabled>
-                {flgMyNft ? 'Your Listing NFT' : 'Buy NFT'}
+              <Button style={{ width: '100%' }} onClick = {()=>cancelList(itemId)}>
+                {flgMyNft ? 'UnList NFT' : 'Buy NFT'}
               </Button>
             )}
           </div>

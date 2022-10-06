@@ -3,11 +3,14 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
-import HappyCows from 'config/abi/HappyCows.json'
+import HappyCows from 'config/abi/HappyCows.json';
+import CowNFT from 'config/abi/CowNFT.json';
+import BullNFT from 'config/abi/BullNFT.json';
+import LandNFT from 'config/abi/LandNFT.json';
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem, toBN } from 'web3-utils'
 import Web3 from 'web3'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress } from 'utils/addressHelpers'
+import { getHappyCowAddress, getMarketAddress, getAirNftAddress, getCowNftAddress, getBullNftAddress, getLandNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 
 const NftOnChainDataContainer = styled.div`
@@ -72,7 +75,7 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const [ownerAddress, setOwnerAddress] = useState('')
   const [dna, setDna] = useState('')
   const [attr, setAttr] = useState([])
-
+  const [collectionAddress, setAddress] = useState("");
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
@@ -84,14 +87,31 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const airnftContract = useMemo(() => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
+  const CowContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+  const BullContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+  const LandContract = useMemo(() => {
+    return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
+  }, [])
 
   const fetchNft = useCallback(async () => {
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     let index = 0
-    let isTokenAir = false
+    let isTokenAir = false;
+    let isCowNFT = false;
+    let isBullNFT = false;
+    let isHappyCow = false;
+    let isLandNFT = false;
     for (let i = 0; i < marketItems.length; i++) {
       if (marketItems[i].itemId === itemId) {
         isTokenAir = marketItems[i].nftContract === getAirNftAddress()
+        isCowNFT = marketItems[i].nftContract === getCowNftAddress();
+        isBullNFT = marketItems[i].nftContract === getBullNftAddress();
+        isHappyCow = marketItems[i].nftContract === getHappyCowAddress();
+        isLandNFT = marketItems[i].nftContract === getLandNftAddress();
         setTokenId(marketItems[i].tokenId.toString())
         setOwnerAddress(marketItems[i].seller.toString())
         index = i
@@ -100,16 +120,33 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
     }
 
     let nftHash = null
-    if (isTokenAir)
+    if (isTokenAir) {
       nftHash = await airnftContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
-    else nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setAddress(getAirNftAddress());
+    }
+    else if(isHappyCow) {
+      nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setAddress(getHappyCowAddress())
+    }
+    else if(isCowNFT) {
+      nftHash = await CowContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setAddress(getCowNftAddress())
+    } 
+    else if(isBullNFT) {
+      nftHash = await BullContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setAddress(getBullNftAddress());
+    } 
+    else {
+      nftHash = await LandContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setAddress(getLandNftAddress())
+    } 
 
     const res = await fetch(nftHash)
     const json = await res.json()
     setIsAIR(isTokenAir)
     setDna(json.dna)
     setAttr(json.attributes)
-  }, [account, marketContract, airnftContract, itemId, happyCowsContract])
+  }, [account, marketContract,CowContract,BullContract,LandContract, airnftContract, itemId, happyCowsContract])
 
   useEffect(() => {
     fetchNft()
@@ -138,10 +175,10 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
               <a
                 rel="noreferrer"
                 target="_blank"
-                href={`https://bscscan.com/address/${isAIR ? getAirNftAddress() : getHappyCowAddress()}`}
+                href={`https://bscscan.com/address/${collectionAddress}`}
                 style={{ textDecoration: 'underline', color: isDark ? 'white' : '#431216' }}
               >
-                {isAIR ? getAirNftAddress() : getHappyCowAddress()}
+                {collectionAddress}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>

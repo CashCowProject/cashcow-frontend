@@ -85,7 +85,10 @@ const sortByItems = [
 const filterByCollection = [
   { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
   { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
-  { label: 'Genesis', value: { field: 'AirNFT', direction: 'asc' } },
+  { label: 'Genesis', value: { field: 'airnft', direction: 'asc' } },
+  { label: 'Land', value: { field: 'land', direction: 'asc' } },
+  { label: 'Cow', value: { field: 'cow', direction: 'asc' } },
+  { label: 'Bull', value: { field: 'bull', direction: 'asc' } },
 ]
 
 const NftHeader = () => {
@@ -105,15 +108,15 @@ const NftHeader = () => {
           options={filterByCollection}
           onOptionChange={(option) => dispatch(setCollectionType(option.value))}
           style={{ marginRight: '15px' }}
-        />
+        /> 
         {/* <SearchBox>
           <InputTag placeholder="Please enter keywords to search" />
           <LinkTag>
             <img alt="search icon" style={{ width: 30, height: 30 }} src="https://img.icons8.com/FFFFFF/search" />
           </LinkTag>
-        </SearchBox> */}
+        </SearchBox>*/}
       </RightContainer>
-    </NftHeaderContainer>
+  </NftHeaderContainer>
   )
 }
 

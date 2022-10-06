@@ -11,7 +11,7 @@ export interface BlindBoxItemInterface {
 
 const ItemBackgroundCover = styled.div`
     width: 100%;
-    height: 250px;
+    height: 25vh;
     overflow: hidden;
     position: relative;
     margin-bottom: 25px;
@@ -27,7 +27,7 @@ const BlindBoxItem = ({itemId, background, itemTitle}: BlindBoxItemInterface) =>
         width: 100%;
         height: 100%;
         background-image : url(images/${background});
-        background-size: cover;
+        background-size: 100%;
         background-position: 0;
         background-repeat: no-repeat;
         cursor: pointer;

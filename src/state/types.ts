@@ -48,11 +48,27 @@ export interface FarmsState {
 export interface PoolsState {
   data: Pool[]
 }
+export interface LandState {
+  landItemCount: number
+  updated: boolean
+}
+export interface CowState {
+  cowItemCount: number
+  updated: boolean
+}
+export interface BullState {
+  bullItemCount: number
+  updated: boolean
+}
 
 // Global state
+
 
 export interface State {
   farms: FarmsState
   pools: PoolsState
   markets: MarketState
+  land: LandState
+  cow: CowState
+  bull: BullState
 }

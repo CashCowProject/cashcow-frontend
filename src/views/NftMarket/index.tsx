@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import styled, { useTheme } from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
@@ -9,8 +10,8 @@ const StyledHero = styled.div`
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 20px;
 `
-const NftMarket = () => {
 
+const NftMarket = () => {
     const { isDark } = useTheme();
     
     return (

@@ -20,7 +20,7 @@ const NftDetailHeader = ({ collectionName }: NftDetailHeaderInterface) => {
   return (
     <NftDetailHeaderContainer>
       <NftDetailPrevious>
-        <Link to="/nft-market" style={{ color: isDark ? 'white' : '#431216' }}>
+        <Link to="/market" style={{ color: isDark ? 'white' : '#431216' }}>
           NFT Market
         </Link>
         <span style={{ padding: '0 8px', color: isDark ? 'white' : '' }}>{'>'}</span>
