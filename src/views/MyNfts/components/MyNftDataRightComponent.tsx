@@ -94,61 +94,49 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
   }, [myToken, fetchNft])
   return (
     <NftOnChainDataContainer>
-      <NftOnChainDataTitle style={{ color: isDark ? 'white' : '' }}>On-chain data</NftOnChainDataTitle>
+      <NftOnChainDataTitle style={{ color: isDark ? 'white' : 'white' }}>On-chain data</NftOnChainDataTitle>
       <NftOnChainDetailContainer>
         <NftOnChainDetail>
           <NftOnChainEachData>
-            <div style={{ color: isDark ? 'white' : '#694f4e' }}>Owner</div>
+            <div style={{ color: isDark ? 'white' : 'white' }}>Owner</div>
             <NftOnChainLinkStyle>
               <a
                 rel="noreferrer"
                 target="_blank"
                 href={`https://bscscan.com/address/${account}`}
-                style={{ textDecoration: 'underline', color: isDark ? 'white' : '#431216' }}
+                style={{ textDecoration: 'underline', color: isDark ? 'white' : 'white' }}
               >
                 {account}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>
           <NftOnChainEachData>
-            <div style={{ color: isDark ? 'white' : '#694f4e' }}>Contract Address</div>
+            <div style={{ color: isDark ? 'white' : 'white' }}>Contract Address</div>
             <NftOnChainLinkStyle>
               <a
                 rel="noreferrer"
                 target="_blank"
                 href={`https://bscscan.com/address/${myToken.collection}`}
-                style={{ textDecoration: 'underline', color: isDark ? 'white' : '#431216' }}
+                style={{ textDecoration: 'underline', color: isDark ? 'white' : 'white' }}
               >
                 {myToken.collection}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>
           <NftOnChainEachData>
-            <div style={{ color: isDark ? 'white' : '#694f4e' }}>Token ID</div>
-            <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{`# ${tokenId}`}</NftOnChainLinkStyle>
+            <div style={{ color: isDark ? 'white' : 'white' }}>Token ID</div>
+            <NftOnChainLinkStyle style={{ color: isDark ? 'white' : 'white' }}>{`# ${tokenId}`}</NftOnChainLinkStyle>
           </NftOnChainEachData>
-          {/* <NftOnChainEachData>
-                        <div style={{color: isDark ? 'white' : '#694f4e'}}>Asset Protocol</div>
-                        <NftOnChainLinkStyle style={{color: isDark ? 'white' : ''}}>
-                            ERC721
-                        </NftOnChainLinkStyle>
-                    </NftOnChainEachData>
-                    <NftOnChainEachData>
-                        <div style={{color: isDark ? 'white' : '#694f4e'}}>Asset public chain</div>
-                        <NftOnChainLinkStyle style={{color: isDark ? 'white' : ''}}>
-                            BSC
-                        </NftOnChainLinkStyle>
-                    </NftOnChainEachData> */}
           {dna && (
             <NftOnChainEachData>
-              <div style={{ color: isDark ? 'white' : '#694f4e' }}>DNA</div>
+              <div style={{ color: isDark ? 'white' : 'white' }}>DNA</div>
               <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{dna}</NftOnChainLinkStyle>
             </NftOnChainEachData>
           )}
           {attr.map((item) => (
             <NftOnChainEachData key={item.trait_type}>
-              <div style={{ color: isDark ? 'white' : '#694f4e' }}>{item.trait_type}</div>
-              <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{item.value}</NftOnChainLinkStyle>
+              <div style={{ color: isDark ? 'white' : 'white' }}>{item.trait_type}</div>
+              <NftOnChainLinkStyle style={{ color: isDark ? 'white' : 'white' }}>{item.value}</NftOnChainLinkStyle>
             </NftOnChainEachData>
           ))}
         </NftOnChainDetail>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
 import MyNftDataLeftComponent from './MyNftDataLeftComponent'
 import MyNftDataRightComponent from './MyNftDataRightComponent'
+import MyNftDataCenterComponent from './MyNftDataCenterComponent'
 
 const NftDataContainer = styled.div`
     position: relative;
@@ -39,16 +40,27 @@ const GradientBack = styled.div`
 
 export interface NftDataInterface {
     myToken?: any;
-  }
+}
 
-const MyNftData = ({myToken}: NftDataInterface) => {
+const MyNftData = ({ myToken }: NftDataInterface) => {
     const { isDark } = useTheme()
     return (
-        <NftDataContainer style={{background: isDark ? "#27262c" : ''}}>
-            <GradientBack />
-            <MyNftDataLeftComponent myToken={myToken}/>
+        <NftDataContainer style={{ background: isDark ? "#0B3D4C" : '#0B3D4C' }}>
+            {/* <GradientBack /> */}
+            {/* NFT Image */}
+            <MyNftDataLeftComponent
+                myToken={myToken}
+            />
             <NftDataSeperation />
-            <MyNftDataRightComponent myToken={myToken} />
+            {/* NFT Data and actions */}
+            <MyNftDataCenterComponent
+                myToken={myToken}
+            />
+            <NftDataSeperation />
+            {/* NFT Propertries */}
+            <MyNftDataRightComponent
+                myToken={myToken}
+            />
         </NftDataContainer>
     )
 }

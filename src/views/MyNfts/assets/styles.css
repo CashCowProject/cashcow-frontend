@@ -1,0 +1,46 @@
+.parent {
+    position: relative;
+    top: 0;
+    left: 0;
+    /* margin: auto auto; */
+    width: 80%;
+}
+
+.image1 {
+    position: relative;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+}
+
+.image2 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.sell-button {
+    background: url(http://localhost:3000/images/nfts/buttons/listgray.png) no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    border: none;
+    width: 40%;
+    transition: transform .2s; /* Animation */
+}
+
+.sell-button:hover {
+    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.burn-button {
+    background: url(http://localhost:3000/images/nfts/buttons/burngray.png) no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    border: none;
+    width: 36%;
+    transition: transform .2s; /* Animation */
+}
+
+.burn-button:hover {
+    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
