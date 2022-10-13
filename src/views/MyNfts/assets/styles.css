@@ -2,8 +2,9 @@
     position: relative;
     top: 0;
     left: 0;
-    /* margin: auto auto; */
     width: 80%;
+    margin-top: 10%;
+    margin-left: 10%;
 }
 
 .image1 {
@@ -41,6 +42,63 @@
     transition: transform .2s; /* Animation */
 }
 
+.burn-button-disabled {
+    background: url(http://localhost:3000/images/nfts/buttons/burngray.png) no-repeat;
+    background-size: contain;
+    border: none;
+    width: 36%;
+    opacity:0.5;
+    outline: none;
+}
+
 .burn-button:hover {
     transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.burn-alien-image {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.burn-alien-image-png {
+    width: 70%;
+}
+
+.burn-confirm-button {
+    color: white;
+    font-size: 1.5em;
+    font-weight: 900;
+    position: absolute;
+    bottom: 5%;
+    left: 32%;
+    cursor: pointer;
+    transition: transform .2s; /* Animation */
+}
+
+.burn-confirm-button:hover {
+    transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.burn-cancel-button {
+    color: white;
+    font-size: 1.5em;
+    font-weight: 900;
+    position: absolute;
+    bottom: 5%;
+    left: 58%;
+    cursor: pointer;
+    transition: transform .2s; /* Animation */
+}
+
+.burn-cancel-button:hover {
+    transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.burn-alien-text {
+    color:aliceblue;
+    text-align: center;
+    font-size: 1.15em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }

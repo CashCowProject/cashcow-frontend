@@ -166,7 +166,9 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
   const [description, setDescription] = useState('')
   const [priceNft, setPriceNft] = useState('')
   const [flgList, setFlgList] = useState(false)
+  // Sell and Burn Modals
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [burnModalIsOpen, setBurnModalIsOpen] = useState(false)
   const [flgButtonState, setFlgButtonState] = useState(true)
   const { setLoading } = useContext(LoadingContext)
   const cakePriceUsd = usePriceCakeBusd()
@@ -179,6 +181,8 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
   const nftminterContract = new web3.eth.Contract(NftMinter.abi as AbiItem[], getNftMinterAddress())
 
   const fetchNft = useCallback(async () => {
+    setLoading(true);
+
     console.log('Fetching from Center component')
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     console.log(marketItems)
@@ -205,7 +209,6 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     //   nftHash = await airnftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     // }
 
-
     const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection);
     let nftHash = await nftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     const res = await fetch(nftHash)
@@ -227,6 +230,9 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
       setTokenName(json.name + "#" + myToken.tokenId)
       setImage(imageUrl)
     }
+
+    setLoading(false);
+
   }, [account, myToken])
 
   useEffect(() => {
@@ -333,9 +339,18 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     // references are now sync'd and can be accessed.
   }
 
+  const afterOpenBurnModal = () => {
+    // references are now sync'd and can be accessed.
+  }
+
   const closeModal = () => {
     setIsOpen(false)
   }
+
+  const closeBurnModal = () => {
+    setBurnModalIsOpen(false)
+  }
+
 
   const handleChange = (e) => {
     const { value, maxLength } = e.target
@@ -343,11 +358,21 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     setPriceNft(message)
   }
 
+  const handleOpenBurnModal = () => {
+    if (flgList) {
+      toast.error('You cannot burn a listed nft.');
+    } else if (tokenType === "Land") {
+      toast.error('You cannot burn a Land.');
+    } else {
+      setBurnModalIsOpen(true);
+    }
+  }
+
   const handleBurn = async () => {
     if (!myToken) return
 
-    console.log('burning... ', myToken)
-    console.log('tokenName... ', tokenType)
+    closeBurnModal();
+    setLoading(true);
 
     if (tokenType === "Bull") {
       try {
@@ -384,6 +409,8 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
         console.log(e)
       }
     }
+
+    setLoading(false);
 
   }
 
@@ -455,7 +482,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
               <>
                 <Button
                   className="sell-button"
-                  style={{ 
+                  style={{
                     backgroundColor: 'transparent',
                   }}
                   onClick={flgList ? unlistNFTHandler : openModal}
@@ -464,15 +491,13 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
                 </Button>
                 &nbsp;
                 {/* We need to check if the tokenType is not Land, because we cannot burn lands */}
-                {tokenType === "Cow" || tokenType === "Bull" ? <>
                   <Button
                     style={{ backgroundColor: 'transparent' }}
-                    className="burn-button"
-                    onClick={handleBurn}
+                    className={flgList || tokenType === "Land" ? "burn-button-disabled" : "burn-button"}
+                    onClick={handleOpenBurnModal}
                   >
                     {/* {flgList ? 'Unlist NFT' : 'List NFT'} */}
                   </Button>
-                </> : <></>}
               </>
 
             ) : (
@@ -488,6 +513,8 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
         </BuyNowBtnContainer>
 
       </NftInfo>
+
+      {/* Sell Modal */}
 
       <Modal
         isOpen={modalIsOpen}
@@ -545,6 +572,71 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
           <Button onClick={listNFTHandler}>List NFT</Button>
         </div>
       </Modal>
+
+      {/* Burn Modal */}
+
+      <Modal
+        isOpen={burnModalIsOpen}
+        onAfterOpen={afterOpenBurnModal}
+        onRequestClose={closeBurnModal}
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            width: '30%',
+            // maxWidth: '500px',
+            // minWidth: '400px',
+            borderRadius: '15px',
+            backgroundColor: '#0B3D4C'
+          },
+        }}
+        contentLabel="Example Modal"
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+          {/* <Heading as="h1" size="no" color="primary" mb="20px">
+            Burn NFT
+          </Heading> */}
+
+          {/* <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => closeBurnModal()}
+            onKeyDown={closeBurnModal}
+            role="button"
+            tabIndex={0}
+          >
+            <img src="/images/close.png" style={{ width: '25px', height: '25px' }} alt="close" />
+          </div> */}
+
+          <div className="burn-alien-image">
+            <img src="/images/nfts/extraterrestre.png" className="burn-alien-image-png" />
+            <div
+              className="burn-confirm-button"
+              onClick={handleBurn}
+            >
+              Yes
+            </div>
+            <div
+              className="burn-cancel-button"
+              onClick={closeBurnModal}
+            >
+              No
+            </div>
+          </div>
+
+        </div>
+
+        <div className="burn-alien-text">
+          Your NFT is going to be abducted.
+          <br />
+          Are you sure you want to continue?
+        </div>
+      </Modal>
+
     </NftMetaDataContainer>
   )
 }

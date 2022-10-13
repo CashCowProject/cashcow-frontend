@@ -8,11 +8,11 @@ declare module 'styled-components' {
 }
 
 const GlobalStyle = createGlobalStyle`
-  * {
-    font-family: 'Poppins', 'sans-serif';
-  }
+  * 
   body {
-    background-color: ${({ theme }) => theme.colors.background};
+    // background-color: ${({ theme }) => theme.colors.background};
+    background-image: url('http://localhost:3000/images/background-granja.png');
+    background-size: cover;
 
     img {
       height: auto;

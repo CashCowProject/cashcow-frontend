@@ -51,12 +51,12 @@ const MyNftData = ({ myToken }: NftDataInterface) => {
             <MyNftDataLeftComponent
                 myToken={myToken}
             />
-            <NftDataSeperation />
+            {/* <NftDataSeperation /> */}
             {/* NFT Data and actions */}
             <MyNftDataCenterComponent
                 myToken={myToken}
             />
-            <NftDataSeperation />
+            {/* <NftDataSeperation /> */}
             {/* NFT Propertries */}
             <MyNftDataRightComponent
                 myToken={myToken}
