@@ -1,0 +1,80 @@
+.cards-mapper {
+    background-color: rgb(11,51,75);
+    border-radius: 10%;
+    padding: 2% 2% 2% 2%;
+}
+
+.cards-mapper-image {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: all 1s;
+}
+
+.cards-mapper-image:hover{
+    transform: scale(0.92);
+}
+
+.add-nft-div {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.add-nft-div-button {
+    margin-right: 1em;
+    height: 2.7em;
+    transition: all 1s;
+    cursor: pointer;
+}
+
+.add-nft-div-button:hover{
+    transform: scale(1.1);
+}
+
+/* NFT Listing dev@topospec */
+
+.metal-frame-div {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 90%;
+    margin-top: 90%;
+    margin-left: 5%;
+    transition: all 0.5s;
+}
+
+.metal-frame-div:hover{
+    transform: scale(1.07);
+}
+
+.nft-image {
+    position: relative;
+    margin-top: 10%;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+}
+
+.metal-frame-image {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.remove-from-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.remove-from-div-button {
+    width: 100%;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.remove-from-div-button:hover {
+    transform: scale(1.15);
+}

@@ -67,6 +67,10 @@ const config: MenuEntry[] = [
       {
         label: 'Breeding',
         href: '/farm/breeding',
+      },
+      {
+        label: 'Management',
+        href: '/farm/management'
       }
     ]
   },
