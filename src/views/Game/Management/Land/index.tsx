@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
@@ -16,14 +16,19 @@ const LandManage = () => {
     return (
         <Page
             style={{
-                backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+                backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
             }}
         >
             <StyledHero>
-                <Heading as="h1" size="lg" color="text" mb="20px">
+                <Heading
+                    as="h1"
+                    size="lg"
+                    color={isDark ? "white" : "#0b334b"}
+                    mb="20px"
+                >
                     Management - Lands
                 </Heading>
             </StyledHero>

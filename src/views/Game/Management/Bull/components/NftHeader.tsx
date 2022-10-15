@@ -14,10 +14,11 @@ import Web3 from 'web3'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import SelectNFT from "./SelectNFT"
-import { CASH_BULLNFT_IMAGE_BASEURI, CATTLE_RARITY, BULL_BREED} from 'config/constants/nfts'
+import { CASH_BULLNFT_IMAGE_BASEURI, CATTLE_RARITY, BULL_BREED } from 'config/constants/nfts'
 import { LoadingContext } from 'contexts/LoadingContext'
-import {setBullNftCount, updating } from 'state/bullManagement'
+import { setBullNftCount, updating } from 'state/bullManagement'
 import Select from '../../../../../components/Select/Select'
+import '../../management.css'
 
 const NftHeaderContainer = styled.div`
   display: flex;
@@ -33,11 +34,11 @@ const NftHeaderContainer = styled.div`
 const LeftContainer = styled.div`
   display:flex;
   flex: left;
-  width:40%;
-  height:60px;
+  width:50%;
+  height:70px;
   align-items: center;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 15px;
 `
 
 const RightContainer = styled.div`
@@ -56,6 +57,8 @@ const RightContainer = styled.div`
   }
 `
 const Total = styled.div`
+  font-size: 1.5em;
+  padding-left: 1em;
   display:flex;
   flex: 5;
 `
@@ -85,24 +88,24 @@ const NftHeader = () => {
   const updated = useSelector((state: State) => state.bull.updated)
   const { isDark } = useTheme()
   const itemCount = useSelector((state: State) => state.bull.bullItemCount)
-  const { account }: { account: string;} = useWallet()
+  const { account }: { account: string; } = useWallet()
   const [isOpen, setIsOpen] = useState(false);
   const [myNfts, setMyNfts] = useState([]);
-  const {setLoading } = useContext(LoadingContext);
+  const { setLoading } = useContext(LoadingContext);
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
 
-  const farmActionHandler = async (_tokenId: string) =>{
-    try{
+  const farmActionHandler = async (_tokenId: string) => {
+    try {
       setLoading(true);
       setIsOpen(false);
-      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account });
       await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
       dispatch(updating(!updated))
       setLoading(false)
-    }catch (error) {
+    } catch (error) {
       setLoading(false);
       console.log(error)
     }
@@ -110,7 +113,7 @@ const NftHeader = () => {
   const fetchNftItems = useCallback(async () => {
     const tokenIds = await nftContract.methods.tokenIdsOf(account).call();
     let attrs = []
-    for(let i = 0 ; i< tokenIds.length; i++) {
+    for (let i = 0; i < tokenIds.length; i++) {
       const temp = {};
       const attr = await nftContract.methods.attrOf(tokenIds[i]).call();
       const _image = CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attr.rarity)] + "-" + BULL_BREED[parseInt(attr.breed)] + ".png";
@@ -126,21 +129,32 @@ const NftHeader = () => {
     setMyNfts(attrs);
 
   }, [account, updated])
-  useEffect(() =>{
+  useEffect(() => {
     fetchNftItems()
   }, [account, updated])
 
   return (
     <NftHeaderContainer>
-      <LeftContainer style={{ color: isDark ? 'white' : '#035569', fontWeight: 'bold', background:'white' }}>
-        <Total>
-          TOTAL BULLS: {itemCount}
+      <LeftContainer
+        style={{
+          color: isDark ? 'white' : '#0b334b',
+          fontWeight: 'bold',
+          background: isDark ? '#0b334b' : 'white',
+          paddingTop: '10px',
+          paddingBottom: '10px'
+        }}
+      >        <Total>
+          Total Bulls: {itemCount}
         </Total>
         <Blank />
         <ButtonContainer>
-          <Button onClick = {()=>setIsOpen(true)}>
-            ADD BULL
-          </Button>
+          <div className="add-nft-div">
+            <img
+              className="add-nft-div-button"
+              src={'/images/farms/management/addbullgreen.png'}
+              onClick={() => setIsOpen(true)}
+            />
+          </div>
         </ButtonContainer>
       </LeftContainer>
       {/* <RightContainer>
@@ -155,10 +169,10 @@ const NftHeader = () => {
           style={{ marginRight: '15px' }}
         />
       </RightContainer> */}
-      <SelectNFT 
+      <SelectNFT
         isOpen={isOpen}
-        closeDialog={()=>setIsOpen(false)}
-        myNfts = {myNfts}
+        closeDialog={() => setIsOpen(false)}
+        myNfts={myNfts}
         actionHandler={farmActionHandler}
       />
     </NftHeaderContainer>

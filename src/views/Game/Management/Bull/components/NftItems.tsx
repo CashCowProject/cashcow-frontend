@@ -65,7 +65,13 @@ const NftItems = () => {
   return (
     <NftItemContainer>
       {nftItems.map((nftEachItem) => {
-        return <NftEachItem image = {nftEachItem.image} tokenId = {nftEachItem.tokenId} rarity = {nftEachItem.rarity} key={nftEachItem.itemId} />
+        return( 
+          <NftEachItem 
+            image = {nftEachItem.image} 
+            tokenId = {nftEachItem.tokenId} 
+            rarity = {nftEachItem.rarity} 
+            key={nftEachItem.itemId} 
+          />)
       })}
     </NftItemContainer>
   )

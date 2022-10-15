@@ -74,25 +74,25 @@ const config: MenuEntry[] = [
       }
     ]
   },
-  { 
-    label: "Farm Management",
-    icon: 'TicketIcon',
-    items: [
-      {
-        label:"Cows",
-        href:"/management/cow"
-      },
-      {
-        label:"Bulls",
-        href:"/management/bull"
-      },
-      {
-        label:"Lands",
-        href:"/management/land"
-      }
+  // { 
+  //   label: "Farm Management",
+  //   icon: 'TicketIcon',
+  //   items: [
+  //     {
+  //       label:"Cows",
+  //       href:"/management/cow"
+  //     },
+  //     {
+  //       label:"Bulls",
+  //       href:"/management/bull"
+  //     },
+  //     {
+  //       label:"Lands",
+  //       href:"/management/land"
+  //     }
 
-    ]
-  },
+  //   ]
+  // },
   {
     label: 'NFT Staking',
     icon: 'TicketIcon',

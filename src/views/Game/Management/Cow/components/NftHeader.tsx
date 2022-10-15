@@ -18,6 +18,7 @@ import { CASH_COWNFT_IMAGE_BASEURI, CATTLE_RARITY, COW_BREED } from 'config/cons
 import { LoadingContext } from 'contexts/LoadingContext'
 import { updating } from 'state/cowManagement'
 import Select from '../../../../../components/Select/Select'
+import '../../management.css'
 
 const NftHeaderContainer = styled.div`
   display: flex;

@@ -142,13 +142,6 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
             <img className="metal-frame-image" src="/images/nfts/marcometal.png" />
           </div>
 
-          {/* <NftImage 
-            style={{ 
-              width: '80%',
-              height: '80%',
-              backgroundImage: `url(${image})`
-             }} 
-            /> */}
         </NftImageContainer>
       </ItemTop>
 

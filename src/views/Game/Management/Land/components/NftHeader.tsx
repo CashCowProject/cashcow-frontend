@@ -15,9 +15,11 @@ import Web3 from 'web3'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import SelectNFT from "./SelectNFT"
-import { CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND} from 'config/constants/nfts'
+import { CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from 'config/constants/nfts'
 import { LoadingContext } from 'contexts/LoadingContext'
-import {setLandNftCount, updating } from 'state/landManagement'
+import { setLandNftCount, updating } from 'state/landManagement'
+import '../../management.css'
+
 const NftHeaderContainer = styled.div`
   display: flex;
   align-items: center;
@@ -32,11 +34,11 @@ const NftHeaderContainer = styled.div`
 const LeftContainer = styled.div`
   display:flex;
   flex: left;
-  width:40%;
-  height:60px;
+  width:50%;
+  height:70px;
   align-items: center;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 15px;
 `
 
 const RightContainer = styled.div`
@@ -55,6 +57,8 @@ const RightContainer = styled.div`
   }
 `
 const Total = styled.div`
+  font-size: 1.5em;
+  padding-left: 1em;
   display:flex;
   flex: 5;
 `
@@ -84,24 +88,24 @@ const NftHeader = () => {
   const updated = useSelector((state: State) => state.land.updated)
   const { isDark } = useTheme()
   const itemCount = useSelector((state: State) => state.land.landItemCount)
-  const { account }: { account: string;} = useWallet()
+  const { account }: { account: string; } = useWallet()
   const [isOpen, setIsOpen] = useState(false);
   const [myNfts, setMyNfts] = useState([]);
-  const {setLoading } = useContext(LoadingContext);
+  const { setLoading } = useContext(LoadingContext);
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
 
-  const farmActionHandler = async (_tokenId: string) =>{
-    try{
+  const farmActionHandler = async (_tokenId: string) => {
+    try {
       setLoading(true);
       setIsOpen(false);
-      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
+      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account });
       await NFTFarmingContract.methods.depositLand(_tokenId).send({ from: account });
       dispatch(updating(!updated))
       setLoading(false)
-    }catch (error) {
+    } catch (error) {
       setLoading(false);
       console.log(error)
     }
@@ -109,7 +113,7 @@ const NftHeader = () => {
   const fetchNftItems = useCallback(async () => {
     const tokenIds = await nftContract.methods.tokenIdsOf(account).call();
     let attrs = []
-    for(let i = 0 ; i< tokenIds.length; i++) {
+    for (let i = 0; i < tokenIds.length; i++) {
       let temp = {};
       let attr = await nftContract.methods.attrOf(tokenIds[i]).call();
       let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attr.rarity)] + "-" + LAND_KIND[parseInt(attr.landType)] + ".png";
@@ -125,21 +129,35 @@ const NftHeader = () => {
     setMyNfts(attrs);
 
   }, [account, updated])
-  useEffect(() =>{
+  useEffect(() => {
     fetchNftItems()
   }, [account, updated])
 
   return (
     <NftHeaderContainer>
-      <LeftContainer style={{ color: isDark ? 'white' : '#035569', fontWeight: 'bold', background:'white' }}>
+      <LeftContainer
+        style={{
+          color: isDark ? 'white' : '#0b334b',
+          fontWeight: 'bold',
+          background: isDark ? '#0b334b' : 'white',
+          paddingTop: '10px',
+          paddingBottom: '10px'
+        }}
+      >
         <Total>
-          TOTAL LANDS: {itemCount}
+          Total Lands: {itemCount}
         </Total>
         <Blank />
         <ButtonContainer>
-          <Button onClick = {()=>setIsOpen(true)}>
-            ADD LAND
-          </Button>
+
+          <div className="add-nft-div">
+            <img
+              className="add-nft-div-button"
+              src={'/images/farms/management/addlandgreen.png'}
+              onClick={() => setIsOpen(true)}
+            />
+          </div>
+
         </ButtonContainer>
       </LeftContainer>
       {/* <RightContainer>
@@ -154,10 +172,10 @@ const NftHeader = () => {
           style={{ marginRight: '15px' }}
         />
       </RightContainer> */}
-      <SelectNFT 
+      <SelectNFT
         isOpen={isOpen}
-        closeDialog={()=>setIsOpen(false)}
-        myNfts = {myNfts}
+        closeDialog={() => setIsOpen(false)}
+        myNfts={myNfts}
         actionHandler={farmActionHandler}
       />
     </NftHeaderContainer>
