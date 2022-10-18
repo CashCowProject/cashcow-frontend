@@ -1,5 +1,5 @@
 .cards-mapper {
-    background-color: rgb(11,51,75);
+    background-color: rgb(11, 51, 75);
     border-radius: 10%;
     padding: 2% 2% 2% 2%;
 }
@@ -11,14 +11,14 @@
     transition: all 1s;
 }
 
-.cards-mapper-image:hover{
+.cards-mapper-image:hover {
     transform: scale(0.92);
 }
 
 .add-nft-div {
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
 
 .add-nft-div-button {
@@ -28,7 +28,7 @@
     cursor: pointer;
 }
 
-.add-nft-div-button:hover{
+.add-nft-div-button:hover {
     transform: scale(1.1);
 }
 
@@ -44,7 +44,7 @@
     transition: all 0.5s;
 }
 
-.metal-frame-div:hover{
+.metal-frame-div:hover {
     transform: scale(1.07);
 }
 
@@ -77,4 +77,90 @@
 
 .remove-from-div-button:hover {
     transform: scale(1.15);
+}
+
+/* HappyCow Nft Box */
+
+.happy-cow-nft {
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+    height: 11em;
+}
+
+.happy-cow-nft-box {
+    background-color: rgb(11, 51, 75);
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 10px;
+}
+
+.happy-cow-nft-box-left {
+    width: 30%;
+}
+
+.happy-cow-nft-box-right {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 2%;
+}
+
+.individual-happy-cow-box {
+    margin: 1.5% 1% 1% 1%;
+    border-radius: 10px;
+    width: 16%;
+    height: 100%;
+    border:1px solid white;
+    text-align: center;
+}
+
+.individual-happy-cow-image {
+    padding: 15% 10% 10% 10%;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-image:hover {
+    transform: scale(1.05);
+}
+
+.individual-happy-cow-button {
+    width:90%;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-button:hover {
+    transform: scale(1.05);
+}
+
+.individual-happy-cow-more-button {
+    width: 60%;
+    margin-top: 25%;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.individual-happy-cow-more-button:hover {
+    transform: scale(1.2);
+}
+
+.individual-happy-cow-add-button {
+    width:90%;
+    margin-top: 20%;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-add-button:hover {
+    transform: scale(1.05);
+}
+
+.existing-nft-box {
+
+}
+
+.add-nft-box {
+
 }
