@@ -12,6 +12,8 @@ import Web3 from "web3";
 import HappyCows from 'config/abi/HappyCows.json'
 import NftFarmingV2 from 'config/abi/NftFarmingV2.json'
 import { fromWei, AbiItem } from "web3-utils";
+import { TailSpin } from 'react-loader-spinner'
+import toast from 'react-hot-toast';
 import './happycowcards.css'
 
 const web3 = new Web3(Web3.givenProvider);
@@ -28,11 +30,13 @@ const NftImage = styled.div`
     transform: scale(1.04);
   }
 `
-const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
+const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowStakedBreeds }) => {
   const TranslateString = useI18n()
   const { isDark } = useTheme()
   const { account } = useWallet()
   const [userHappyCows, setUserHappyCows] = useState([]);
+
+  const [isAdding, setIsAdding] = useState(true);
 
   const { setLoading } = useContext(LoadingContext);
 
@@ -50,14 +54,15 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
   }, [isOpen])
 
   const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263';
-  const temporalFarmingContract = '0x23f1Ef47a0953E8A33982AEB5dde6daB08427544';
+  const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
   const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
   const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], temporalHappyCowsContract);
   const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
 
   const fetchUserHappyCows = async () => {
     setUserHappyCows([]);
-    setLoading(true);
+    // setLoading(true);
+    setIsAdding(true);
     try {
       if (account) {
         console.log(happyCowsContract)
@@ -66,17 +71,25 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
           const tokenUri = `${temporalFullTokenUriPrefix}/${element}.json`
           console.log('Full token URI: ', tokenUri)
           const fullTokenData = await fetchIndividualHappyCow(tokenUri);
+          console.log(fullTokenData)
           // const currentHappyCow = [{ "tokenId": element, "name": fullTokenData.name, "image": fullTokenData.image.replace('ipfs://', 'http://ipfs.io/ipfs/') }];
-          const currentHappyCow = [{ "tokenId": element, "image": `/images/nfts/happycows/${fullTokenData.attributes[1].value}.png`, "name": fullTokenData.name }];
+          const currentHappyCow = {
+            "tokenId": element,
+            "image": `/images/nfts/happycows/${fullTokenData.attributes[1].value}.png`,
+            "name": fullTokenData.name,
+            "breed": fullTokenData.attributes[1].value
+          };
           console.log(currentHappyCow)
           setUserHappyCows(oldHappyCows => [...oldHappyCows, currentHappyCow]);
           // setHappyCowUserBreeds(oldBreeds => [...oldBreeds, currentHappyCowBreed]);
         });
       }
       console.log('finished NFT fetch')
-      setLoading(false);
+      // setLoading(false);
+      setIsAdding(false);
     } catch (e) {
       console.log(e);
+      setIsAdding(false);
     }
   }
 
@@ -92,8 +105,9 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
   }
 
   const handleAddNft = async (_tokenId: string) => {
+    setIsAdding(true);
     try {
-      setLoading(true);
+      // setLoading(true);
       await happyCowsContract.methods.approve(temporalFarmingContract, _tokenId).send({ from: account });
       await farmingContract.methods.depositHappyCow(_tokenId).send({ from: account })
       // await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
@@ -104,6 +118,7 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
       // setLoading(false);
       console.log(error)
     }
+    setIsAdding(true);
   }
 
 
@@ -150,19 +165,44 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows }) => {
           maxHeight: "400px",
           overflow: 'auto'
         }}>
-        {_.map(userHappyCows, nft => (
-          <div className="each-happy-cow-image-container">
-            <img
-              src={nft[0].image}
-              alt=""
-              className='each-happy-cow-card-image'
-              onClick={() => handleAddNft(nft[0].tokenId)}
-            />
-            <div className="each-happy-cow-card-text">
-              {nft[0].name}
+        {isAdding ? <>
+          <TailSpin
+            height="80"
+            width="80"
+            color="#334B65"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          /></> : <>
+          {_.map(userHappyCows, nft => (
+            <div
+              className={"each-happy-cow-image-container"}>
+              {happyCowStakedBreeds.includes(nft.breed) ? <>
+                <img
+                  src={nft.image}
+                  alt=""
+                  className='each-happy-cow-card-image-disabled'
+                  onClick={() => toast.error('Cannot add more than one equal breed.')}
+                />
+                <div className="each-happy-cow-card-text">
+                  Cannot add more {nft.breed} to farm!
+                </div>
+              </> : <>
+                <img
+                  src={nft.image}
+                  alt=""
+                  className='each-happy-cow-card-image'
+                  onClick={() => handleAddNft(nft.tokenId)}
+                />
+                <div className="each-happy-cow-card-text">
+                  {nft.name}
+                </div>
+              </>}
             </div>
-          </div>
-        ))}
+          ))}
+        </>}
       </div>
 
     </Modal>

@@ -14,19 +14,22 @@ export interface CardInterface {
     index?: number;
     userHappyCow?: any;
     fetchUserHappyCows?: any;
+    userStakedHappyCows?: any;
+    happyCowStakedBreeds?: any;
 }
 
 const web3 = new Web3(Web3.givenProvider);
 
-const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows }: CardInterface) => {
+const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows, userStakedHappyCows, happyCowStakedBreeds }: CardInterface) => {
     const { account, connect } = useWallet()
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(userHappyCow);
+    // console.log(userHappyCow);
+    // console.log('var2 ', happyCowStakedBreeds)
 
     const { setLoading } = useContext(LoadingContext);
 
-    const temporalFarmingContract = '0x23f1Ef47a0953E8A33982AEB5dde6daB08427544';
+    const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
     const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
 
     const removeHappyCowFromFarming = async () => {
@@ -34,7 +37,7 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows }: Ca
         setLoading(true);
         try {
             if (account) {
-                const currentTokenId = userHappyCow[0].tokenId;
+                const currentTokenId = userHappyCow.tokenId;
                 await farmingContract.methods.withdrawHappyCow(currentTokenId).send({ from: account });
                 fetchUserHappyCows();
             } else {
@@ -55,7 +58,7 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows }: Ca
                 {userHappyCow ? <div className="existing-nft-box">
                     <img
                         className='individual-happy-cow-image'
-                        src={`/images/nfts/happycows/${userHappyCow[0].breed}.png`}
+                        src={`/images/nfts/happycows/${userHappyCow.breed}.png`}
                     />
                     <img
                         className='individual-happy-cow-button'
@@ -80,6 +83,7 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows }: Ca
                 isOpen={isOpen}
                 closeDialog={() => setIsOpen(false)}
                 fetchOriginalUserHappyCows={fetchUserHappyCows}
+                happyCowStakedBreeds={happyCowStakedBreeds}
                 // actionHandler={farmActionHandler}
             />
         </>
