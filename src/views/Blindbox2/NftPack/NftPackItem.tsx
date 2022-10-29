@@ -13,7 +13,6 @@ const ItemBackgroundCover = styled.div`
     overflow: hidden;
     position: relative;
     border-radius: 32px;
-
 `
 
 const NftPackItem = ({background, title}: NftPackItemInterface) => {

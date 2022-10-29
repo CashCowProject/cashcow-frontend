@@ -33,6 +33,19 @@
     transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
+.unlist-button {
+    background: url(http://localhost:3000/images/nfts/buttons/unlistgray.png) no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    border: none;
+    width: 40%;
+    transition: transform .2s; /* Animation */
+}
+
+.unlist-button:hover {
+    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
 .burn-button {
     background: url(http://localhost:3000/images/nfts/buttons/burngray.png) no-repeat;
     background-size: contain;

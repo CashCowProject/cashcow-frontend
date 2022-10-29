@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import {Link, useParams} from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
@@ -22,8 +22,8 @@ const CommonPack = () => {
   `
 
   const BoxDetailContainer = styled.div`
-    background: ${isDark ? '#27262c' : 'white'};
-    ${isDark ? 
+    background: ${isDark ? '#0b334b' : 'white'};
+    ${isDark ?
       "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
       : ""
     };
@@ -107,33 +107,34 @@ const CommonPack = () => {
       text-transform: uppercase;
     }
   `
-    return (
-      <Page style={{
-          backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',}}
-      >
-        <StyledHero>
-          <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
-            Blind Box
-          </Heading>
-        </StyledHero>
-        <Heading as="h1" size="no" color="primary" mb="20px" style={{color: isDark ? "white" : ''}}>
-          CashCow Farm
+  return (
+    <Page style={{
+      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <StyledHero>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+          Blind Box
         </Heading>
-        <BoxDetailContainer>
-          <GradientBack/>
-          <BoxContainerLeft>
-            <BoxContainerComponent boxTitle="Common Pack" boxImage="nftpacks/chestcommon.gif"/>
-          </BoxContainerLeft>
-          <BoxContainerRight>
-            <BoxBuyDetailComponent />
-            <BlindBoxDetailInfo />
-          </BoxContainerRight>
-        </BoxDetailContainer>
-      </Page>
-    )
+      </StyledHero>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        CashCow Farm
+      </Heading>
+      <BoxDetailContainer>
+        <GradientBack />
+        <BoxContainerLeft>
+          <BoxContainerComponent boxTitle="Common Pack" boxImage="nftpacks/chestcommon.gif" />
+        </BoxContainerLeft>
+        <BoxContainerRight>
+          <BoxBuyDetailComponent />
+          <BlindBoxDetailInfo />
+        </BoxContainerRight>
+      </BoxDetailContainer>
+    </Page>
+  )
 }
 
 export default CommonPack

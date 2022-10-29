@@ -7,6 +7,7 @@ import { fromWei, AbiItem } from "web3-utils";
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import toast from 'react-hot-toast'
 import SelectNFT from './SelectNFT';
+import { getNftFarmingAddress, getHappyCowAddress } from 'utils/addressHelpers'
 import '../management.css'
 
 export interface CardInterface {
@@ -24,13 +25,12 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows, user
     const { account, connect } = useWallet()
     const [isOpen, setIsOpen] = useState(false);
 
-    // console.log(userHappyCow);
-    // console.log('var2 ', happyCowStakedBreeds)
-
     const { setLoading } = useContext(LoadingContext);
 
     const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
-    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
+    // const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
+
+    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
 
     const removeHappyCowFromFarming = async () => {
         console.log('Removing: ', userHappyCow);
@@ -52,8 +52,6 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows, user
     return (
         <>
             <div className='individual-happy-cow-box'>
-                {/* {userHappyCow ? userHappyCow[0].breed : <>No Data</>}
-            <br /> */}
 
                 {userHappyCow ? <div className="existing-nft-box">
                     <img
@@ -84,7 +82,6 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows, user
                 closeDialog={() => setIsOpen(false)}
                 fetchOriginalUserHappyCows={fetchUserHappyCows}
                 happyCowStakedBreeds={happyCowStakedBreeds}
-                // actionHandler={farmActionHandler}
             />
         </>
     )

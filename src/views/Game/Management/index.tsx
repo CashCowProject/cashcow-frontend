@@ -13,8 +13,8 @@ import EachHappyCowCard from './HappyCowSection/EachHappyCowCard'
 import GenesisSection from './GenesisSection/GenesisSection';
 import EachGenesisCard from './GenesisSection/EachGenesisCard';
 import { TailSpin } from 'react-loader-spinner'
+import { getNftFarmingAddress, getHappyCowAddress } from 'utils/addressHelpers'
 import './management.css'
-
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -48,10 +48,11 @@ const FarmManagement = () => {
     }
   ]
 
-  const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
+  const temporalFarmingContract = '0x7335A5c716E512FdD13667f04118B162e80345A9';
   const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263';
   const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
   const temporalGenesisUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
+
 
   const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
   const [happyCowTokenIds, setHappyCowTokenIds] = useState([]);
@@ -63,8 +64,11 @@ const FarmManagement = () => {
   const [genesisTokenId, setGenesisTokenId] = useState(0);
   const [genesisToken, setGenesisToken] = useState([]);
 
-  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
-  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], temporalHappyCowsContract);
+  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
+  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+
+  // const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
+  // const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], temporalHappyCowsContract);
 
   useEffect(() => {
     fetchUserHappyCows();
@@ -77,7 +81,7 @@ const FarmManagement = () => {
     setHappyCowStakedBreeds([]);
     // Fetch Staked Happy Cows dev@topospec
     try {
-      const userHappyCows = await farmingContract.methods.happyCowsTokenIdsOf(account).call();
+      const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call();
       console.log('happy cows: ', userHappyCows);
       // Itero alrededor de los UserHappyCows dev@topospec
       userHappyCows.forEach(async element => {

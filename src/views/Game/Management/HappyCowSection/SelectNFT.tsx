@@ -11,6 +11,7 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from "web3";
 import HappyCows from 'config/abi/HappyCows.json'
 import NftFarmingV2 from 'config/abi/NftFarmingV2.json'
+import { getNftFarmingAddress, getHappyCowAddress, getAirNftAddress } from 'utils/addressHelpers'
 import { fromWei, AbiItem } from "web3-utils";
 import { TailSpin } from 'react-loader-spinner'
 import toast from 'react-hot-toast';
@@ -54,10 +55,11 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowSt
   }, [isOpen])
 
   const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263';
-  const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
+  const temporalFarmingContract = '0x7335A5c716E512FdD13667f04118B162e80345A9';
+  
   const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
-  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], temporalHappyCowsContract);
-  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
+  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
 
   const fetchUserHappyCows = async () => {
     setUserHappyCows([]);
@@ -108,9 +110,8 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowSt
     setIsAdding(true);
     try {
       // setLoading(true);
-      await happyCowsContract.methods.approve(temporalFarmingContract, _tokenId).send({ from: account });
+      await happyCowsContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account });
       await farmingContract.methods.depositHappyCow(_tokenId).send({ from: account })
-      // await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
       await setLoading(false);
       fetchOriginalUserHappyCows();
       closeDialog()

@@ -38,24 +38,9 @@ const BlindboxCow = () => {
         fetchPackSaleState();
     },[])
     return (
-        <Page style={{
-            backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',}}
-        >
-            <StyledHero>
-                <Heading as="h1" size="lg" color="secondary" mb="20px">
-                    Blind Box CashCow
-                </Heading>
-            </StyledHero>
-            {
-                packState === 2&& <NftPack />
-                // packState === 2&& <NftIndividual />
-            }
-            {/* <Link to='/blind-box/pack'><BlindBoxItem background='BANNER-FARM.png' itemTitle='Pack Sale'/></Link>
-            <Link to='/blind-box/individual'><BlindBoxItem background='BANNER-FARM.png' itemTitle='Individual Sale'/></Link> */}
-        </Page>
+        <>
+        <NftPack />
+        </>
     )
 }
 

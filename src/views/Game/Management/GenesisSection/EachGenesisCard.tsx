@@ -7,6 +7,7 @@ import { fromWei, AbiItem } from "web3-utils";
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import toast from 'react-hot-toast'
 import SelectNFT from './SelectNFT';
+import { getNftFarmingAddress } from 'utils/addressHelpers'
 import '../management.css'
 
 const web3 = new Web3(Web3.givenProvider);
@@ -17,7 +18,7 @@ const EachGenesisCard = ({ genesisToken, genesisTokenId, hasGenesisStaked, fetch
     const [isOpen, setIsOpen] = useState(false);
 
     const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
-    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], temporalFarmingContract);
+    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
 
     const removeGenesisFromFarming = async () => {
         console.log('Removing: ', genesisTokenId);
@@ -43,7 +44,7 @@ const EachGenesisCard = ({ genesisToken, genesisTokenId, hasGenesisStaked, fetch
                 <img
                     className='individual-genesis-image'
                     // src={(genesisToken.image).replace('ipfs://', 'http://ipfs.io/ipfs/')}
-                    // FIXME: Must be replaced with line 45
+                    // FIXME: Must be replaced with last line
                     // Just for testing: dev@topospec
                     src='/images/farms/management/dancingcow.png'
                 />

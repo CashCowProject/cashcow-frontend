@@ -9,6 +9,7 @@ import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
 import NftFarming from 'config/abi/NftFarming.json'
+import NftFarmingV2 from 'config/abi/NftFarmingV2.json'
 import CowTokenABI from 'config/abi/cow.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import happyCowBreeds from 'config/constants/happycowbreeds'
@@ -111,29 +112,34 @@ const FarmDashboard = () => {
     const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
     const [milkPerDay, setMilkPerDay] = useState(0);
     const [milkReward, setMilkReward] = useState("0");
-    const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
+    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
     const history = useHistory();
+
     const userReward = useRewardAmountQuery({account});
+
     console.log(userReward)
+
     useEffect( () => {
       async function fetchInfo() {
           try {
               setLoading(true);
+              console.log('Fetching info..')
               const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress());
               const vMilkPower = await farmingContract.methods.milkPowerOf(account).call({ from: account});
               const vGameMilkPower = await farmingContract.methods.totalMilkPower().call();
-              // const vGameMilkPower = 1000;
+              // FIXME: Updated function dev@topospec
+              // const vGameMilkPower = 0;
               const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
               const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call();
+              console.log(cowNFTIds)
               const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call();
               setMilkPower(vMilkPower);
               setGameMilkPower(vGameMilkPower);
               if(vGameMilkPower != 0) {
                 const _dailyAmount = await farmingContract.methods.getUserDailyMilk().call({ from: account});
-  
-                setMilkPerDay( parseInt(fromWei(_dailyAmount)) );  
+                setMilkPerDay( parseInt(fromWei(_dailyAmount)) );
+                console.log('Updating..')
               }
-    
     
               setCowAmount(cowNFTIds);
               setBullAmount(bullNFTIds);

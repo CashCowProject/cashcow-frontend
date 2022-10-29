@@ -481,7 +481,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
             {account && flgButtonState ? (
               <>
                 <Button
-                  className="sell-button"
+                  className={flgList ? "unlist-button" : "sell-button"}
                   style={{
                     backgroundColor: 'transparent',
                   }}
