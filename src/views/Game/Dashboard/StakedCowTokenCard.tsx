@@ -33,7 +33,6 @@ const ImageContainer = styled.div`
 `
 const TitleContainer = styled.div`
     width: 100%;
-    // margin-top: 16px;
     margin-bottom: 10px;
     font-size: 1.5vw;
     font-weight: 600;
@@ -60,7 +59,7 @@ const ValueContainer = styled.div`
     }
 `
 
-const StaticCard = ({title, value, image}: CardInterface) => {
+const StakedCowTokenCard = ({title, value, image}: CardInterface) => {
     
     return (
         <Container>    
@@ -71,7 +70,9 @@ const StaticCard = ({title, value, image}: CardInterface) => {
             </ImageContainer>
             <ContentContainer>
                 <TitleContainer>
-                    {title}
+                    $COW
+                    <br />
+                    Staked
                 </TitleContainer>
                 <ValueContainer>
                     {value}
@@ -81,4 +82,4 @@ const StaticCard = ({title, value, image}: CardInterface) => {
     )
 }
 
-export default StaticCard
+export default StakedCowTokenCard;

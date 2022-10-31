@@ -15,6 +15,8 @@ import EachGenesisCard from './GenesisSection/EachGenesisCard';
 import { TailSpin } from 'react-loader-spinner'
 import { getNftFarmingAddress, getHappyCowAddress } from 'utils/addressHelpers'
 import './management.css'
+import CowStakingCard from './CowStakingSection/CowStakingCard';
+import StaticCard from './CowStakingSection/StaticCard';
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -302,7 +304,11 @@ const FarmManagement = () => {
 
           </div>
           <div className='genesis-nft-box-right'>
-
+            <StaticCard
+              title='$COW In Wallet'
+              value={0}
+              image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+            />
           </div>
         </div>
       </div>

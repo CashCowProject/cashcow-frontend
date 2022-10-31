@@ -16,6 +16,7 @@ import happyCowBreeds from 'config/constants/happycowbreeds'
 import MasterChefABI from 'config/abi/masterchef.json'
 import {getHappyCowAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import StaticCard from './StaticCard'
+import StakedCowTokenCard from './StakedCowTokenCard'
 import CattleCard from './CattleCard'
 import LandCard from './LandCard'
 import GenesisCard from './GenesisCard'
@@ -28,7 +29,8 @@ type boxParam = {
   index: string;
 };
 
-const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false]; 
+const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false];
+
 const StyledHero = styled.div`
     border-bottom: 0px solid #e8e8e8;
     margin-bottom: 20px;
@@ -108,7 +110,7 @@ const FarmDashboard = () => {
     const [cowAmount, setCowAmount] = useState([])
     const [bullAmount, setBullAmount] = useState([])
     const [cowTokenAmount, setCowTokenAmount] = useState("0")
-    const [genesisNftStatus, setGenesisNftStatus] = useState(false)
+    const [genesisNftStatus, setGenesisNftStatus] = useState(true)
     const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
     const [milkPerDay, setMilkPerDay] = useState(0);
     const [milkReward, setMilkReward] = useState("0");
@@ -140,11 +142,12 @@ const FarmDashboard = () => {
                 setMilkPerDay( parseInt(fromWei(_dailyAmount)) );
                 console.log('Updating..')
               }
+              const userCowStaked = await farmingContract.methods.stakedCowOf(account).call({ from: account });
+              setCowTokenAmount((userCowStaked/10**9).toFixed(1));
     
               setCowAmount(cowNFTIds);
               setBullAmount(bullNFTIds);
               if(landTokenIds) {
-                console.log("AAA")
                 setLandAmount(landTokenIds);
               }
               setLoading(false);
@@ -157,59 +160,6 @@ const FarmDashboard = () => {
       fetchInfo();
     },[account])
 
-    /* useEffect( () => {
-      async function fetchGenesisInfo() {
-          
-          const contractInstance = new web3.eth.Contract(AirNft.abi as AbiItem[], getAirNftAddress());
-
-          const promises = []
-          for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
-              promises.push(contractInstance.methods.ownerOf(GENESIS_NFT_IDS[i]).call())
-          }
-          const nftOwners = await Promise.all(promises)
-          for (let i = 0; i < GENESIS_NFT_IDS.length;i ++) {
-            if(nftOwners[i] === account) {
-              setGenesisNftStatus(true);
-              return;
-            }
-          }
-          setGenesisNftStatus(false)
-      }
-
-      fetchGenesisInfo();
-    },[account]) */
-
-    // useEffect( () => {
-    //   async function fetchHappyCowInfo() {
-          
-    //       const contractInstance = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
-
-    //       const promises = []
-    //       for (let i = 0; i < happyCowBreeds.length;i ++) {
-    //           promises.push(contractInstance.methods.ownerOf(i+1).call())
-    //       }
-    //       const nftOwners = await Promise.all(promises)
-    //       const hcs = [false, false, false, false, false]; 
-    //       for (let i = 0; i < happyCowBreeds.length;i ++) {
-    //         if(nftOwners[i] === account) {
-    //           hcs[happyCowBreeds[i]] = true;
-    //         }
-    //       }
-    //       setHappyCowStatus(hcs)
-    //   }
-
-    //   fetchHappyCowInfo();
-    // },[account])
-
-    useEffect( () => {
-      async function fetchCowTokenInfo() {
-          const contractInstance = new web3.eth.Contract(CowTokenABI as AbiItem[], getCowTokenAddress());
-          const tokenAmount = await contractInstance.methods.balanceOf(account).call()
-          setCowTokenAmount(fromWei(tokenAmount, "Gwei"));
-      }
-
-      fetchCowTokenInfo();
-    },[account])
     return (
         <Page style={{
             backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
@@ -232,8 +182,8 @@ const FarmDashboard = () => {
             <CattleCard title='My Cows' value={cowAmount.length.toString()} tokenIds = {cowAmount} isCowNFT = {true}/>
             <CattleCard title='My Bulls' value={bullAmount.length.toString()} tokenIds = {bullAmount} isCowNFT = {false}/>
             <GenesisCard title='Genesis NFT' hasGenesisNft={genesisNftStatus}/>
-            <HappyCowCard title='Happy Cow' value={happyCowStatus}/>
-            <StaticCard title='$COW In Wallet' value={cowTokenAmount} image = "/images/farms/dashboard/illustrations/tokenscowfondo.png" />
+            <HappyCowCard title='Happy Cows' value={happyCowStatus}/>
+            <StakedCowTokenCard title='$COW Staked' value={cowTokenAmount} image = "/images/farms/dashboard/illustrations/tokenscowfondo.png" />
           </CardContainer>
         </Page>
     )
