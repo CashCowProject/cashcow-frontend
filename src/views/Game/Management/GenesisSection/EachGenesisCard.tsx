@@ -17,6 +17,7 @@ const EachGenesisCard = ({ genesisToken, genesisTokenId, hasGenesisStaked, fetch
     const { setLoading } = useContext(LoadingContext);
     const [isOpen, setIsOpen] = useState(false);
 
+    // FIXME: To be removed in a future version
     const temporalFarmingContract = '0xb1A8042ba17Fd8B67E1A90aa577c553B4e5b1b17';
     const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
 
@@ -25,7 +26,7 @@ const EachGenesisCard = ({ genesisToken, genesisTokenId, hasGenesisStaked, fetch
         setLoading(true);
         try {
             if (account) {
-                await farmingContract.methods.withdrawGenesis(genesisTokenId).send({ from: account });
+                await farmingContract.methods.withdrawAirNft(genesisTokenId).send({ from: account });
                 fetchUserGenesis();
             } else {
                 toast.error("Error with account. Please Reconnect your Wallet.");

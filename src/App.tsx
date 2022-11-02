@@ -165,7 +165,7 @@ const App: React.FC = () => {
                 <Bulls />
               </Route>
               <Route exact path="/farm/map">
-                {/* <Map /> */}
+                <Map />
               </Route>
               <Route exact path="/farm/dashboard">
                 <FarmDashboard />
