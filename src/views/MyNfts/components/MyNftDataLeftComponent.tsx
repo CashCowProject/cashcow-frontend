@@ -52,7 +52,7 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
     const json = await res.json()
     console.log('FETCHED NFT >>>> ', json)
     setDna(json.dna)
-    setImageUrl(json.image)
+    setImageUrl(json.image.replace('ipfs://', 'https://ipfs.io/ipfs/'))
     setAttr(json.attributes)
     setTokenId(myToken.tokenId)
   }, [myToken, account, nftContract])
@@ -65,7 +65,7 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
 
       <div className="parent">
         <img className="image1" src={imageUrl} />
-        <img className="image2" src="http://localhost:3000/images/nfts/marcometal.png" />
+        <img className="image2" src="/images/nfts/marcometal.png" />
       </div>
 
     </NftOnChainDataContainer>

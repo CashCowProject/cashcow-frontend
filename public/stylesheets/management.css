@@ -1,0 +1,218 @@
+.loading-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.cards-mapper {
+    background-color: rgb(11, 51, 75);
+    border-radius: 10%;
+    padding: 2% 2% 2% 2%;
+}
+
+.cards-mapper-image {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: all 1s;
+}
+
+.cards-mapper-image:hover {
+    transform: scale(0.92);
+}
+
+.add-nft-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-nft-div-button {
+    margin-right: 1em;
+    height: 2.7em;
+    transition: all 1s;
+    cursor: pointer;
+}
+
+.add-nft-div-button:hover {
+    transform: scale(1.1);
+}
+
+/* NFT Listing dev@topospec */
+
+.metal-frame-div {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 90%;
+    margin-top: 90%;
+    margin-left: 5%;
+    transition: all 0.5s;
+}
+
+.metal-frame-div:hover {
+    transform: scale(1.07);
+}
+
+.nft-image {
+    position: relative;
+    margin-top: 10%;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+}
+
+.metal-frame-image {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.remove-from-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.remove-from-div-button {
+    width: 100%;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.remove-from-div-button:hover {
+    transform: scale(1.15);
+}
+
+/* HappyCow Nft Box */
+
+.happy-cow-nft {
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+    /* height: 11em; */
+}
+
+.happy-cow-nft-box {
+    background-color: rgb(11, 51, 75);
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 10px;
+}
+
+.happy-cow-nft-box-left {
+    width: 30%;
+}
+
+.happy-cow-nft-box-right {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 2%;
+}
+
+.individual-happy-cow-box {
+    margin: 1.5% 1% 1% 1%;
+    border-radius: 10px;
+    width: 16%;
+    height: 100%;
+    border:1px solid white;
+    text-align: center;
+}
+
+.individual-happy-cow-image {
+    padding: 15% 10% 10% 10%;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-image:hover {
+    transform: scale(1.05);
+}
+
+.individual-happy-cow-button {
+    width:90%;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-button:hover {
+    transform: scale(1.05);
+}
+
+.individual-happy-cow-more-button {
+    width: 60%;
+    margin-top: 25%;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.individual-happy-cow-more-button:hover {
+    transform: scale(1.2);
+}
+
+.individual-happy-cow-add-button {
+    width:90%;
+    margin-top: 20%;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.individual-happy-cow-add-button:hover {
+    transform: scale(1.05);
+}
+
+/* Genesis and COW NFT */
+
+.genesis-nft-box {
+    margin-top: 3%;
+    /* background-color: rgb(11, 51, 75); */
+    margin-left: 8px;
+    margin-right: 8px;
+    /* border-radius: 10px; */
+}
+
+.genesis-nft {
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+    /* height: 13em; */
+}
+
+.genesis-nft-box-left{
+    width: 40%;
+    border-radius: 10px;
+    background-color: rgb(11, 51, 75);
+    margin-right: 10%;
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+}
+
+.genesis-nft-box-right{
+    width: 40%;
+    border-radius: 10px;
+    background-color: rgb(11, 51, 75);
+    margin-left: 10%;
+    top: 50%;
+}
+
+.individual-genesis-box {
+    margin: 2% 1% 3% 8%;
+    border-radius: 10px;
+    width: 35%;
+    /* height: 100%; */
+    border:1px solid white;
+    text-align: center;
+}
+
+.individual-genesis-image {
+    padding: 15% 10% 10% 10%;
+    transition: all 0.5s;
+}
+
+.individual-genesis-image:hover {
+    transform: scale(1.05);
+}

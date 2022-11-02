@@ -77,7 +77,7 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowSt
           // const currentHappyCow = [{ "tokenId": element, "name": fullTokenData.name, "image": fullTokenData.image.replace('ipfs://', 'http://ipfs.io/ipfs/') }];
           const currentHappyCow = {
             "tokenId": element,
-            "image": `/images/nfts/happycows/${fullTokenData.attributes[1].value}.png`,
+            "image": `/images/nfts/happycows/${(fullTokenData.attributes[1].value).toLowerCase()}.png`,
             "name": fullTokenData.name,
             "breed": fullTokenData.attributes[1].value
           };

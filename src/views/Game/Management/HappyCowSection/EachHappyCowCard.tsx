@@ -56,7 +56,7 @@ const EachHappyCowCard = ({ title, index, userHappyCow, fetchUserHappyCows, user
                 {userHappyCow ? <div className="existing-nft-box">
                     <img
                         className='individual-happy-cow-image'
-                        src={`/images/nfts/happycows/${userHappyCow.breed}.png`}
+                        src={`/images/nfts/happycows/${(userHappyCow.breed).toLowerCase()}.png`}
                     />
                     <img
                         className='individual-happy-cow-button'
