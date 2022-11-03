@@ -1,25 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled, { keyframes } from 'styled-components';
-import { useParams } from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Web3 from "web3";
-import { fromWei, AbiItem } from "web3-utils";
 import Page from 'components/layout/Page'
-import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
-import NftFarming from 'config/abi/NftFarming.json'
-import CowTokenABI from 'config/abi/cow.json'
-import HappyCows from 'config/abi/HappyCows.json'
-import happyCowBreeds from 'config/constants/happycowbreeds'
-import MasterChefABI from 'config/abi/masterchef.json'
-import { getHappyCowAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { LoadingContext } from 'contexts/LoadingContext'
-
-import useRewardAmountQuery from 'hooks/useRewardAmountQuery'
-
-type boxParam = {
-  index: string;
-};
 
 const fadeIn = keyframes`
   from {
@@ -77,6 +62,8 @@ const MarketplaceLink = styled.img`
     width: 12%;
     cursor: pointer;
     animation: ${fadeIn} 1s linear;
+    transition: all 1s;
+    &:hover { transform: scale(1.07); }
   `
 
 const MyNftsLink = styled.img`
@@ -86,6 +73,8 @@ const MyNftsLink = styled.img`
     width: 12%;
     cursor: pointer;
     animation: ${fadeIn} 1s linear;
+    transition: all 1s;
+    &:hover { transform: scale(1.07); }
   `
 
 const MyDashboardLink = styled.img`
@@ -95,6 +84,8 @@ const MyDashboardLink = styled.img`
     width: 12%;
     cursor: pointer;
     animation: ${fadeIn} 1s linear;
+    transition: all 1s;
+    &:hover { transform: scale(1.07); }
   `
 
 const ManageLink = styled.img`
@@ -104,6 +95,8 @@ const ManageLink = styled.img`
     width: 15%;
     cursor: pointer;
     animation: ${fadeIn} 1s linear;
+    transition: all 1s;
+    &:hover { transform: scale(1.07); }
   `
 
 const BreedLink = styled.img`
@@ -113,7 +106,45 @@ const BreedLink = styled.img`
     width: 15%;
     cursor: pointer;
     animation: ${fadeIn} 1s linear;
+    transition: all 1s;
+    &:hover { transform: scale(1.07); }
   `
+
+const FirstButton = styled.img`
+    position: absolute;
+    top: 30%;
+    left: 82.5%;
+    width: 4%;
+`
+
+const SecondButton = styled.img`
+    position: absolute;
+    top: 36%;
+    left: 82.5%;
+    width: 4%;
+`
+
+const ThirdButton = styled.img`
+    position: absolute;
+    top: 42%;
+    left: 82.5%;
+    width: 4%;
+`
+
+const FourthButton = styled.img`
+    position: absolute;
+    top: 48%;
+    left: 82.5%;
+    width: 4%;
+`
+
+const FifthButton = styled.img`
+    position: absolute;
+    top: 54%;
+    left: 82.5%;
+    width: 4%;
+`
+
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -138,23 +169,45 @@ const Map = () => {
     >
       <FrameDiv>
 
-        <VideoContainer 
-          autoPlay 
-          muted 
-          onLoadedData={() => setLoading(false)} 
+        <VideoContainer
+          autoPlay
+          muted
+          onLoadedData={() => setLoading(false)}
           onEnded={() => setPlaying(true)}
-          >
+        >
           <source src="/images/map/mapa2_2.mp4" type="video/mp4" />
         </VideoContainer>
 
         <FrameImage src="/images/map/pantalla-horizontal.png" />
 
+        {/* Buttons fot TV */}
+        <FirstButton src="/images/map/icons/botongris.png" />
+        <SecondButton src={playing ? "/images/map/icons/botonverde.png" : "/images/map/icons/botongris.png"} />
+        <ThirdButton src="/images/map/icons/botongris.png" />
+        <FourthButton src="/images/map/icons/botongris.png" />
+        <FifthButton src="/images/map/icons/botongris.png" />
+
         {playing ? <>
-          <MarketplaceLink src="/images/map/icons/marketplace.png" />
-          <MyNftsLink src="/images/map/icons/mynft.png" />
-          <MyDashboardLink src="/images/map/icons/mydashboard.png" />
-          <ManageLink src="/images/map/icons/myfarm.png" />
-          <BreedLink src="/images/map/icons/breed.png" />
+          <MarketplaceLink
+            src="/images/map/icons/marketplace.png"
+            onClick={() => window.location.href = "/market"}
+          />
+          <MyNftsLink
+            src="/images/map/icons/mynft.png"
+            onClick={() => window.location.href = "/myNFTs"}
+          />
+          <MyDashboardLink
+            src="/images/map/icons/mydashboard.png"
+            onClick={() => window.location.href = "/farm/dashboard"}
+          />
+          <ManageLink
+            src="/images/map/icons/myfarm.png"
+            onClick={() => window.location.href = "/farm/management"}
+          />
+          <BreedLink
+            src="/images/map/icons/breed.png"
+            onClick={() => window.location.href = "/farm/breeding"}
+          />
         </> : <></>}
 
 
