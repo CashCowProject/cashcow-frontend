@@ -44,6 +44,7 @@ const NftPack = () => {
   const StyledWrapper = styled(Page)`
     position: relative;
   `
+
   return (
     <Page style={{
       backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
@@ -63,11 +64,13 @@ const NftPack = () => {
       <FlexLayout>
         {
           nftPackData.map((item) => {
+
             return (
               <Link key={item.id} to={`/blind-box/${item.id}`}>
                 <NftPackItem background={item.image} title={item.title} />
               </Link>
             )
+
           })
         }
       </FlexLayout>

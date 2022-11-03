@@ -79,7 +79,7 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserGenesis }) => {
           console.log(fullTokenData)
           const currentGenesis = {
             "tokenId": element,
-            "image": `/images/nfts/happycows/${fullTokenData.attributes[1].value}.png`,
+            "image": `/images/nfts/happycows/${(fullTokenData.attributes[1].value).toLowerCase()}.png`,
             // "image": fullTokenData.image,
             "name": fullTokenData.name,
           };
