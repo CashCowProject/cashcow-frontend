@@ -54,12 +54,10 @@ const config: MenuEntry[] = [
     label: 'My Farm',
     icon: 'FarmIcon',
     items: [
-      /*
       {
         label: 'Map',
         href: '/farm/map',
       },
-      */
       {
         label: 'Dashboard',
         href: '/farm/dashboard',

@@ -117,6 +117,31 @@ const FarmDashboard = () => {
     const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
     const history = useHistory();
 
+    const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
+
+    const happyCowOriginalBreeds = [
+      {
+        "id": 0,
+        "name": "holstein"
+      },
+      {
+        "id": 1,
+        "name": "highland"
+      },
+      {
+        "id": 2,
+        "name": "hereford"
+      },
+      {
+        "id": 3,
+        "name": "brahman"
+      },
+      {
+        "id": 4,
+        "name": "angus"
+      }
+    ]
+
     const userReward = useRewardAmountQuery({account});
 
     console.log(userReward)
@@ -139,12 +164,14 @@ const FarmDashboard = () => {
               setGameMilkPower(vGameMilkPower);
               if(vGameMilkPower != 0) {
                 const _dailyAmount = await farmingContract.methods.getUserDailyMilk().call({ from: account});
+                console.log('daily milk: ', fromWei(_dailyAmount))
                 setMilkPerDay( parseInt(fromWei(_dailyAmount)) );
                 console.log('Updating..')
               }
               const userCowStaked = await farmingContract.methods.stakedCowOf(account).call({ from: account });
               setCowTokenAmount((userCowStaked/10**9).toFixed(1));
-    
+              // Fetch Happy Cow Status
+              await fetchUserHappyCows();
               setCowAmount(cowNFTIds);
               setBullAmount(bullNFTIds);
               if(landTokenIds) {
@@ -159,6 +186,53 @@ const FarmDashboard = () => {
 
       fetchInfo();
     },[account])
+
+    const fetchUserHappyCows = async () => {
+      // Fetch Staked Happy Cows dev@topospec
+      try {
+        const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call();
+        // Itero alrededor de los UserHappyCows dev@topospec
+        userHappyCows.forEach(async element => {
+          const tokenUri = `${temporalFullTokenUriPrefix}/${element}.json`
+          // console.log('Full token URI: ', tokenUri)
+          const fullTokenData = await fetchIndividualHappyCow(tokenUri);
+          const breed = await fullTokenData.attributes[1].value;
+          // console.log('Breed: ', fullTokenData.attributes[1].value)
+          let editedHappyCowStatus = happyCowStatus;
+          switch (breed) {
+            case "Holstein":
+              editedHappyCowStatus[0] = true;
+              break;
+            case "Highland":
+              editedHappyCowStatus[1] = true;
+              break;
+            case "Hereford":
+              editedHappyCowStatus[2] = true;
+              break;
+            case "Brahman":
+              editedHappyCowStatus[3] = true;
+              break;
+            case "Angus":
+              editedHappyCowStatus[4] = true;
+              break;
+          }
+          setHappyCowStatus(editedHappyCowStatus);
+        });
+      } catch (error) {
+        console.log('error :', error)
+      }
+    }
+
+    const fetchIndividualHappyCow = async (tokenUri) => {
+      try {
+        const response = await fetch(tokenUri)
+        const json = await response.json()
+        return json;
+      } catch (e) {
+        console.log('error fetching: ', e)
+        return e;
+      }
+    }
 
     return (
         <Page style={{
