@@ -16,6 +16,13 @@ const fadeIn = keyframes`
   }
 `;
 
+// @media (max-width: 768px) {
+//   height: 10%;
+//   width: 90%;
+//   min-width: 100px;
+//   justify-content: space-around;
+// }
+
 const FrameDiv = styled.div`
     top: 0;
     left: 0;
@@ -53,6 +60,12 @@ const VideoContainer = styled.video`
     right: 0;
     margin-left: auto; 
     margin-right: 24%; 
+    @media (max-width: 965px) {
+      top: 3%;
+      width: 70%;
+      left: 15%;
+      margin-left: unset; 
+    }
   `
 
 const MarketplaceLink = styled.img`
@@ -64,6 +77,10 @@ const MarketplaceLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
+    @media (max-width: 965px) {
+      top: 12%;
+      left: 68%;
+    }
   `
 
 const MyNftsLink = styled.img`
@@ -157,6 +174,7 @@ const Map = () => {
 
   useEffect(() => {
     setLoading(true)
+    console.log(window.innerWidth)
   }, [])
 
   return (
@@ -175,10 +193,15 @@ const Map = () => {
           onLoadedData={() => setLoading(false)}
           onEnded={() => setPlaying(true)}
         >
-          <source src="/images/map/mapa2_2.mp4" type="video/mp4" />
+          <source 
+            src={window.innerWidth > 965 ? "/images/map/mapa2_2.mp4" : "/images/map/MAPAcuadrado.mp4"}
+            type="video/mp4" 
+            />
         </VideoContainer>
 
-        <FrameImage src="/images/map/pantalla-horizontal.png" />
+        <FrameImage 
+          src={window.innerWidth > 965 ? "/images/map/pantalla-horizontal.png" : "/images/map/tele-movil.png"} 
+        />
 
         {/* Buttons fot TV */}
         <FirstButton src="/images/map/icons/botongris.png" />
