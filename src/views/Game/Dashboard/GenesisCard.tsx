@@ -47,7 +47,7 @@ const GenesisCard = ({title, hasGenesisNft}: CardInterface) => {
                 {title}
             </TitleContainer>
             <ValueContainer>
-                {hasGenesisNft && <img src="/images/svgs/check.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>}
+                {hasGenesisNft ? <img src="/images/svgs/check.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/> : <img src="/images/svgs/none.svg" alt="" style={{width: "36px",  height: "36px", marginRight: '8px'}}/>}
             </ValueContainer>
         </Container>
     )

@@ -172,6 +172,8 @@ const FarmDashboard = () => {
               setCowTokenAmount((userCowStaked/10**9).toFixed(1));
               // Fetch Happy Cow Status
               await fetchUserHappyCows();
+              // Fetch Genesis Status
+              await fetchUserGenesis();
               setCowAmount(cowNFTIds);
               setBullAmount(bullNFTIds);
               if(landTokenIds) {
@@ -220,6 +222,21 @@ const FarmDashboard = () => {
         });
       } catch (error) {
         console.log('error :', error)
+      }
+    }
+
+    const fetchUserGenesis = async () => {
+      try {
+        const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call();
+        if (userGenesis.length > 0) {
+          console.log('Genesis Tokens ', userGenesis);
+          setGenesisNftStatus(true);
+        } else {
+          console.log('No Genesis Staked');
+          setGenesisNftStatus(false);
+        }
+      } catch (e) {
+        console.log(e)
       }
     }
 
