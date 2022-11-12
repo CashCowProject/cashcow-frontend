@@ -8,15 +8,19 @@ import { usePriceCakeBusd } from 'state/hooks'
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
-import { 
-  getHappyCowAddress, 
-  getMarketAddress, 
-  getAirNftAddress, 
+import {
+  getHappyCowAddress,
+  getMarketAddress,
+  getAirNftAddress,
   getCowNftAddress,
   getBullNftAddress,
   getLandNftAddress
- } from 'utils/addressHelpers'
- const NftEachItemContainer = styled.div`
+} from 'utils/addressHelpers'
+import baseMilkPower from 'config/constants/baseMilkPower';
+import toast from 'react-hot-toast'
+import bullRecoveryTimes from 'config/constants/bullRecoveryTimes'
+
+const NftEachItemContainer = styled.div`
   cursor: pointer;
   flex: 1;
   margin-right: 15px;
@@ -117,6 +121,15 @@ const ItemValueToken = styled.div`
   font-size: 16px;
 `
 
+const ItemMetaData = styled.div`
+  font-size: 18px;
+  font-weight: 700;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const web3 = new Web3(Web3.givenProvider)
 
 export interface EachNftInterface {
@@ -133,6 +146,9 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
   const [listedPrice, setListedPrice] = useState('')
   // const [itemId, setItemId] = useState(0);
   const [milkPrice, setMilkPrice] = useState(0)
+  // NFT Clasifier dev@topospec
+  const [nftMetaData, setNftMetaData] = useState('');
+  const [nftType, setNftType] = useState('');
 
   const cakePriceUsd = usePriceCakeBusd()
 
@@ -140,30 +156,60 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
 
-  // const happyCowContract = useMemo(() => {
-  //     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
-  // }, [])
-
   const fetchMyNftImage = useCallback(async () => {
     try {
       const res = await fetch(eachMyToken.tokenHash)
       const json = await res.json()
       let imageUrl = json.image
-      if (eachMyToken.collection == getHappyCowAddress()) {
-        imageUrl = imageUrl.slice(7)
-        setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`)
-      } else {
-        setImageIpfsHash(imageUrl)
-      }
-      if(eachMyToken.collection == getHappyCowAddress()|| eachMyToken.collection == getAirNftAddress()) {
-        setName(json.name)
-      } else {
-        setName(json.name + " #" + eachMyToken.tokenId)
+
+      switch (eachMyToken.collection) {
+        case getHappyCowAddress():
+          // Case Happy Cow
+          imageUrl = imageUrl.slice(7);
+          setNftType('HC');
+          setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`);
+          setNftMetaData('HappyCow NFT');
+          setName(json.name);
+          break;
+        case getAirNftAddress():
+          // Case Genesis
+          setNftType('AIR');
+          setImageIpfsHash(imageUrl);
+          setNftMetaData('Genesis NFT');
+          setName(json.name);
+          break;
+        case getCowNftAddress():
+          // Case Cow NFT
+          const cowBreed = json.attributes[1].value;
+          setNftType('COW');
+          setNftMetaData(baseMilkPower[cowBreed]);
+          setImageIpfsHash(imageUrl);
+          setName(json.name + " #" + eachMyToken.tokenId);
+          break;
+        case getBullNftAddress():
+          // Case Bull NFT
+          setNftType('BULL');
+          const bullBreed = json.attributes[1].value;
+          setNftMetaData(bullRecoveryTimes[bullBreed]);
+          console.log(json)
+          setImageIpfsHash(imageUrl);
+          setName(json.name + " #" + eachMyToken.tokenId);
+          break;
+        case getLandNftAddress():
+          // Case Land NFT
+          setImageIpfsHash(imageUrl);
+          setNftMetaData('Land NFT');
+          setNftType('LAND');
+          setName(json.name + " #" + eachMyToken.tokenId);
+          break;
+        default:
+          console.log('No Nft Found');
+          break;
       }
     } catch (e) {
-      // console.log(e);
+      toast.error('Error fetching your NFTs.')
     }
-  }, [eachMyToken])
+  }, [eachMyToken]);
 
   const fetchItemsCreated = useCallback(async () => {
     const res = await marketContract.methods.fetchItemsCreated().call({ from: account })
@@ -188,14 +234,51 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
 
   return (
     <div>
-      <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
+      <NftEachItemContainer
+        style={{ background: isDark ? '#27262c' : '' }}
+      >
         <ItemTop>
+          <ItemMetaData
+            style={{ color: isDark ? 'white' : '#27262c' }}
+          >
+            {nftType == "COW" ?
+              <img
+                src="/images/svgs/vida.svg"
+                alt="token"
+                style={{ width: '18px', height: '18px' }}
+              />
+              : <></>}
+            {nftType == "BULL" ?
+              <img
+                src="/images/svgs/relojgreen.svg"
+                alt="token"
+                style={{ width: '18px', height: '18px' }}
+              />
+              : <></>}
+            &nbsp;&nbsp;
+            {nftMetaData}
+          </ItemMetaData>
           <NftImageContainer>
-            <NftImage style={{ backgroundImage: `url(${imageIpfsHash})` }} />
+            {nftType == "AIR" ?
+              <NftImage
+                style={{ backgroundImage: `url(/images/nfts/18-DancingCow.png)` }}
+              />
+              :
+              <NftImage
+                style={{ backgroundImage: `url(${imageIpfsHash})` }}
+              />
+            }
+
           </NftImageContainer>
           <Title>
-            <TitleText style={{ color: isDark ? 'white' : '' }}>
-              <div>{name}</div>
+            <TitleText
+              style={{ color: isDark ? 'white' : '' }}
+            >
+              {nftType == "AIR" ?
+                <div>Genesis</div>
+                :
+                <div>{name}</div>
+              }
             </TitleText>
           </Title>
         </ItemTop>

@@ -84,7 +84,7 @@ const Blindbox = () => {
 
             <Link key={2} to={`/blind-box/pack`}>
                 <BlindBoxItem
-                    background="BANNER-FARM-PACKS.png"
+                    background="packsblack.png"
                     itemId={1}
                     itemTitle=""
                 />

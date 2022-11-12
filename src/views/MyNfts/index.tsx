@@ -8,6 +8,7 @@ import { AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import Page from 'components/layout/Page'
 import AirNfts from 'config/abi/AirNft.json'
+import Genesis from 'config/abi/Genesis.json'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
 import LandNFT from 'config/abi/LandNFT.json'
@@ -79,6 +80,9 @@ const MyNfts = () => {
   const airnftContract = useMemo(() => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
+
+  const genesisContract = new web3.eth.Contract(Genesis.abi as AbiItem[], getAirNftAddress());
+
   const cownftContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
   }, [])
@@ -110,17 +114,20 @@ const MyNfts = () => {
     _.map(landTokens, (itm) => {
       tokenIds.push({ tokenId: itm, collection: getLandNftAddress() })
     })
+    const userGenesis = await genesisContract.methods.fetchMyNfts().call({ from: account });
+    userGenesis.map((item, i) => {
+      tokenIds.push({ tokenId: item, collection: getAirNftAddress()});
+    })
     // retrieve my nft from air
-    const airNftOwners = []
-    _.map(airNFTs, (nft) => {
-      airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
-    })
-    const owners = await Promise.all(airNftOwners)
-    _.map(owners, (owner, idx) => {
-      if (owner !== account) return
-
-      tokenIds.push({ tokenId: airNFTs[idx], collection: getAirNftAddress() })
-    })
+    // const airNftOwners = []
+    // _.map(airNFTs, (nft) => {
+    //   airNftOwners.push(airnftContract.methods.ownerOf(nft).call())
+    // })
+    // const owners = await Promise.all(airNftOwners)
+    // _.map(owners, (owner, idx) => {
+    //   if (owner !== account) return
+    //   tokenIds.push({ tokenId: airNFTs[idx], collection: getAirNftAddress() })
+    // })
     
     const items = await marketContract.methods.fetchItemsCreated().call({ from: account })
     const tokenIdLength = tokenIds.length
@@ -242,7 +249,7 @@ const MyNfts = () => {
       </StyledHero>
       <NftItemContainer>
         {myTokens.map((EachMyToken, index) => {
-          console.log(myTokens)
+          console.log('To Map: ', myTokens)
           return (
             <Link key={EachMyToken.tokenId + "_" + index} to={`/myNFTs/${EachMyToken.tokenId}/${EachMyToken.collection}`} className="LinkItemContainer" onClick = {()=>{localStorage.setItem("collection", EachMyToken.collection);localStorage.setItem("marketItemId", EachMyToken.itemId)}}>
               <EachNft eachMyToken={EachMyToken} key={EachMyToken.tokenId} />
