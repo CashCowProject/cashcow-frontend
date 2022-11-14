@@ -131,7 +131,7 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
   }
   return (
     <NftEachItemContainer
-      style={{ background: isDark ? '#0b334b' : 'white' }}
+      style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
         <NftImageContainer>

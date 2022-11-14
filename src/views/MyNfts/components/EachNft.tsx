@@ -19,6 +19,7 @@ import {
 import baseMilkPower from 'config/constants/baseMilkPower';
 import toast from 'react-hot-toast'
 import bullRecoveryTimes from 'config/constants/bullRecoveryTimes'
+import landTypes from 'config/constants/landTypes'
 
 const NftEachItemContainer = styled.div`
   cursor: pointer;
@@ -123,7 +124,7 @@ const ItemValueToken = styled.div`
 
 const ItemMetaData = styled.div`
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 400;
   height: 30px;
   display: flex;
   justify-content: center;
@@ -168,7 +169,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           imageUrl = imageUrl.slice(7);
           setNftType('HC');
           setImageIpfsHash(`${PINATA_BASE_URI}${imageUrl}`);
-          setNftMetaData('HappyCow NFT');
+          setNftMetaData(json.attributes[1].value);
           setName(json.name);
           break;
         case getAirNftAddress():
@@ -197,8 +198,10 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           break;
         case getLandNftAddress():
           // Case Land NFT
-          setImageIpfsHash(imageUrl);
+          setImageIpfsHash(await fetchLandImage(json));
           setNftMetaData('Land NFT');
+          setNftMetaData(json.attributes[1].value);
+          // fetchLandImage(json)
           setNftType('LAND');
           setName(json.name + " #" + eachMyToken.tokenId);
           break;
@@ -210,6 +213,13 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
       toast.error('Error fetching your NFTs.')
     }
   }, [eachMyToken]);
+
+  const fetchLandImage = async (json) => {
+    console.log('fetching image for land:')
+    const landBreed = json.attributes[1].value;
+    const landRarity = json.attributes[0].value;
+    return landTypes[landBreed][landRarity];
+  }
 
   const fetchItemsCreated = useCallback(async () => {
     const res = await marketContract.methods.fetchItemsCreated().call({ from: account })
@@ -241,22 +251,29 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           <ItemMetaData
             style={{ color: isDark ? 'white' : '#27262c' }}
           >
-            {nftType == "COW" ?
+            {nftType == "COW" ? <>
               <img
                 src="/images/svgs/vida.svg"
                 alt="token"
                 style={{ width: '18px', height: '18px' }}
               />
+              &nbsp;&nbsp;
+              {nftMetaData}
+            </>
               : <></>}
-            {nftType == "BULL" ?
+            {nftType == "BULL" ? <>
               <img
                 src="/images/svgs/relojgreen.svg"
                 alt="token"
                 style={{ width: '18px', height: '18px' }}
               />
+              &nbsp;&nbsp;
+              {nftMetaData}
+            </>
               : <></>}
-            &nbsp;&nbsp;
-            {nftMetaData}
+            {nftType == "HC" ? <i>{nftMetaData}&nbsp;HC</i> : <></>}
+            {nftType == "AIR" ? <i>{nftMetaData}</i> : <></>}
+            {nftType == "LAND" ? <i>{nftMetaData}</i> : <></>}
           </ItemMetaData>
           <NftImageContainer>
             {nftType == "AIR" ?

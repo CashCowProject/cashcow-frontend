@@ -18,11 +18,12 @@ const ItemBackgroundCover = styled.div`
 `
 
 const CategoryItem = ({background}: CategoryItemInterface) => {
+    
     const ItemBackground = styled.div`
         width: 400px;
         height: 400px;
         background-image : url(/images/nftindividuals/${background});
-        background-size: 80% 80%;
+        background-size: 90%;
         background-position: 0;
         background-repeat: no-repeat;
         cursor: pointer;
