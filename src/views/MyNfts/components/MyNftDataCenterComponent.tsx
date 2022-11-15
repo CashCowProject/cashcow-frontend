@@ -363,6 +363,8 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
       toast.error('You cannot burn a listed nft.');
     } else if (tokenType === "Land") {
       toast.error('You cannot burn a Land.');
+    } else if (tokenName.includes("HappyCows")) {
+      toast.error('You cannot burn a HappyCow')
     } else {
       setBurnModalIsOpen(true);
     }
@@ -493,7 +495,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
                 {/* We need to check if the tokenType is not Land, because we cannot burn lands */}
                   <Button
                     style={{ backgroundColor: 'transparent' }}
-                    className={flgList || tokenType === "Land" ? "burn-button-disabled" : "burn-button"}
+                    className={flgList || tokenType === "Land" || tokenName.includes("HappyCows") ? "burn-button-disabled" : "burn-button"}
                     onClick={handleOpenBurnModal}
                   >
                     {/* {flgList ? 'Unlist NFT' : 'List NFT'} */}

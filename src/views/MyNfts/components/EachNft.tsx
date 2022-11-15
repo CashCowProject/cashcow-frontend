@@ -183,6 +183,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           // Case Cow NFT
           const cowBreed = json.attributes[1].value;
           setNftType('COW');
+          console.log('COW JSON: ', json)
           setNftMetaData(baseMilkPower[cowBreed]);
           setImageIpfsHash(imageUrl);
           setName(json.name + " #" + eachMyToken.tokenId);

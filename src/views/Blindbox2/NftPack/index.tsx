@@ -14,19 +14,19 @@ type boxParam = {
 const nftPackData = [
   {
     id: "common-pack",
-    image: 'common.png',
+    image: 'common-pack-new.png',
     title: 'Common Pack',
     tab: 1
   },
   {
     id: "uncommon-pack",
-    image: 'uncommon.png',
+    image: 'uncommon-pack-new.png',
     title: 'Uncommon Pack',
     tab: 2
   },
   {
     id: "rare-pack",
-    image: 'rare.png',
+    image: 'rare-pack-new.png',
     title: 'Rare Pack',
     tab: 3
   }
