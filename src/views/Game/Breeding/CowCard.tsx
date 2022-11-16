@@ -70,7 +70,6 @@ const NftItemContainer = styled.div`
     
 `
 
-
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 

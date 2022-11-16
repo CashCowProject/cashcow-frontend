@@ -147,12 +147,12 @@ const FarmBreeding = () => {
   const [breedingStarted, setBreedingStarted] = useState(false);
   const history = useHistory();
   const [userBreedingItems, setUserItems] = useState({
-    0:[],
-    1:[],
-    2:[],
-    3:[],
-    4:[],
-    5:[]
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: []
   });
   const farmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress());
 
@@ -170,9 +170,9 @@ const FarmBreeding = () => {
         const breedingPrice = await farmingContract.methods.breedingPrice().call();
         console.log(breedingPrice)
         const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress());
-        const userBalance  = await milkTokenContract.methods.balanceOf(account).call();
+        const userBalance = await milkTokenContract.methods.balanceOf(account).call();
         console.log(userBalance)
-        if(toBN(userBalance).lt(toBN(breedingPrice))) {
+        if (toBN(userBalance).lt(toBN(breedingPrice))) {
           toast.error("You must have " + fromWei(breedingPrice, 'ether') + "MILK to breed")
           return;
         }
@@ -197,11 +197,11 @@ const FarmBreeding = () => {
             setSelectedBullTokenId(0)
             toast.success('Breeding started');
           })
-          
+
       } catch (err: unknown) {
         console.log("ERROR: ", err);
         setLoading(false);
-        
+
         const { message } = err as Error
         toast.error(message);
       }
@@ -238,64 +238,68 @@ const FarmBreeding = () => {
     >
       <StyledHero>
         <VideoContainer>
-              <video autoPlay style = {{width: '100%', height: '100%'}} muted loop src='/images/breeding/breed.mp4'></video>
+          <video autoPlay style={{ width: '100%', height: '100%' }} muted loop src='/images/breeding/breed.mp4'></video>
         </VideoContainer>
-        <HomeButton onClick = {e => history.push('/farm/map')}/>
+        <HomeButton onClick={e => history.push('/farm/map')} />
       </StyledHero>
       <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
         TOTAL BREEDING FEES : 90 MILK
       </Heading>
       <BreedingContainer>
-        <CowCard selectTokenId={setSelectedCowTokenId} updateFlag = {breedingStarted} key = "bullcard"/>
+        <CowCard
+          selectTokenId={setSelectedCowTokenId}
+          updateFlag={breedingStarted}
+          key="bullcard"
+        />
         <ActionContainer>
-            <MDBContainer className = "mt-1">
-                <MDBView rounded>
-                    <img src="/images/breeding/babycow.png" alt="" style={{maxWidth:"100%",  height: "180px", borderRadius: '0px'}}/>
-                   {/* <MDBMask className = 'flex-center' >
+          <MDBContainer className="mt-1">
+            <MDBView rounded>
+              <img src="/images/breeding/babycow.png" alt="" style={{ maxWidth: "100%", height: "180px", borderRadius: '0px' }} />
+              {/* <MDBMask className = 'flex-center' >
                     <img src="/images/breeding/marcometal.png" alt="" />
                     </MDBMask> */}
-                </MDBView>
-            </MDBContainer>
+            </MDBView>
+          </MDBContainer>
           <ButtonContainer>
-              {(selectedCowTokenId === 0 || selectedBullTokenId === 0)?
-                <img src="/images/breeding/matchgray.png" style = {{maxWidth:"100%", height: "70px"}}/>
-                :
-                <img src="/images/breeding/match.png" style = {{maxWidth:"100%", height: "70px"}} onClick={handleStartBreeding}/>
-              }
+            {(selectedCowTokenId === 0 || selectedBullTokenId === 0) ?
+              <img src="/images/breeding/matchgray.png" style={{ maxWidth: "100%", height: "70px" }} />
+              :
+              <img src="/images/breeding/match.png" style={{ maxWidth: "100%", height: "70px" }} onClick={handleStartBreeding} />
+            }
           </ButtonContainer>
         </ActionContainer>
-        <BullCard selectTokenId={setSelectedBullTokenId} updateFlag = {breedingStarted}/>
+        <BullCard selectTokenId={setSelectedBullTokenId} updateFlag={breedingStarted} />
       </BreedingContainer>
       <BreedingListContainer>
         {
-          userBreedingItems["0"].map((cowId, idx) =>{ //0:cowid, 1: rarity,2:cowbreed,3:bullid, 4:bullbreed,5:locktime
-            let _restTime = (userBreedingItems[5][idx] - currentBlockTimestamp ) ;
+          userBreedingItems["0"].map((cowId, idx) => { //0:cowid, 1: rarity,2:cowbreed,3:bullid, 4:bullbreed,5:locktime
+            let _restTime = (userBreedingItems[5][idx] - currentBlockTimestamp);
             let restTime = 0;
             let unitTime = "S";
-            if(_restTime > 60 ) {
-              restTime = (userBreedingItems[5][idx] - currentBlockTimestamp) /60;
+            if (_restTime > 60) {
+              restTime = (userBreedingItems[5][idx] - currentBlockTimestamp) / 60;
               unitTime = "M"
             }
-            
-            if(_restTime >3600) {
+
+            if (_restTime > 3600) {
               restTime = (userBreedingItems[5][idx] - currentBlockTimestamp) / 3600;
               unitTime = "H";
-            } 
-            
+            }
+
             let _bullId = userBreedingItems[3][idx];
             let _cowBreed = userBreedingItems[2][idx];
             let _bullBreed = userBreedingItems[4][idx];
             let _rarity = userBreedingItems[1][idx];
             console.log(restTime);
-            return <BreedingCard 
-                        key = {cowId + "_" + idx}
-                        unLockTime={Math.round(restTime)}
-                        unit = {unitTime} 
-                        bullId = {_bullId} 
-                        rarity = {_rarity}
-                        cowBreed = {_cowBreed}
-                        bullBreed = {_bullBreed}
-                    />
+            return <BreedingCard
+              key={cowId + "_" + idx}
+              unLockTime={Math.round(restTime)}
+              unit={unitTime}
+              bullId={_bullId}
+              rarity={_rarity}
+              cowBreed={_cowBreed}
+              bullBreed={_bullBreed}
+            />
           })
         }
       </BreedingListContainer>

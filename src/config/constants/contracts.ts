@@ -78,7 +78,7 @@ export default {
   },
   nftfarming: {
     56: '',
-    97: '0x15A07248CF84EfE5f953d8c860ea5bC3CE4f3822'
+    97: '0xedF36e6CA83b2C4fbb1A36764efB62115DDe3F48'
   },
   nftbreeding: {
     56: '',

@@ -92,8 +92,9 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
     }, [])
 
     const fetchNftItems = useCallback(async () => {
-        const tokenIds = await farmingContract.methods.breedingBullTokenIdsOf(account).call({from: account})
 
+        const tokenIds = await farmingContract.methods.breedingBullTokenIdsOf(account).call({from: account})
+        console.log(tokenIds)
         const promises = []
         for (let i = 0; i < tokenIds.length; i++) {
             promises.push(nftContract.methods.attrOf(tokenIds[i]).call())
