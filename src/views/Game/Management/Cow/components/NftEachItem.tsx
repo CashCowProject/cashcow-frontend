@@ -118,6 +118,8 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       if (_totalBullLimit - _bullLimitPerland < 0) {
         toast.error("Plese withdraw the Bull NFTs first.")
       }
+      // Test function:
+      // await farmContract.methods.harvest().send({from: account});
 
       await farmContract.methods.withdrawCow(tokenId).send({ from: account });
       toast.success("success withdrawing a Cow NFT")
