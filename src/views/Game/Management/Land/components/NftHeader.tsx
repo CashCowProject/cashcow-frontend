@@ -137,9 +137,9 @@ const NftHeader = () => {
     <NftHeaderContainer>
       <LeftContainer
         style={{
-          color: isDark ? 'white' : '#0b334b',
+          color: isDark ? 'white' : 'white',
           fontWeight: 'bold',
-          background: isDark ? '#0b334b' : 'white',
+          background: isDark ? '#0b334b' : '#0b334b',
           paddingTop: '10px',
           paddingBottom: '10px'
         }}

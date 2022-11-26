@@ -21,7 +21,7 @@
 }
 
 .sell-button {
-    background: url(http://localhost:3000/images/nfts/buttons/listgray.png) no-repeat;
+    background: url(./listgray.png) no-repeat;
     background-size: contain;
     cursor: pointer;
     border: none;
@@ -34,7 +34,7 @@
 }
 
 .unlist-button {
-    background: url(http://localhost:3000/images/nfts/buttons/unlistgray.png) no-repeat;
+    background: url(./unlistgray.png) no-repeat;
     background-size: contain;
     cursor: pointer;
     border: none;
@@ -47,7 +47,7 @@
 }
 
 .burn-button {
-    background: url(http://localhost:3000/images/nfts/buttons/burngray.png) no-repeat;
+    background: url(./burngray.png) no-repeat;
     background-size: contain;
     cursor: pointer;
     border: none;
@@ -56,7 +56,7 @@
 }
 
 .burn-button-disabled {
-    background: url(http://localhost:3000/images/nfts/buttons/burngray.png) no-repeat;
+    background: url(./burngray.png) no-repeat;
     background-size: contain;
     border: none;
     width: 36%;

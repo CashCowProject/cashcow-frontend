@@ -186,7 +186,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           console.log('COW JSON: ', json)
           setNftMetaData(baseMilkPower[cowBreed]);
           setImageIpfsHash(imageUrl);
-          setName(json.name + " #" + eachMyToken.tokenId);
+          setName("Cow #" + eachMyToken.tokenId);
           break;
         case getBullNftAddress():
           // Case Bull NFT
@@ -195,16 +195,15 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           setNftMetaData(bullRecoveryTimes[bullBreed]);
           console.log(json)
           setImageIpfsHash(imageUrl);
-          setName(json.name + " #" + eachMyToken.tokenId);
+          setName("Bull #" + eachMyToken.tokenId);
           break;
         case getLandNftAddress():
           // Case Land NFT
           setImageIpfsHash(await fetchLandImage(json));
           setNftMetaData('Land NFT');
           setNftMetaData(json.attributes[1].value);
-          // fetchLandImage(json)
           setNftType('LAND');
-          setName(json.name + " #" + eachMyToken.tokenId);
+          setName("Land #" + eachMyToken.tokenId);
           break;
         default:
           console.log('No Nft Found');

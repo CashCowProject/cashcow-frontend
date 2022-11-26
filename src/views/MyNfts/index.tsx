@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React, { useEffect, useState, useMemo,useContext, useCallback } from 'react'
+import React, { useEffect, useState, useMemo, useContext, useCallback } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Heading } from 'cashcow-uikit'
@@ -18,16 +18,16 @@ import airNFTs from 'config/constants/airnfts'
 import EachNft from './components/EachNft'
 import { LoadingContext } from 'contexts/LoadingContext'
 import Select from 'components/Select/Select'
-import { 
-  getHappyCowAddress, 
-  getMarketAddress, 
-  getAirNftAddress, 
+import {
+  getHappyCowAddress,
+  getMarketAddress,
+  getAirNftAddress,
   getCowNftAddress,
   getBullNftAddress,
   getLandNftAddress
- } from 'utils/addressHelpers'
+} from 'utils/addressHelpers'
 
- const filterByCollection = [
+const filterByCollection = [
   { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
   { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
   { label: 'Genesis', value: { field: 'airnft', direction: 'asc' } },
@@ -116,7 +116,7 @@ const MyNfts = () => {
     })
     const userGenesis = await genesisContract.methods.fetchMyNfts().call({ from: account });
     userGenesis.map((item, i) => {
-      tokenIds.push({ tokenId: item, collection: getAirNftAddress()});
+      tokenIds.push({ tokenId: item, collection: getAirNftAddress() });
     })
     // retrieve my nft from air
     // const airNftOwners = []
@@ -128,7 +128,7 @@ const MyNfts = () => {
     //   if (owner !== account) return
     //   tokenIds.push({ tokenId: airNFTs[idx], collection: getAirNftAddress() })
     // })
-    
+
     const items = await marketContract.methods.fetchItemsCreated().call({ from: account })
     const tokenIdLength = tokenIds.length
     for (let i = 0; i < tokenIdLength; i++) {
@@ -138,7 +138,7 @@ const MyNfts = () => {
     let currentIndex = 0
     for (let i = 0; i < items.length; i++) {
       if (items[i].isSold === false) {
-        tokenIds.push({ tokenId: items[i].tokenId, collection: items[i].nftContract})
+        tokenIds.push({ tokenId: items[i].tokenId, collection: items[i].nftContract })
         if (!tmpMyTokens[currentIndex + tokenIdLength]) tmpMyTokens[currentIndex + tokenIdLength] = {}
         tmpMyTokens[currentIndex + tokenIdLength].itemId = items[i].itemId
         currentIndex++
@@ -148,10 +148,10 @@ const MyNfts = () => {
     const myTokenHashes = []
     for (let i = 0; i < tokenIds.length; i++) {
       if (tokenIds[i].collection == getHappyCowAddress()) myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if(tokenIds[i].collection == getAirNftAddress()) myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if(tokenIds[i].collection == getCowNftAddress()) myTokenHashes.push(cownftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if(tokenIds[i].collection == getBullNftAddress()) myTokenHashes.push(bullnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if(tokenIds[i].collection == getLandNftAddress()) myTokenHashes.push(landnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getAirNftAddress()) myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getCowNftAddress()) myTokenHashes.push(cownftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getBullNftAddress()) myTokenHashes.push(bullnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getLandNftAddress()) myTokenHashes.push(landnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
     }
     const result = await Promise.all(myTokenHashes)
 
@@ -165,11 +165,11 @@ const MyNfts = () => {
     setAllNfts(tmpMyTokens);
     setLoading(false)
   }, [account, happyCowsContract, marketContract, airnftContract])
-  
+
   useEffect(() => {
     getTokenHashes()
   }, [account])
-  const filterHandler = (value) =>{
+  const filterHandler = (value) => {
     console.log(value.field)
     let filteredMarketItems = [];
     let index = 0;
@@ -251,8 +251,16 @@ const MyNfts = () => {
         {myTokens.map((EachMyToken, index) => {
           console.log('To Map: ', myTokens)
           return (
-            <Link key={EachMyToken.tokenId + "_" + index} to={`/myNFTs/${EachMyToken.tokenId}/${EachMyToken.collection}`} className="LinkItemContainer" onClick = {()=>{localStorage.setItem("collection", EachMyToken.collection);localStorage.setItem("marketItemId", EachMyToken.itemId)}}>
-              <EachNft eachMyToken={EachMyToken} key={EachMyToken.tokenId} />
+            <Link
+              key={EachMyToken.tokenId + "_" + index}
+              to={`/myNFTs/${EachMyToken.tokenId}/${EachMyToken.collection}`}
+              className="LinkItemContainer"
+              onClick={() => { localStorage.setItem("collection", EachMyToken.collection); localStorage.setItem("marketItemId", EachMyToken.itemId) }}
+            >
+              <EachNft
+                eachMyToken={EachMyToken}
+                key={EachMyToken.tokenId}
+              />
             </Link>
           )
         })}

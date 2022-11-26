@@ -506,7 +506,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
               <Button
                 // style={{ width: '100%' }} 
                 disabled
-                style={{ backgroundImage: 'http://localhost:3000/images/nfts/buttons/burngray.png' }}
+                style={{ backgroundImage: '/images/nfts/buttons/burngray.png' }}
               >
                 {flgList ? 'Unlist NFT' : 'List NFT'}
               </Button>
