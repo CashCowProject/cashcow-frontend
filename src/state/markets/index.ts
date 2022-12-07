@@ -18,9 +18,11 @@ export const MarketsSlice = createSlice({
   reducers: {
     setSortOrder: (state, action) => {
       state.sortOrder = action.payload
+      console.log(action.payload);
     },
     setCollectionType: (state, action) => {
       state.collectionType = action.payload
+      console.log(action.payload);
     },
   },
 })

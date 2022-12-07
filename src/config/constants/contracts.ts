@@ -78,8 +78,10 @@ export default {
   },
   nftfarming: {
     56: '',
-    97: '0x624D7A57739Cc4a05EC37e668EC1C6D7462453F8'
+    97: '0xe5982E6D3237F462795d08Ab75F28d11EDD7F6Db'
     // 97: '0xedF36e6CA83b2C4fbb1A36764efB62115DDe3F48'
+    // 100000000000000000 = milkPerBlock
+    // 10k lp
   },
   nftbreeding: {
     56: '',

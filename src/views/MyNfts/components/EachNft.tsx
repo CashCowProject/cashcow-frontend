@@ -231,9 +231,6 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
       }
     }
 
-    // const owner = await happyCowContract.methods.ownerOf(eachMyToken.tokenId).call();
-    // setItemId(eachMyToken.itemId);
-
     setMilkPrice(cakePriceUsd.toNumber())
   }, [account, marketContract, eachMyToken, cakePriceUsd])
 

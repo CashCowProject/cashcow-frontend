@@ -37,6 +37,7 @@ const NftItems = () => {
         collectionName: "Cow",
         tokenId: tokenIds[i],
       };
+      console.log(tokenIds[i]);
       filteredItems.push(nftItem);
     }
     setLoading(false)

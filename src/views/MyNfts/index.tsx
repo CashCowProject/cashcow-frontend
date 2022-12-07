@@ -28,12 +28,45 @@ import {
 } from 'utils/addressHelpers'
 
 const filterByCollection = [
-  { label: 'All NFTs', value: { field: 'All', direction: 'asc' } },
-  { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc' } },
-  { label: 'Genesis', value: { field: 'airnft', direction: 'asc' } },
-  { label: 'Land', value: { field: 'land', direction: 'asc' } },
-  { label: 'Cow', value: { field: 'cow', direction: 'asc' } },
-  { label: 'Bull', value: { field: 'bull', direction: 'asc' } },
+  { label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } },
+  { label: 'HappyCows', value: { field: 'HappyCows', direction: 'desc', collection: getHappyCowAddress() } },
+  { label: 'Genesis', value: { field: 'airnft', direction: 'asc', collection: getAirNftAddress() } },
+  { label: 'Land', value: { field: 'land', direction: 'asc', collection: getLandNftAddress() } },
+  { label: 'Cow', value: { field: 'cow', direction: 'asc', collection: getCowNftAddress() } },
+  { label: 'Bull', value: { field: 'bull', direction: 'asc', collection: getBullNftAddress() } },
+]
+
+// 0 = Highland
+// 1 = Holstein
+// 2 = Hereford
+// 3 = Brahman
+// 4 = Angus
+
+const filterByBreed = [
+  { label: 'All Breeds', value: { field: 'All', direction: 'asc', collection: '' } },
+  { label: 'Highland', value: { field: 'Highland', direction: 'asc', collection: '' } },
+  { label: 'Holstein', value: { field: 'Holstein', direction: 'asc', collection: '' } },
+  { label: 'Hereford', value: { field: 'Hereford', direction: 'asc', collection: '' } },
+  { label: 'Brahman', value: { field: 'Brahman', direction: 'asc', collection: '' } },
+  { label: 'Angus', value: { field: 'Angus', direction: 'asc', collection: '' } },
+]
+
+const filterByType = [
+  { label: 'All Types', value: { field: 'All', direction: 'asc', collection: '' } },
+  { label: 'Hills', value: { field: 'Hills', direction: 'asc', collection: '' } },
+  { label: 'Jungle', value: { field: 'Jungle', direction: 'asc', collection: '' } },
+  { label: 'Mountain', value: { field: 'Mountain', direction: 'asc', collection: '' } },
+  { label: 'Plains', value: { field: 'Plains', direction: 'asc', collection: '' } },
+  { label: 'Woods', value: { field: 'Woods', direction: 'asc', collection: '' } },
+]
+
+const filterByRarity = [
+  { label: 'All Rarity', value: { field: 'All', direction: 'asc', collection: '' } },
+  { label: 'Common', value: { field: 'Common', direction: 'asc', collection: '' } },
+  { label: 'Uncommon', value: { field: 'Uncommon', direction: 'asc', collection: '' } },
+  { label: 'Rare', value: { field: 'Rare', direction: 'asc', collection: '' } },
+  { label: 'Legendary', value: { field: 'Legendary', direction: 'asc', collection: '' } },
+  { label: 'Holy', value: { field: 'Holy', direction: 'asc', collection: '' } },
 ]
 
 const StyledHero = styled.div`
@@ -43,8 +76,7 @@ const StyledHero = styled.div`
 `
 const LeftHeader = styled.div`
   display: flex;
-  width: 60%;
-
+  width: 43%;
 `
 const Blank = styled.div`
   display: flex;
@@ -54,6 +86,7 @@ const RightHeader = styled.div`
   display: flex;
   // flex: 3;
   width: 150px;
+  justify-content: end;
 `
 const NftItemContainer = styled.div`
   display: flex;
@@ -66,9 +99,17 @@ const web3 = new Web3(Web3.givenProvider)
 const MyNfts = () => {
   const { account } = useWallet()
   const [myTokens, setMyTokens] = useState([])
+  const [myFilteredTokens, setMyFilteredTokens] = useState([]);
+  const [filteredBreed, setFilteredBreed] = useState([]);
   const { isDark } = useTheme();
   const { setLoading } = useContext(LoadingContext)
   const [allNfts, setAllNfts] = useState([]);
+  const [filteredCollection, setFilteredCollection] = useState();
+  // 
+  const [collectionFilter, setCollectionFilter] = useState({ label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } });
+  const [breedFilter, setBreedFilter] = useState({ label: 'All Breeds', value: { field: 'All', direction: 'asc', collection: '' } });
+  const [rarityFilter, setRarityFilter] = useState({ label: 'All Rarity', value: { field: 'All', direction: 'asc', collection: '' } });
+  // 
   const happyCowsContract = useMemo(() => {
     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
   }, [])
@@ -160,69 +201,67 @@ const MyNfts = () => {
       tmpMyTokens[i].tokenId = tokenIds[i].tokenId
       tmpMyTokens[i].tokenHash = result[i]
       tmpMyTokens[i].collection = tokenIds[i].collection
+      const uniqueTokenData = await fetchNftData(result[i]);
+      tmpMyTokens[i].attributes = uniqueTokenData.attributes;
     }
     setMyTokens(tmpMyTokens);
     setAllNfts(tmpMyTokens);
     setLoading(false)
   }, [account, happyCowsContract, marketContract, airnftContract])
 
+  const fetchNftData = async (eachMyToken) => {
+    try {
+      const res = await fetch(eachMyToken)
+      const json = await res.json()
+      console.log(json);
+      return json;
+    } catch (e) {
+      console.log('error :(')
+    }
+  }
+
   useEffect(() => {
     getTokenHashes()
   }, [account])
-  const filterHandler = (value) => {
-    console.log(value.field)
-    let filteredMarketItems = [];
-    let index = 0;
-    switch (value.field) {
-      case 'All':
-        filteredMarketItems = allNfts
-        break
-      case 'HappyCows':
-        for (let i = 0; i < allNfts.length; i++) {
-          if (allNfts[i].collection === getHappyCowAddress()) {
-            filteredMarketItems[index] = allNfts[i]
-            index++
-          }
-        }
-        break
-      case 'airnft':
-        for (let i = 0; i < allNfts.length; i++) {
-          if (allNfts[i].collection === getAirNftAddress()) {
-            filteredMarketItems[index] = allNfts[i]
-            index++
-          }
-        }
-        break
-      case 'land':
-        for (let i = 0; i < allNfts.length; i++) {
-          if (allNfts[i].collection === getLandNftAddress()) {
-            filteredMarketItems[index] = allNfts[i]
-            index++
-          }
-        }
-        break
-      case 'cow':
-        for (let i = 0; i < allNfts.length; i++) {
-          if (allNfts[i].collection === getCowNftAddress()) {
-            filteredMarketItems[index] = allNfts[i]
-            index++
-          }
-        }
-        break
-      case 'bull':
-        for (let i = 0; i < allNfts.length; i++) {
-          if (allNfts[i].collection === getBullNftAddress()) {
-            filteredMarketItems[index] = allNfts[i]
-            index++
-          }
-        }
-        break
-      default:
-        break
-    }
-    setMyTokens(filteredMarketItems);
 
+  const filterHandler = async (collection, breed, rarity) => {
+    let filteredMarketItems = allNfts;
+    let filteredByCollection;
+    let filteredByBreed;
+    let filteredByRarity;
+
+    console.log(collection)
+    console.log(breed)
+    console.log(rarity)
+    console.log(filteredMarketItems)
+    //   { label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } },
+    if (collection.value.field === "All") {
+      filteredByCollection = filteredMarketItems;
+    } else {
+      filteredByCollection = filteredMarketItems.filter(function (item) {
+        return item.collection.toLowerCase() === collection.value.collection.toLowerCase();
+      })
+    }
+
+    if (breed.value.field === "All") {
+      filteredByBreed = filteredByCollection;
+    } else {
+      filteredByBreed = filteredByCollection.filter(function (item) {
+        return item.attributes[1].value === breed.value.field;
+      })
+    }
+
+    if (rarity.value.field === "All") {
+      filteredByRarity = filteredByBreed;
+    } else {
+      filteredByRarity = filteredByBreed.filter(function (item) {
+        return item.attributes[0].value === rarity.value.field;
+      })
+    }
+
+    setMyTokens(filteredByRarity);
   }
+
   return (
     <Page
       style={{
@@ -240,11 +279,54 @@ const MyNfts = () => {
         </LeftHeader>
         <Blank />
         <RightHeader >
+
           <Select
             options={filterByCollection}
-            onOptionChange={(option) => filterHandler(option.value)}
+            onOptionChange={(option) => {
+              console.log('From Select: ', option)
+              setCollectionFilter(option);
+              filterHandler(option, breedFilter, rarityFilter);
+            }
+            }
             style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
           />
+
+          <Select
+            options={filterByRarity}
+            onOptionChange={(option) => {
+              setRarityFilter(option)
+              filterHandler(collectionFilter, breedFilter, option);
+            }
+            }
+            style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+          />
+
+          {collectionFilter.value.field === "All" ? <></> : <>
+            {collectionFilter.value.collection === getLandNftAddress() ? <>
+              <Select
+                options={filterByType}
+                onOptionChange={(option) => {
+                  setBreedFilter(option)
+                  filterHandler(collectionFilter, option, rarityFilter);
+                }
+                }
+                style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+              />
+            </> : <>
+
+              <Select
+                options={filterByBreed}
+                onOptionChange={(option) => {
+                  setBreedFilter(option)
+                  filterHandler(collectionFilter, option, rarityFilter);
+                }
+                }
+                style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+              />
+
+            </>}
+          </>}
+
         </RightHeader>
       </StyledHero>
       <NftItemContainer>
