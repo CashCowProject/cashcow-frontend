@@ -210,7 +210,8 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           break;
       }
     } catch (e) {
-      toast.error('Error fetching your NFTs.')
+      // toast.error('Error fetching your NFTs.')
+      console.log('Error fetching: ', e)
     }
   }, [eachMyToken]);
 

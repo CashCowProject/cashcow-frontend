@@ -12,7 +12,15 @@ font-size: 1.1em;
 margin-bottom: 10px;
 `
 
-const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow}) => {
+const CostWarning = styled.div`
+color: #bfbfbf;
+margin-top: 15px;
+margin-bottom: 5px;
+font-size: 0.8em;
+border-radius: 10px;
+`
+
+const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow }) => {
 
   const [val, setVal] = useState('')
 
@@ -58,6 +66,11 @@ const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow}) => {
         symbol={'COW'}
       // depositFeeBP={depositFeeBP}
       />
+
+      <CostWarning>
+        Remember that $COW transactions are subject to a 10% fee.
+      </CostWarning>
+
       <ModalActions>
         <Button variant="secondary" onClick={() => setIsOpen(false)}>
           Cancel

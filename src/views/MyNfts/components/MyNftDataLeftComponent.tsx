@@ -8,6 +8,7 @@ import Web3 from 'web3'
 import { getHappyCowAddress, getAirNftAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import '../assets/styles.css'
+import useLocalImage from 'hooks/useLocalImage'
 
 const NftOnChainDataContainer = styled.div`
   display: flex;
@@ -52,7 +53,11 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
     const json = await res.json()
     console.log('FETCHED NFT >>>> ', json)
     setDna(json.dna)
-    setImageUrl(json.image.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+    if (json.name == "Land") {
+      setImageUrl(useLocalImage(json))
+    } else {
+      setImageUrl(json.image.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+    }
     setAttr(json.attributes)
     setTokenId(myToken.tokenId)
   }, [myToken, account, nftContract])
@@ -60,6 +65,7 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
   useEffect(() => {
     fetchNft()
   }, [myToken, fetchNft])
+
   return (
     <NftOnChainDataContainer>
 

@@ -25,7 +25,7 @@ const MyNftDetailHeader = ({collectionName} : NftDetailHeaderInterface) => {
                 <span style={{padding: '0 8px', color: isDark ? 'white' : ''}}>{'>'}</span>
             </NftDetailPrevious>
             <NftDetailPrevious>
-                <span style={{fontSize: '15px', color: isDark ? 'white' : '#694f4e'}}>
+                <span style={{fontSize: '15px', color: isDark ? 'white' : '#431216'}}>
                     {collectionName}
                 </span>
             </NftDetailPrevious>
