@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { useEffect, useState, useMemo, useContext, useCallback } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Heading } from 'cashcow-uikit'
+import { Button, Heading } from 'cashcow-uikit'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
@@ -26,6 +26,7 @@ import {
   getBullNftAddress,
   getLandNftAddress
 } from 'utils/addressHelpers'
+import toast from 'react-hot-toast'
 
 const filterByCollection = [
   { label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } },
@@ -44,7 +45,7 @@ const filterByCollection = [
 
 const filterByBreed = [
   { label: 'All Breeds', value: { field: 'All', direction: 'asc', collection: '' } },
-  { label: 'Highland', value: { field: 'Highland', direction: 'asc', collection: '' } },
+  { label: 'Highlands', value: { field: 'Highlands', direction: 'asc', collection: '' } },
   { label: 'Holstein', value: { field: 'Holstein', direction: 'asc', collection: '' } },
   { label: 'Hereford', value: { field: 'Hereford', direction: 'asc', collection: '' } },
   { label: 'Brahman', value: { field: 'Brahman', direction: 'asc', collection: '' } },
@@ -55,7 +56,7 @@ const filterByType = [
   { label: 'All Types', value: { field: 'All', direction: 'asc', collection: '' } },
   { label: 'Hills', value: { field: 'Hills', direction: 'asc', collection: '' } },
   { label: 'Jungle', value: { field: 'Jungle', direction: 'asc', collection: '' } },
-  { label: 'Mountain', value: { field: 'Mountain', direction: 'asc', collection: '' } },
+  { label: 'Mountains', value: { field: 'Mountains', direction: 'asc', collection: '' } },
   { label: 'Plains', value: { field: 'Plains', direction: 'asc', collection: '' } },
   { label: 'Woods', value: { field: 'Woods', direction: 'asc', collection: '' } },
 ]
@@ -213,10 +214,10 @@ const MyNfts = () => {
     try {
       const res = await fetch(eachMyToken)
       const json = await res.json()
-      console.log(json);
       return json;
     } catch (e) {
-      console.log('error :(')
+      // toast.error('e', e);
+      console.log('Error on: ', e)
     }
   }
 
@@ -247,6 +248,7 @@ const MyNfts = () => {
       filteredByBreed = filteredByCollection;
     } else {
       filteredByBreed = filteredByCollection.filter(function (item) {
+        console.log(item.attributes[1].value, breed.value.field)
         return item.attributes[1].value === breed.value.field;
       })
     }
@@ -260,6 +262,11 @@ const MyNfts = () => {
     }
 
     setMyTokens(filteredByRarity);
+  }
+
+  const handleFilterReset = () => {
+    console.log('Reset Filters')
+    window.location.reload();
   }
 
   return (
@@ -288,7 +295,11 @@ const MyNfts = () => {
               filterHandler(option, breedFilter, rarityFilter);
             }
             }
-            style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+            style={{
+              marginRight: '15px',
+              background: isDark ? '#27262c' : '',
+              // pointerEvents: collectionFilter.value.field != "All" ? 'none' : 'auto'
+            }}
           />
 
           <Select
@@ -298,7 +309,11 @@ const MyNfts = () => {
               filterHandler(collectionFilter, breedFilter, option);
             }
             }
-            style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+            style={{
+              marginRight: '15px',
+              background: isDark ? '#27262c' : '',
+              // pointerEvents: rarityFilter.value.field != "All" ? 'none' : 'auto'
+            }}
           />
 
           {collectionFilter.value.field === "All" ? <></> : <>
@@ -326,6 +341,13 @@ const MyNfts = () => {
 
             </>}
           </>}
+
+          <Button
+            onClick={handleFilterReset}
+            style={{ height: '2.5em' }}
+          >
+            Reset Filters
+          </Button>
 
         </RightHeader>
       </StyledHero>
