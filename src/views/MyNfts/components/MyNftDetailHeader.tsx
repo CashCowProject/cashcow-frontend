@@ -19,13 +19,13 @@ const MyNftDetailHeader = ({collectionName} : NftDetailHeaderInterface) => {
     return (
         <NftDetailHeaderContainer>
             <NftDetailPrevious>
-                <Link to="/myNFTs" style={{color: isDark ? 'white' : '#431216'}}>
+                <Link to="/myNFTs" style={{color: isDark ? 'white' : '#0B3D4C'}}>
                     My NFTs
                 </Link>
-                <span style={{padding: '0 8px', color: isDark ? 'white' : ''}}>{'>'}</span>
+                <span style={{padding: '0 8px', color: isDark ? 'white' : '#0B3D4C'}}>{'>'}</span>
             </NftDetailPrevious>
             <NftDetailPrevious>
-                <span style={{fontSize: '15px', color: isDark ? 'white' : '#431216'}}>
+                <span style={{fontSize: '15px', color: isDark ? 'white' : '#0B3D4C'}}>
                     {collectionName}
                 </span>
             </NftDetailPrevious>

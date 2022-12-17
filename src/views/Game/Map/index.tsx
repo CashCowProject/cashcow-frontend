@@ -29,7 +29,7 @@ const FrameDiv = styled.div`
     width: 90%;
     margin-top: 90%;
     margin-left: auto; 
-    margin-right: auto; 
+    margin-right: auto;
 `
 
 const InsideFrameContent = styled.img`
@@ -50,6 +50,9 @@ const FrameImage = styled.img`
     right: 0;
     margin-left: auto; 
     margin-right: auto; 
+    @media (max-width: 750px) {
+      width: 80%;
+    }
   `
 
 const VideoContainer = styled.video`
@@ -60,9 +63,9 @@ const VideoContainer = styled.video`
     right: 0;
     margin-left: auto; 
     margin-right: 24%; 
-    @media (max-width: 965px) {
+    @media (max-width: 750px) {
       top: 3%;
-      width: 70%;
+      width: 73%;
       left: 15%;
       margin-left: unset; 
     }
@@ -77,9 +80,9 @@ const MarketplaceLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
-    @media (max-width: 965px) {
-      top: 12%;
-      left: 68%;
+    @media (max-width: 750px) {
+      top: 10%;
+      left: 70%;
     }
   `
 
@@ -92,6 +95,10 @@ const MyNftsLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
+    @media (max-width: 750px) {
+      top: 23%;
+      left: 55%;
+    }
   `
 
 const MyDashboardLink = styled.img`
@@ -103,6 +110,10 @@ const MyDashboardLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
+    @media (max-width: 750px) {
+      top: 9%;
+      left: 45%;
+    }
   `
 
 const ManageLink = styled.img`
@@ -114,6 +125,10 @@ const ManageLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
+    @media (max-width: 750px) {
+      top: 25%;
+      left: 36%;
+    }
   `
 
 const BreedLink = styled.img`
@@ -125,6 +140,10 @@ const BreedLink = styled.img`
     animation: ${fadeIn} 1s linear;
     transition: all 1s;
     &:hover { transform: scale(1.07); }
+    @media (max-width: 750px) {
+      top: 10%;
+      left: 18%;
+    }
   `
 
 const FirstButton = styled.img`
@@ -194,13 +213,13 @@ const Map = () => {
           onEnded={() => setPlaying(true)}
         >
           <source 
-            src={window.innerWidth > 965 ? "/images/map/mapa2_2.mp4" : "/images/map/MAPAcuadrado.mp4"}
+            src={window.innerWidth > 750 ? "/images/map/mapa2_2.mp4" : "/images/map/MAPAcuadrado.mp4"}
             type="video/mp4" 
             />
         </VideoContainer>
 
         <FrameImage 
-          src={window.innerWidth > 965 ? "/images/map/pantalla-horizontal.png" : "/images/map/tele-movil.png"} 
+          src={window.innerWidth > 750 ? "/images/map/pantalla-horizontal.png" : "/images/map/tele-movil.png"} 
         />
 
         {/* Buttons fot TV */}

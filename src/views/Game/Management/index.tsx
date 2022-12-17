@@ -237,7 +237,7 @@ const FarmManagement = () => {
         <HomeButton onClick={e => history.push('/farm/map')} />
       </StyledHero>
 
-      <FlexLayout>
+      <FlexLayout style={{ minWidth: '150px'}}>
         {nftIndividualData.map((item) =>
           <div className="cards-mapper">
             <img

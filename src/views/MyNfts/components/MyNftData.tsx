@@ -17,27 +17,6 @@ const NftDataContainer = styled.div`
     }
 `
 
-const NftDataSeperation = styled.div`
-    min-width: 2px;
-    position: relative;
-    background-image: url(../images/line.jpg);
-    background-repeat: repeat-y;
-    background-size: contain;
-    background-position: 50%;
-`
-const GradientBack = styled.div`
-    background: linear-gradient( 45deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100% );
-    background-size: 300% 300%;
-    animation: ilqnTz 2s linear infinite;
-    filter: blur(10px);
-    position: absolute;
-    top:-2px;
-    right:-2px;
-    bottom:-2px;
-    left:-2px;
-    z-index: -1;
-`
-
 export interface NftDataInterface {
     myToken?: any;
 }
@@ -45,7 +24,9 @@ export interface NftDataInterface {
 const MyNftData = ({ myToken }: NftDataInterface) => {
     const { isDark } = useTheme()
     return (
-        <NftDataContainer style={{ background: isDark ? "#0B3D4C" : '#0B3D4C' }}>
+        <NftDataContainer
+            style={{ background: isDark ? "#0B3D4C" : '#0B3D4C' }}
+        >
             {/* <GradientBack /> */}
             {/* NFT Image */}
             <MyNftDataLeftComponent

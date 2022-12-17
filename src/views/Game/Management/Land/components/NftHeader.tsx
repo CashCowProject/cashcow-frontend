@@ -39,6 +39,9 @@ const LeftContainer = styled.div`
   align-items: center;
   padding: 10px;
   border-radius: 15px;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `
 
 const RightContainer = styled.div`

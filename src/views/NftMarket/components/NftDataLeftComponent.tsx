@@ -9,7 +9,6 @@ import HappyCows from 'config/abi/HappyCows.json'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
 import LandNFT from 'config/abi/LandNFT.json'
-
 import MilkToken from 'config/abi/MilkToken.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
@@ -20,6 +19,7 @@ import useTheme from 'hooks/useTheme'
 import { LoadingContext } from 'contexts/LoadingContext'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
+import landTypes from 'config/constants/landTypes'
 
 const NftMetaDataContainer = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ const NftImageContainer = styled.div`
   min-width: 240px;
   min-height: 240px;
   width: 46%;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 16px 16px;
   overflow: hidden;
   margin: 16px 32px 16px 0;
   position: relative;
@@ -158,6 +158,13 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
 
   const milkTokenContract = new web3.eth.Contract(MilkToken.abi as AbiItem[], getMilkAddress())
 
+  const fetchLandImage = async (json) => {
+    console.log('fetching image for land:')
+    const landBreed = json.attributes[1].value;
+    const landRarity = json.attributes[0].value;
+    return landTypes[landBreed][landRarity];
+  }
+
   const fetchNft = useCallback(async () => {
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     let isAirToken = false;
@@ -197,6 +204,8 @@ const NftDataLeftComponent = ({ itemId }: NftDataLeftComponentInterface) => {
     if(isHappyCow) {
       imageUrl = imageUrl.slice(7)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else if (isLandToken) {
+      setImage(await fetchLandImage(json))
     } else{
       setImage(imageUrl);
     }

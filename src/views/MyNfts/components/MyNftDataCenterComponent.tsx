@@ -184,6 +184,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     setLoading(true);
 
     console.log('Fetching from Center component')
+
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     console.log(marketItems)
     if (!myToken) return
@@ -200,15 +201,6 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
     if (!tmpTokenId) return
 
-    // FIXME: Deleted Code With Errors dev@topospec
-    // let nftHash = null
-    // if (myToken.collection) {
-    //   console.log('inside conditional')
-    //   nftHash = await happyCowsContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
-    // } else {
-    //   nftHash = await airnftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
-    // }
-
     const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection);
     let nftHash = await nftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     const res = await fetch(nftHash)
@@ -218,7 +210,8 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
     setDescription(json.description ? json.description : "")
 
-    let imageUrl = json.image
+    let imageUrl = json.image;
+
     if (myToken.collection == getHappyCowAddress()) {
       setTokenName(json.name)
       imageUrl = imageUrl.slice(7)
@@ -226,6 +219,9 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     } else if (myToken.collection == getAirNftAddress()) {
       setTokenName(json.name)
       setImage(imageUrl)
+    } else if (myToken.collection == getCowNftAddress()) {
+      setTokenName('Cow #' + myToken.tokenId)
+      setImage(imageUrl);
     } else {
       setTokenName(json.name + "#" + myToken.tokenId)
       setImage(imageUrl)
@@ -488,13 +484,13 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
                 </Button>
                 &nbsp;
                 {/* We need to check if the tokenType is not Land, because we cannot burn lands */}
-                  <Button
-                    style={{ backgroundColor: 'transparent' }}
-                    className={flgList || tokenType === "Land" || tokenName.includes("HappyCows") ? "burn-button-disabled" : "burn-button"}
-                    onClick={handleOpenBurnModal}
-                  >
-                    {/* {flgList ? 'Unlist NFT' : 'List NFT'} */}
-                  </Button>
+                <Button
+                  style={{ backgroundColor: 'transparent' }}
+                  className={flgList || tokenType === "Land" || tokenName.includes("HappyCows") ? "burn-button-disabled" : "burn-button"}
+                  onClick={handleOpenBurnModal}
+                >
+                  {/* {flgList ? 'Unlist NFT' : 'List NFT'} */}
+                </Button>
               </>
 
             ) : (

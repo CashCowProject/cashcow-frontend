@@ -102,7 +102,7 @@ const MyNftsDeatail = () => {
         <Heading
           as="h1"
           size="lg"
-          color={isDark ? 'white' : '#431216'}
+          color={isDark ? 'white' : '#0B3D4C'}
           mb="20px"
         >
           My NFT Detail
@@ -110,7 +110,9 @@ const MyNftsDeatail = () => {
       </StyledHero>
       <MyNftDetailHeader collectionName={collectionName} />
       <NftDetailContainer>
-        <MyNftData myToken={myToken} />
+        <MyNftData
+          myToken={myToken}
+        />
       </NftDetailContainer>
     </Page>
   )

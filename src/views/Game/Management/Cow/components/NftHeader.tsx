@@ -27,6 +27,7 @@ const NftHeaderContainer = styled.div`
   justify-content: space-between;
 
   @media (max-width: 768px) {
+
     flex-direction: column;
     align-items: flex-start;
   }
@@ -39,6 +40,10 @@ const LeftContainer = styled.div`
   align-items: center;
   padding: 10px;
   border-radius: 15px;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `
 
 const RightContainer = styled.div`
@@ -160,18 +165,6 @@ const NftHeader = () => {
 
         </ButtonContainer>
       </LeftContainer>
-      {/* <RightContainer>
-        <Select
-          options={sortByItems}
-          // onOptionChange={(option) => dispatch(setSortOrder(option.value))}
-          style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
-        />
-        <Select
-          options={filterByCollection}
-          // onOptionChange={(option) => dispatch(setCollectionType(option.value))}
-          style={{ marginRight: '15px' }}
-        />
-      </RightContainer> */}
       <SelectNFT
         isOpen={isOpen}
         closeDialog={() => setIsOpen(false)}

@@ -14,6 +14,8 @@ import { getHappyCowAddress, getAirNftAddress, getCowNftAddress, getBullNftAddre
 import useTheme from 'hooks/useTheme'
 import { PINATA_BASE_URI } from 'config/constants/nfts'
 import { getNumberSuffix } from 'utils/formatBalance'
+import landTypes from 'config/constants/landTypes'
+
 
 const NftEachItemContainer = styled.div`
   cursor: pointer;
@@ -146,6 +148,13 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
 
+  const fetchLandImage = async (json) => {
+    console.log('fetching image for land:')
+    const landBreed = json.attributes[1].value;
+    const landRarity = json.attributes[0].value;
+    return landTypes[landBreed][landRarity];
+  }
+
   const fetchNft = useCallback(async () => {
     let nftHash = null
     const isAIR = nftEachItem.nftContract === getAirNftAddress()
@@ -172,6 +181,9 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
       imageUrl = imageUrl.slice(7);
       setName(json.name)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
+    } else if (isLandNft) {
+      setName(json.name);
+      setImage(await fetchLandImage(json))
     } else {
       setImage(imageUrl);
       setName(json.name +"#"+nftEachItem.tokenId.toString())
