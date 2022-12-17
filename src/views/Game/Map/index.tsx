@@ -151,6 +151,10 @@ const FirstButton = styled.img`
     top: 30%;
     left: 82.5%;
     width: 4%;
+    @media (max-width: 750px) {
+      top: 38%;
+      left: 33%;
+    }
 `
 
 const SecondButton = styled.img`
@@ -158,6 +162,10 @@ const SecondButton = styled.img`
     top: 36%;
     left: 82.5%;
     width: 4%;
+    @media (max-width: 750px) {
+      top: 38%;
+      left: 39%;
+    }
 `
 
 const ThirdButton = styled.img`
@@ -165,6 +173,10 @@ const ThirdButton = styled.img`
     top: 42%;
     left: 82.5%;
     width: 4%;
+    @media (max-width: 750px) {
+      top: 38%;
+      left: 45%;
+    }
 `
 
 const FourthButton = styled.img`
@@ -172,6 +184,10 @@ const FourthButton = styled.img`
     top: 48%;
     left: 82.5%;
     width: 4%;
+    @media (max-width: 750px) {
+      top: 38%;
+      left: 51%;
+    }
 `
 
 const FifthButton = styled.img`
@@ -179,6 +195,10 @@ const FifthButton = styled.img`
     top: 54%;
     left: 82.5%;
     width: 4%;
+    @media (max-width: 750px) {
+      top: 38%;
+      left: 57%;
+    }
 `
 
 
