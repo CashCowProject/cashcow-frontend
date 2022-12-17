@@ -81,7 +81,7 @@ const MarketplaceLink = styled.img`
     transition: all 1s;
     &:hover { transform: scale(1.07); }
     @media (max-width: 750px) {
-      top: 10%;
+      top: 14%;
       left: 70%;
     }
   `
@@ -96,7 +96,7 @@ const MyNftsLink = styled.img`
     transition: all 1s;
     &:hover { transform: scale(1.07); }
     @media (max-width: 750px) {
-      top: 23%;
+      top: 27%;
       left: 55%;
     }
   `
@@ -111,7 +111,7 @@ const MyDashboardLink = styled.img`
     transition: all 1s;
     &:hover { transform: scale(1.07); }
     @media (max-width: 750px) {
-      top: 9%;
+      top: 13%;
       left: 45%;
     }
   `
@@ -126,7 +126,7 @@ const ManageLink = styled.img`
     transition: all 1s;
     &:hover { transform: scale(1.07); }
     @media (max-width: 750px) {
-      top: 25%;
+      top: 29%;
       left: 36%;
     }
   `
@@ -141,7 +141,7 @@ const BreedLink = styled.img`
     transition: all 1s;
     &:hover { transform: scale(1.07); }
     @media (max-width: 750px) {
-      top: 10%;
+      top: 14%;
       left: 18%;
     }
   `
@@ -152,6 +152,7 @@ const FirstButton = styled.img`
     left: 82.5%;
     width: 4%;
     @media (max-width: 750px) {
+      display: none;
       top: 38%;
       left: 33%;
     }
@@ -163,6 +164,7 @@ const SecondButton = styled.img`
     left: 82.5%;
     width: 4%;
     @media (max-width: 750px) {
+      display: none;
       top: 38%;
       left: 39%;
     }
@@ -174,6 +176,7 @@ const ThirdButton = styled.img`
     left: 82.5%;
     width: 4%;
     @media (max-width: 750px) {
+      display: none;
       top: 38%;
       left: 45%;
     }
@@ -185,6 +188,7 @@ const FourthButton = styled.img`
     left: 82.5%;
     width: 4%;
     @media (max-width: 750px) {
+      display: none;
       top: 38%;
       left: 51%;
     }
@@ -196,6 +200,7 @@ const FifthButton = styled.img`
     left: 82.5%;
     width: 4%;
     @media (max-width: 750px) {
+      display: none;
       top: 38%;
       left: 57%;
     }
