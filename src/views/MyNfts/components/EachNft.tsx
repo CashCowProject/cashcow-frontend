@@ -20,6 +20,12 @@ import baseMilkPower from 'config/constants/baseMilkPower';
 import toast from 'react-hot-toast'
 import bullRecoveryTimes from 'config/constants/bullRecoveryTimes'
 import landTypes from 'config/constants/landTypes'
+import CowNFT from 'config/abi/CowNFT.json'
+import BullNFT from 'config/abi/BullNFT.json'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import MilkPowerData from 'components/MilkPowerData'
+import BullRecoveryTime from 'components/BullRecoveryTime'
 
 const NftEachItemContainer = styled.div`
   cursor: pointer;
@@ -138,6 +144,7 @@ export interface EachNftInterface {
 }
 
 const EachNft = ({ eachMyToken }: EachNftInterface) => {
+
   const { account } = useWallet()
   const { isDark } = useTheme()
 
@@ -157,8 +164,55 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
 
+  const cownftContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+
+  const bullnftContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await cownftContract.methods.attrOf(cowID).call({ from: account })
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    return cowAgingMultiplier;
+  }
+
+  const fetchBullRecuperationTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await bullnftContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+    console.log('bullBirth: ', res.birth)
+    console.log('bullAge: ', bullAge)
+    const bullBreed = res.breed;
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+
+    let bullRecoveryTime = (baseRecoveryTimes[bullBreed] + ((maxRecoveryTime - baseRecoveryTimes[bullBreed]) * (bullAge / maxAge))) / (60 * 60)
+
+    // RecoveryTime = BaseRecoveryTime + { (MaxRecoveryTime - BaseRecoveryTime) * [ (CurrentTime - BullBirthTime) / MaxAge ]    }
+    return bullRecoveryTime.toFixed(0);
+
+  }
+
   const fetchMyNftImage = useCallback(async () => {
     try {
+      console.log('FETCHING: ', eachMyToken)
       const res = await fetch(eachMyToken.tokenHash)
       const json = await res.json()
       let imageUrl = json.image
@@ -184,7 +238,9 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           const cowBreed = json.attributes[1].value;
           setNftType('COW');
           console.log('COW JSON: ', json)
-          setNftMetaData(baseMilkPower[cowBreed]);
+          const cowAgingMultiplier = await fetchCowAge(eachMyToken.tokenId);
+          const cowMilkPower = baseMilkPower[cowBreed] * cowAgingMultiplier
+          setNftMetaData(cowMilkPower.toFixed(0));
           setImageIpfsHash(imageUrl);
           setName("Cow #" + eachMyToken.tokenId);
           break;
@@ -192,7 +248,9 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           // Case Bull NFT
           setNftType('BULL');
           const bullBreed = json.attributes[1].value;
-          setNftMetaData(bullRecoveryTimes[bullBreed]);
+          const bullRecuperationTime = await fetchBullRecuperationTime(eachMyToken.tokenId);
+          // setNftMetaData(bullRecoveryTimes[bullBreed]);
+          setNftMetaData(bullRecuperationTime);
           console.log(json)
           setImageIpfsHash(imageUrl);
           setName("Bull #" + eachMyToken.tokenId);
@@ -249,29 +307,13 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           <ItemMetaData
             style={{ color: isDark ? 'white' : '#27262c' }}
           >
-            {nftType == "COW" ? <>
-              <img
-                src="/images/svgs/vida.svg"
-                alt="token"
-                style={{ width: '18px', height: '18px' }}
-              />
-              &nbsp;&nbsp;
-              {nftMetaData}
-            </>
-              : <></>}
-            {nftType == "BULL" ? <>
-              <img
-                src="/images/svgs/relojgreen.svg"
-                alt="token"
-                style={{ width: '18px', height: '18px' }}
-              />
-              &nbsp;&nbsp;
-              {nftMetaData}
-            </>
-              : <></>}
-            {nftType == "HC" ? <i>{nftMetaData}&nbsp;HC</i> : <></>}
-            {nftType == "AIR" ? <i>{nftMetaData}</i> : <></>}
-            {nftType == "LAND" ? <i>{nftMetaData}</i> : <></>}
+            
+            {nftType == "COW" && <MilkPowerData tokenID={eachMyToken.tokenId} /> }
+            {nftType == "BULL" && <BullRecoveryTime tokenID={eachMyToken.tokenId} />}
+            {nftType == "HC" && <i>{nftMetaData}&nbsp;HC</i>}
+            {nftType == "AIR" && <i>{nftMetaData}</i>}
+            {nftType == "LAND" && <i>{nftMetaData}</i>}
+
           </ItemMetaData>
           <NftImageContainer>
             {nftType == "AIR" ?

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Web3 from 'web3'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
-import { Button } from 'cashcow-uikit'
 import NftFarming from 'config/abi/NftFarming.json'
 import { getNftFarmingAddress } from 'utils/addressHelpers'
 import { AbiItem } from 'web3-utils';
@@ -12,6 +11,7 @@ import { LoadingContext } from 'contexts/LoadingContext'
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'state/types'
 import { setCowNftCount, updating } from 'state/cowManagement'
+import MilkPowerData from 'components/MilkPowerData'
 import '../../management.css'
 
 const web3 = new Web3(Web3.givenProvider);
@@ -40,50 +40,14 @@ const NftImageContainer = styled.div`
   align-items: center; 
 `
 
-const NftImage = styled.div`
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-  transform-origin: center;
-  background-size: auto 100%;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  &:hover {
-    transform: scale(1.04);
-  }
-`
-const Title = styled.div`
-  height: 68px;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-`
-
-const TitleText = styled.div`
+const ItemMetaData = styled.div`
   font-size: 18px;
-  line-height: 1.2;
-  color: #431216;
-  word-break: break-word;
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-clamp: 2;
+  font-weight: 400;
+  height: 30px;
   display: flex;
+  justify-content: center;
   align-items: center;
-`
-
-const ItemSeperation = styled.div`
-  height: 1px;
-  min-width: unset;
-  background-image: url(../images/line.jpg);
-  background-repeat: repeat-x;
-  position: relative;
-  background-size: contain;
-  background-position: 50%;
+  margin-top: .3em;
 `
 
 const ItemBottom = styled.div`
@@ -92,14 +56,15 @@ const ItemBottom = styled.div`
   margin: 0;
 `
 
-
 const NftEachItem = ({ image, tokenId, rarity }) => {
+
   const { account } = useWallet()
   const { isDark } = useTheme()
   const { setLoading } = useContext(LoadingContext)
   const itemCount = useSelector((state: State) => state.cow.cowItemCount);
   const updated = useSelector((state: State) => state.cow.updated);
   const dispatch = useDispatch();
+
   const removeItemHandler = async () => {
     try {
       setLoading(true)
@@ -108,19 +73,20 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
         toast.error('Please connect to your account')
         return;
       }
+      
       const _totalCowLimit = await farmContract.methods._totalCowLimitOf(account).call()
       const _totalBullLimit = await farmContract.methods._totalBullLimitOf(account).call()
       const _cowLimitPerland = await farmContract.methods.cowLimitPerLand(rarity).call()
       const _bullLimitPerland = await farmContract.methods.bullLimitPerLand(rarity).call()
+
       if (_totalCowLimit - _cowLimitPerland < 0) {
         toast.error("Please withdraw the cow NFTs first");
       }
       if (_totalBullLimit - _bullLimitPerland < 0) {
         toast.error("Plese withdraw the Bull NFTs first.")
       }
-      // Test function:
-      // await farmContract.methods.harvest().send({from: account});
 
+      // Test function:
       await farmContract.methods.withdrawCow(tokenId).send({ from: account });
       toast.success("success withdrawing a Cow NFT")
       dispatch(setCowNftCount(itemCount - 1))
@@ -132,11 +98,13 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       setLoading(false)
     }
   }
+
   return (
     <NftEachItemContainer
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
+        <MilkPowerData tokenID={tokenId}/>
         <NftImageContainer>
 
           <div className="metal-frame-div">

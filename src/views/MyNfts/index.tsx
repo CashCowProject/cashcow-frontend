@@ -128,6 +128,7 @@ const MyNfts = () => {
   const cownftContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
   }, [])
+  
   const bullnftContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])

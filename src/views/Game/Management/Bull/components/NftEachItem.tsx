@@ -12,6 +12,7 @@ import { LoadingContext } from 'contexts/LoadingContext'
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'state/types'
 import { setBullNftCount, updating } from 'state/bullManagement'
+import BullRecoveryTime from 'components/BullRecoveryTime'
 const web3 = new Web3(Web3.givenProvider);
 const NftEachItemContainer = styled.div`
   cursor: pointer;
@@ -132,6 +133,7 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
+        <BullRecoveryTime tokenID={tokenId} />
         <NftImageContainer>
           <div className="metal-frame-div">
             <img className="nft-image" src={image} />
