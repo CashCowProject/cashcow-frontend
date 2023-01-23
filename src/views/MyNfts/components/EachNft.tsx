@@ -216,7 +216,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
   }, [eachMyToken]);
 
   const fetchLandImage = async (json) => {
-    console.log('fetching image for land:')
+    console.log('fetching image for land...')
     const landBreed = json.attributes[1].value;
     const landRarity = json.attributes[0].value;
     return landTypes[landBreed][landRarity];
