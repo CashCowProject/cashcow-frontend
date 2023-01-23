@@ -22,8 +22,6 @@ import bullRecoveryTimes from 'config/constants/bullRecoveryTimes'
 import landTypes from 'config/constants/landTypes'
 import CowNFT from 'config/abi/CowNFT.json'
 import BullNFT from 'config/abi/BullNFT.json'
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import MilkPowerData from 'components/MilkPowerData'
 import BullRecoveryTime from 'components/BullRecoveryTime'
 
@@ -354,7 +352,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
                   alt="token"
                   style={{ width: '18px', height: '18px', marginRight: '4px' }}
                 />
-                MILK
+                - MILK
               </ItemValueToken>
             </ItemValue>
           </ItemBottom>
