@@ -124,12 +124,15 @@ const ItemValueToken = styled.div`
 `
 
 const ItemMetaData = styled.div`
-  font-size: 18px;
-  font-weight: 400;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .3em;
+    margin-bottom: .3em;
 `
 
 const web3 = new Web3(Web3.givenProvider)
@@ -178,7 +181,9 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
 
     const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
     let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
-    console.log('>>>>>> ', bullRecoveryTime)
+    
+    console.log('>>>>> ', bullRecoveryTime)
+    return bullRecoveryTime.toFixed(0);
   }
 
   const fetchMyNftImage = useCallback(async () => {
@@ -216,10 +221,11 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           // Case Bull NFT
           setNftType('BULL');
           const bullBreed = json.attributes[1].value;
-          setNftMetaData(bullRecoveryTimes[bullBreed]);
+          // setNftMetaData(bullRecoveryTimes[bullBreed]);
           console.log(json)
           setImageIpfsHash(imageUrl);
-          await fetchBullRecoveryTime(eachMyToken.tokenId)
+          const bullRT = await fetchBullRecoveryTime(eachMyToken.tokenId)
+          setNftMetaData(bullRT);
           setName("Bull #" + eachMyToken.tokenId);
           break;
         case getLandNftAddress():
