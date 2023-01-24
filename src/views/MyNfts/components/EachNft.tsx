@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import Web3 from 'web3'
 import Market from 'config/abi/Market.json'
+import BullNFT from 'config/abi/BullNFT.json'
 import { fromWei, AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
@@ -157,6 +158,29 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
 
+  const bullnftContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+
+  const fetchBullRecoveryTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await bullnftContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+
+    const bullBreed = res.breed;
+    const bullRarity = parseInt(res.rarity);
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+    console.log('>>>>>> ', bullRecoveryTime)
+  }
+
   const fetchMyNftImage = useCallback(async () => {
     try {
       const res = await fetch(eachMyToken.tokenHash)
@@ -195,6 +219,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           setNftMetaData(bullRecoveryTimes[bullBreed]);
           console.log(json)
           setImageIpfsHash(imageUrl);
+          await fetchBullRecoveryTime(eachMyToken.tokenId)
           setName("Bull #" + eachMyToken.tokenId);
           break;
         case getLandNftAddress():
