@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Web3 from 'web3'
 import Market from 'config/abi/Market.json'
 import BullNFT from 'config/abi/BullNFT.json'
+import CowNFT from 'config/abi/CowNFT.json'
 import { fromWei, AbiItem } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { usePriceCakeBusd } from 'state/hooks'
@@ -165,6 +166,39 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
 
+  const cownftContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await cownftContract.methods.attrOf(cowID).call({ from: account })
+
+    const cowBreed = parseInt(res.breed);
+    const cowRarity = parseInt(res.rarity)
+
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    const cowRarityMilkPower = [
+      2000,
+      3000,
+      5000,
+      8000,
+      13000
+    ]
+
+    const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
+
+    return cowMilkPower.toFixed(0)
+  }
+
   const fetchBullRecoveryTime = async (bullID) => {
     console.log('Fetching recuperation time for bull: ', bullID)
 
@@ -181,7 +215,7 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
 
     const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
     let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
-    
+
     console.log('>>>>> ', bullRecoveryTime)
     return bullRecoveryTime.toFixed(0);
   }
@@ -213,7 +247,9 @@ const EachNft = ({ eachMyToken }: EachNftInterface) => {
           const cowBreed = json.attributes[1].value;
           setNftType('COW');
           console.log('COW JSON: ', json)
-          setNftMetaData(baseMilkPower[cowBreed]);
+          const cowAge = await fetchCowAge(eachMyToken.tokenId);
+          // setNftMetaData(baseMilkPower[cowBreed]);
+          setNftMetaData(cowAge);
           setImageIpfsHash(imageUrl);
           setName("Cow #" + eachMyToken.tokenId);
           break;
