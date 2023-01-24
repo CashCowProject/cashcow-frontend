@@ -194,7 +194,7 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
-      <ItemMetaData style={{ color: isDark ? 'white' : '#27262c' }}>              
+      <ItemMetaData style={{ color: isDark ? 'white' : 'white' }}>              
           <img
               src="/images/svgs/vida.svg"
               alt="token"

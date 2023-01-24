@@ -1,6 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import Web3 from 'web3'
+import BullNFT from 'config/abi/BullNFT.json'
+import {
+  getBullNftAddress
+} from 'utils/addressHelpers'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
 import { Button } from 'cashcow-uikit'
@@ -89,6 +93,18 @@ const ItemBottom = styled.div`
   margin: 0;
 `
 
+const ItemMetaData = styled.div`
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .3em;
+    margin-bottom: .3em;
+`
+
 
 const NftEachItem = ({ image, tokenId, rarity }) => {
   const { account } = useWallet()
@@ -97,6 +113,17 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
   const itemCount = useSelector((state: State) => state.bull.bullItemCount);
   const updated = useSelector((state: State) => state.bull.updated);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchBullRecoveryTime(tokenId);
+  }, [])
+
+  const [nftMetaData, setNftMetaData] = useState('')
+
+  const bullnftContract = useMemo(() => {
+    return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+  }, [])
+
   const removeItemHandler = async () => {
     try {
       setLoading(true)
@@ -127,11 +154,43 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       setLoading(false)
     }
   }
+
+  const fetchBullRecoveryTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await bullnftContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+
+    const bullBreed = res.breed;
+    const bullRarity = parseInt(res.rarity);
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+
+    console.log('>>>>> ', bullRecoveryTime)
+    setNftMetaData(bullRecoveryTime.toFixed(0));
+  }
+
   return (
     <NftEachItemContainer
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
+        <ItemMetaData style={{ color: isDark ? 'white' : 'white' }}>
+          <img
+            src="/images/svgs/relojgreen.svg"
+            alt="token"
+            style={{ width: '18px', height: '18px' }}
+          />
+          &nbsp;&nbsp;
+          {nftMetaData}
+
+        </ItemMetaData>
         <NftImageContainer>
           <div className="metal-frame-div">
             <img className="nft-image" src={image} />
