@@ -1,6 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import Web3 from 'web3'
+import CowNFT from 'config/abi/CowNFT.json'
+import {
+  getCowNftAddress
+} from 'utils/addressHelpers'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import useTheme from 'hooks/useTheme'
 import { Button } from 'cashcow-uikit'
@@ -92,6 +96,18 @@ const ItemBottom = styled.div`
   margin: 0;
 `
 
+const ItemMetaData = styled.div`
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .3em;
+    margin-bottom: .3em;
+`
+
 
 const NftEachItem = ({ image, tokenId, rarity }) => {
   const { account } = useWallet()
@@ -100,6 +116,47 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
   const itemCount = useSelector((state: State) => state.cow.cowItemCount);
   const updated = useSelector((state: State) => state.cow.updated);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchCowAge(tokenId)
+  }, [])
+
+  const [nftMetaData, setNftMetaData] = useState('')
+
+  const cownftContract = useMemo(() => {
+    return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+  }, [])
+
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await cownftContract.methods.attrOf(cowID).call({ from: account })
+
+    const cowBreed = parseInt(res.breed);
+    const cowRarity = parseInt(res.rarity)
+
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    const cowRarityMilkPower = [
+      2000,
+      3000,
+      5000,
+      8000,
+      13000
+    ]
+
+    const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
+
+    setNftMetaData(cowMilkPower.toFixed(0))
+  }
+
+
   const removeItemHandler = async () => {
     try {
       setLoading(true)
@@ -137,6 +194,16 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
+      <ItemMetaData style={{ color: isDark ? 'white' : '#27262c' }}>              
+          <img
+              src="/images/svgs/vida.svg"
+              alt="token"
+              style={{ width: '18px', height: '18px' }}
+            />
+            &nbsp;&nbsp;
+            {nftMetaData}
+
+          </ItemMetaData>
         <NftImageContainer>
 
           <div className="metal-frame-div">
