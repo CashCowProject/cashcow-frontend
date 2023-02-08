@@ -115,6 +115,19 @@ const ItemValueToken = styled.div`
   align-items: center;
   font-size: 14px;
 `
+
+const ItemMetaData = styled.div`
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .3em;
+    margin-bottom: .3em;
+`
+
 const web3 = new Web3(Web3.givenProvider)
 
 export interface NftEachItemInterface {
@@ -127,6 +140,8 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
   const [flgMyNft, setFlgMyNft] = useState(false)
   const [name, setName] = useState('')
   const [image, setImage] = useState('')
+  const [nftMetaData, setNftMetaData] = useState('')
+  const [nftType, setNftType] = useState('');
   const [milkPrice, setMilkPrice] = useState(0)
 
   const cakePriceUsd = usePriceCakeBusd()
@@ -157,16 +172,19 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
 
   const fetchNft = useCallback(async () => {
     let nftHash = null
+
     const isAIR = nftEachItem.nftContract === getAirNftAddress()
     const isHappy = nftEachItem.nftContract === getHappyCowAddress();
     const isCowNft = nftEachItem.nftContract === getCowNftAddress();
     const isBullNft = nftEachItem.nftContract === getBullNftAddress();
     const isLandNft = nftEachItem.nftContract === getLandNftAddress();
+
     if (isAIR) nftHash = await airnftContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
-    else if(isHappy) nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
-    else if(isCowNft) nftHash = await cowContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
-    else if(isBullNft) nftHash = await bullContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if (isHappy) nftHash = await happyCowsContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if (isCowNft) nftHash = await cowContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+    else if (isBullNft) nftHash = await bullContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
     else nftHash = await landContract.methods.tokenURI(nftEachItem.tokenId).call({ from: account })
+
     if (nftEachItem.seller === account) {
       setFlgMyNft(true)
     }
@@ -177,29 +195,113 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     if (isAIR) {
       setImage(imageUrl);
       setName(json.name)
-    } else if(isHappy) {
+    } else if (isHappy) {
       imageUrl = imageUrl.slice(7);
       setName(json.name)
       setImage(`${PINATA_BASE_URI}${imageUrl}`)
     } else if (isLandNft) {
       setName(json.name);
       setImage(await fetchLandImage(json))
+    } else if (isCowNft) {
+      setImage(imageUrl);
+      setName(json.name + "#" + nftEachItem.tokenId.toString())
+      console.log('json: ', json)
+      const cowAge = await fetchCowAge(nftEachItem.tokenId);
+      setNftType('COW');
+      setNftMetaData(cowAge);
+    } else if (isBullNft) {
+      setImage(imageUrl);
+      setName(json.name + "#" + nftEachItem.tokenId.toString())
+      const bullRT = await fetchBullRecoveryTime(nftEachItem.tokenId)
+      setNftType('BULL');
+      setNftMetaData(bullRT);
     } else {
       setImage(imageUrl);
-      setName(json.name +"#"+nftEachItem.tokenId.toString())
+      setName(json.name + "#" + nftEachItem.tokenId.toString())
     }
-    
+
 
     setMilkPrice(cakePriceUsd.toNumber())
   }, [account, happyCowsContract, airnftContract, nftEachItem, cakePriceUsd, bullContract, cowContract, landContract])
 
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await cowContract.methods.attrOf(cowID).call({ from: account })
+
+    const cowBreed = parseInt(res.breed);
+    const cowRarity = parseInt(res.rarity)
+
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    const cowRarityMilkPower = [
+      2000,
+      3000,
+      5000,
+      8000,
+      13000
+    ]
+
+    const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
+
+    return cowMilkPower.toFixed(0)
+  }
+
+  const fetchBullRecoveryTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await bullContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+
+    const bullBreed = res.breed;
+    const bullRarity = parseInt(res.rarity);
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+
+    console.log('>>>>> ', bullRecoveryTime)
+    return bullRecoveryTime.toFixed(0);
+  }
+
   useEffect(() => {
     fetchNft()
   }, [fetchNft])
+
   return (
     <Link to={`/nft-market/${nftEachItem.itemId}`}>
       <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
         <ItemTop>
+          <ItemMetaData>
+            {nftType == "COW" && <>
+              <img
+                src="/images/svgs/vida.svg"
+                alt="token"
+                style={{ width: '18px', height: '18px' }}
+              />
+              &nbsp;&nbsp;
+              {nftMetaData}
+            </>}
+            {nftType == "BULL" && <>
+              <img
+                src="/images/svgs/relojgreen.svg"
+                alt="token"
+                style={{ width: '18px', height: '18px' }}
+              />
+              &nbsp;&nbsp;
+              {nftMetaData}
+            </>}
+          </ItemMetaData>
           <NftImageContainer>
             <NftImage style={{ backgroundImage: `url(${image})` }} />
           </NftImageContainer>

@@ -127,11 +127,35 @@ const NftHeader = () => {
       temp["image"] = _image;
       temp["rarity"] = _rarity;
       temp["tokenId"] = tokenIds[i];
+      temp["nftMetaData"] = await fetchBullRecoveryTime(tokenIds[i]);
       attrs.push(temp);
     }
     setMyNfts(attrs);
 
   }, [account, updated])
+
+  const fetchBullRecoveryTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await nftContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+
+    const bullBreed = res.breed;
+    const bullRarity = parseInt(res.rarity);
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+
+    console.log('>>>>> ', bullRecoveryTime)
+    return bullRecoveryTime.toFixed(0);
+  }
+
+
   useEffect(() => {
     fetchNftItems()
   }, [account, updated])

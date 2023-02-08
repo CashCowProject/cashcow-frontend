@@ -129,11 +129,43 @@ const NftHeader = () => {
       temp["image"] = _image;
       temp["rarity"] = _rarity;
       temp["tokenId"] = tokenIds[i];
+      temp["nftMetaData"] = await fetchCowAge(tokenIds[i]);
       attrs.push(temp);
     }
+    console.log('FULL ATTRS COW: ', attrs)
     setMyNfts(attrs);
 
   }, [account, updated])
+
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await nftContract.methods.attrOf(cowID).call({ from: account })
+
+    const cowBreed = parseInt(res.breed);
+    const cowRarity = parseInt(res.rarity)
+
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    const cowRarityMilkPower = [
+      2000,
+      3000,
+      5000,
+      8000,
+      13000
+    ]
+
+    const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
+
+    return cowMilkPower.toFixed(0)
+  }
+
   useEffect(() => {
     fetchNftItems()
   }, [account, updated])
@@ -156,7 +188,7 @@ const NftHeader = () => {
         <ButtonContainer>
 
           <div className="add-nft-div">
-            <img 
+            <img
               className="add-nft-div-button"
               src={'/images/farms/management/addcowgreen.png'}
               onClick={() => setIsOpen(true)}
