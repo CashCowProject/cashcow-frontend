@@ -122,7 +122,9 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
               <NftImage style={{ backgroundImage: `url(${nft.image})` }} onClick={() => actionHandler(nft.tokenId)} />
               {/* <img src={nft.image} alt="" style={{ cursor: 'pointer', width: "30%", marginRight: '8px', marginTop: '10px' }} onClick={() => actionHandler(nft.tokenId)} /> */}
             </NftImageContainer>
-
+            <ItemMetaData>
+                <span style={{ color: isDark ? 'white' : 'black' }}>Bull #{nft.tokenId}</span>
+              </ItemMetaData>
           </ItemTop>
         </NftEachItemContainer>
         ))}

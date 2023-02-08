@@ -76,6 +76,10 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const [dna, setDna] = useState('')
   const [attr, setAttr] = useState([])
   const [collectionAddress, setAddress] = useState("");
+  // FIXME: Add NFT Metadata
+  const [nftMetaData, setNftMetaData] = useState("");
+  const [nftType, setNftType] = useState("");
+
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
   }, [])
@@ -87,12 +91,15 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const airnftContract = useMemo(() => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
+
   const CowContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
   }, [])
+
   const BullContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
+  
   const LandContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
@@ -105,6 +112,7 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
     let isBullNFT = false;
     let isHappyCow = false;
     let isLandNFT = false;
+
     for (let i = 0; i < marketItems.length; i++) {
       if (marketItems[i].itemId === itemId) {
         isTokenAir = marketItems[i].nftContract === getAirNftAddress()
@@ -124,33 +132,95 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
       nftHash = await airnftContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
       setAddress(getAirNftAddress());
     }
-    else if(isHappyCow) {
+    else if (isHappyCow) {
       nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
       setAddress(getHappyCowAddress())
     }
-    else if(isCowNFT) {
+    else if (isCowNFT) {
       nftHash = await CowContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      const cowAge = await fetchCowAge(marketItems[index].tokenId);
+      setNftType("COW");
+      setNftMetaData(cowAge);
       setAddress(getCowNftAddress())
-    } 
-    else if(isBullNFT) {
+    }
+    else if (isBullNFT) {
       nftHash = await BullContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
+      setNftType("BULL");
+      const bullRT = await fetchBullRecoveryTime(marketItems[index].tokenId)
+      setNftMetaData(bullRT);
       setAddress(getBullNftAddress());
-    } 
+    }
     else {
       nftHash = await LandContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
       setAddress(getLandNftAddress())
-    } 
+    }
 
     const res = await fetch(nftHash)
     const json = await res.json()
     setIsAIR(isTokenAir)
     setDna(json.dna)
     setAttr(json.attributes)
-  }, [account, marketContract,CowContract,BullContract,LandContract, airnftContract, itemId, happyCowsContract])
+  }, [account, marketContract, CowContract, BullContract, LandContract, airnftContract, itemId, happyCowsContract])
 
   useEffect(() => {
     fetchNft()
   }, [itemId, fetchNft])
+
+
+  const fetchCowAge = async (cowID) => {
+    console.log('Fetching Age For: ', cowID)
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxAge = 200 * 24 * 60 * 60;
+    const res = await CowContract.methods.attrOf(cowID).call({ from: account })
+
+    const cowBreed = parseInt(res.breed);
+    const cowRarity = parseInt(res.rarity)
+
+    const cowAge = currentTimestamp - res.birth;
+    let cowAgingMultiplier = 0;
+
+    if (maxAge > cowAge) {
+      cowAgingMultiplier = 1 - (cowAge / maxAge);
+    }
+
+    const cowRarityMilkPower = [
+      2000,
+      3000,
+      5000,
+      8000,
+      13000
+    ]
+
+    const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
+
+    return cowMilkPower.toFixed(0)
+  }
+
+  const fetchBullRecoveryTime = async (bullID) => {
+    console.log('Fetching recuperation time for bull: ', bullID)
+
+    const currentTimestamp = new Date().getTime() / 1000;
+    const maxRecoveryTime = 15 * 24 * 60 * 60;
+    const maxAge = 200 * 24 * 60 * 60;
+
+    const res = await BullContract.methods.attrOf(bullID).call({ from: account })
+
+    const bullAge = currentTimestamp - res.birth;
+
+    const bullBreed = res.breed;
+    const bullRarity = parseInt(res.rarity);
+
+    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+
+    console.log('>>>>> ', bullRecoveryTime)
+    return bullRecoveryTime.toFixed(0);
+  }
+
+
+
+
+
   return (
     <NftOnChainDataContainer>
       <NftOnChainDataTitle style={{ color: isDark ? 'white' : '' }}>Properties</NftOnChainDataTitle>
@@ -210,6 +280,17 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
               <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{item.value}</NftOnChainLinkStyle>
             </NftOnChainEachData>
           ))}
+          {nftMetaData != '' &&
+            <NftOnChainEachData>
+              <div style={{ color: isDark ? 'white' : '#694f4e' }}>
+                {nftType == "COW" && <>Milk Power</>}
+                {nftType == "BULL" && <>Recovery Time</>}
+              </div>
+              <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>
+                {nftMetaData}
+              </NftOnChainLinkStyle>
+            </NftOnChainEachData>
+          }
         </NftOnChainDetail>
       </NftOnChainDetailContainer>
     </NftOnChainDataContainer>

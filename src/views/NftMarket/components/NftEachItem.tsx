@@ -282,7 +282,7 @@ const NftEachItem = ({ nftEachItem }: NftEachItemInterface) => {
     <Link to={`/nft-market/${nftEachItem.itemId}`}>
       <NftEachItemContainer style={{ background: isDark ? '#27262c' : '' }}>
         <ItemTop>
-          <ItemMetaData>
+          <ItemMetaData style={{ color: isDark ? 'white' : '#431216' }}>
             {nftType == "COW" && <>
               <img
                 src="/images/svgs/vida.svg"

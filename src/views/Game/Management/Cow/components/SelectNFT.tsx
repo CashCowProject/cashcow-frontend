@@ -109,7 +109,10 @@ const SelectNFT = ({ isOpen, closeDialog, myNfts, actionHandler }) => {
         {_.map(myNfts, nft => (
           <NftEachItemContainer style={{ background: isDark ? '#383740' : '' }}>
             <ItemTop>
+
               <ItemMetaData>
+                {/* <span style={{ color: isDark ? 'white' : 'black' }}>COW #1234</span>
+                &nbsp; */}
                 <img
                   src="/images/svgs/vida.svg"
                   alt="token"
@@ -122,7 +125,9 @@ const SelectNFT = ({ isOpen, closeDialog, myNfts, actionHandler }) => {
                 <NftImage style={{ backgroundImage: `url(${nft.image})` }} onClick={() => actionHandler(nft.tokenId)} />
                 {/* <img src={nft.image} alt="" style={{ cursor: 'pointer', width: "30%", marginRight: '8px', marginTop: '10px' }} onClick={() => actionHandler(nft.tokenId)} /> */}
               </NftImageContainer>
-
+              <ItemMetaData>
+                <span style={{ color: isDark ? 'white' : 'black' }}>Cow #{nft.tokenId}</span>
+              </ItemMetaData>
             </ItemTop>
           </NftEachItemContainer>
 

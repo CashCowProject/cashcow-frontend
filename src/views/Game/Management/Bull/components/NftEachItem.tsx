@@ -58,23 +58,22 @@ const NftImage = styled.div`
   }
 `
 const Title = styled.div`
-  height: 68px;
+  height: 1.4em;
   padding: 0 24px;
   display: flex;
   align-items: center;
+  margin-bottom: .3em;
+  text-align: center;
 `
 
 const TitleText = styled.div`
   font-size: 18px;
-  line-height: 1.2;
   color: #431216;
   word-break: break-word;
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-clamp: 2;
-  display: flex;
-  align-items: center;
+  text-align: center;
 `
 
 const ItemSeperation = styled.div`
@@ -197,6 +196,11 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
             <img className="metal-frame-image" src="/images/nfts/marcometal.png" />
           </div>
         </NftImageContainer>
+        <Title>
+          <TitleText style={{ color: 'white' }}>
+            Bull #{tokenId}
+          </TitleText>
+        </Title>
       </ItemTop>
       <ItemBottom >
         <div

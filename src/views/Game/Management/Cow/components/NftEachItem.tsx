@@ -61,23 +61,22 @@ const NftImage = styled.div`
   }
 `
 const Title = styled.div`
-  height: 68px;
+  height: 1.4em;
   padding: 0 24px;
   display: flex;
   align-items: center;
+  margin-bottom: .3em;
+  text-align: center;
 `
 
 const TitleText = styled.div`
   font-size: 18px;
-  line-height: 1.2;
   color: #431216;
   word-break: break-word;
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-clamp: 2;
-  display: flex;
-  align-items: center;
+  text-align: center;
 `
 
 const ItemSeperation = styled.div`
@@ -194,16 +193,16 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
       style={{ background: isDark ? '#0b334b' : '#0b334b' }}
     >
       <ItemTop>
-      <ItemMetaData style={{ color: isDark ? 'white' : 'white' }}>              
+        <ItemMetaData style={{ color: isDark ? 'white' : 'white' }}>
           <img
-              src="/images/svgs/vida.svg"
-              alt="token"
-              style={{ width: '18px', height: '18px' }}
-            />
-            &nbsp;&nbsp;
-            {nftMetaData}
+            src="/images/svgs/vida.svg"
+            alt="token"
+            style={{ width: '18px', height: '18px' }}
+          />
+          &nbsp;&nbsp;
+          {nftMetaData}
 
-          </ItemMetaData>
+        </ItemMetaData>
         <NftImageContainer>
 
           <div className="metal-frame-div">
@@ -212,6 +211,11 @@ const NftEachItem = ({ image, tokenId, rarity }) => {
           </div>
 
         </NftImageContainer>
+        <Title>
+          <TitleText style={{ color: 'white' }}>
+            Cow #{tokenId}
+          </TitleText>
+        </Title>
       </ItemTop>
 
       <ItemBottom >
