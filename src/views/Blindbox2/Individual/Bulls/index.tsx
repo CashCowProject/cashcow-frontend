@@ -7,6 +7,7 @@ import useTheme from 'hooks/useTheme'
 import BoxContainerComponent from './BoxContainerComponent'
 import BoxBuyDetailComponent from './BoxBuyDetailComponent'
 import BlindBoxDetailInfo from './BlindBoxDetailInfo'
+import ViewNFT from '../ViewNft'
 
 type boxParam = {
   index: string;
@@ -15,6 +16,9 @@ type boxParam = {
 const IndividualBulls = () => {
   const { index } = useParams<boxParam>();
   const { isDark } = useTheme();
+
+  const [isMinted, setIsMinted] = useState(false);
+  const [mintedNft, setMintedNft] = useState('');
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -132,10 +136,15 @@ const IndividualBulls = () => {
             <BoxContainerComponent boxTitle="Bulls" boxImage="nftindividuals/bulls.png"/>
           </BoxContainerLeft>
           <BoxContainerRight>
-            <BoxBuyDetailComponent />
+          <BoxBuyDetailComponent setIsMinted={setIsMinted} setMintedNft={setMintedNft} />
             <BlindBoxDetailInfo />
           </BoxContainerRight>
         </BoxDetailContainer>
+        <ViewNFT
+        isOpen={isMinted}
+        closeDialog={() => setIsMinted(false)}
+        nft={mintedNft}
+      />
       </Page>
     )
 }

@@ -50,7 +50,7 @@ const BuyNowBtnContainer = styled.div`
     margin-top: 40px;
 `
 
-const BoxBuyDetailComponent = () => {
+const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
 
     const { setLoading } = useContext(LoadingContext);
     const { isDark } = useTheme()
@@ -144,6 +144,8 @@ const BoxBuyDetailComponent = () => {
                     setMintedAmount(prev => prev + 1); 
                     setMintingState(true);
                     setLoading(false);
+                    setMintedNft(receipt);
+                    setIsMinted(true);
                     toast.success('Mint succeed');
                 })
         } catch (err: unknown) {

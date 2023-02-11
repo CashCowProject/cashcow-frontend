@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
@@ -9,6 +9,7 @@ import { PINATA_BASE_URI } from 'config/constants/nfts'
 import BoxContainerComponent from './components/BoxContainerComponent'
 import BoxBuyDetailComponent from './components/BoxBuyDetailComponent'
 import BlindBoxDetailInfo from './components/BlindBoxDetailInfo'
+import ViewNFT from './components/ViewNft'
 
 type boxParam = {
   index: string;
@@ -17,7 +18,10 @@ type boxParam = {
 const BlindboxDetail = () => {
   const { index } = useParams<boxParam>();
   const { isDark } = useTheme();
-  const [ breedsList, setBreedsList ] = useState<Array<any>>([]);
+  const [breedsList, setBreedsList] = useState<Array<any>>([]);
+
+  const [isMinted, setIsMinted] = useState(false);
+  const [mintedNft, setMintedNft] = useState([])
 
   const fetchBreeds = useCallback(async () => {
     const promises = breeds.map(async (item) => {
@@ -42,7 +46,7 @@ const BlindboxDetail = () => {
 
   useEffect(() => {
     fetchBreeds();
-  }, [fetchBreeds]);
+  }, []);
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -55,7 +59,7 @@ const BlindboxDetail = () => {
 
   const BoxDetailContainer = styled.div`
     background: ${isDark ? '#27262c' : 'white'};
-    ${isDark ? 
+    ${isDark ?
       "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
       : ""
     };
@@ -148,35 +152,36 @@ const BlindboxDetail = () => {
       text-transform: uppercase;
     }
   `
-    return (
+  return (
+    <>
       <StyledWrapper>
         <Page>
           <StyledHero>
-            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
-            Blind Box
+            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+              Blind Box
             </Heading>
           </StyledHero>
-          <Heading as="h1" size="no" color="primary" mb="20px" style={{color: isDark ? "white" : ''}}>
+          <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
             HappyCow Box
           </Heading>
           <BoxDetailContainer>
-            <GradientBack/>
+            <GradientBack />
             <BoxContainerLeft>
-              <BoxContainerComponent boxTitle="HappyCow" boxImage="misterybox360cow.low.gif"/>
+              <BoxContainerComponent boxTitle="HappyCow" boxImage="misterybox360cow.low.gif" />
             </BoxContainerLeft>
             <BoxContainerRight>
-              <BoxBuyDetailComponent />
+              <BoxBuyDetailComponent setIsMinted={setIsMinted} setMintedNft={setMintedNft} />
               <BlindBoxDetailInfo />
             </BoxContainerRight>
           </BoxDetailContainer>
-          <Heading as="h1" size="no" color="primary" mt="35px" mb="15px" style={{textAlign: "center", color : isDark ? 'white' : ''}}>
+          <Heading as="h1" size="no" color="primary" mt="35px" mb="15px" style={{ textAlign: "center", color: isDark ? 'white' : '' }}>
             HappyCows Breeds
           </Heading>
           <ItemContainer>
             {
               breedsList.map((item) => {
                 return (
-                  <ItemEachContainer key={item.image} style={{backgroundImage: `url('${item.image}')`}}>
+                  <ItemEachContainer key={item.image} style={{ backgroundImage: `url('${item.image}')` }}>
                     <span>{item.breed}</span>
                   </ItemEachContainer>
                 )
@@ -185,7 +190,13 @@ const BlindboxDetail = () => {
           </ItemContainer>
         </Page>
       </StyledWrapper>
-    )
+      <ViewNFT
+        isOpen={isMinted}
+        closeDialog={() => setIsMinted(false)}
+        nft={mintedNft}
+      />
+    </>
+  )
 }
 
 export default BlindboxDetail

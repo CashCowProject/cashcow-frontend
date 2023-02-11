@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
 import BoxContainerComponent from './BoxContainerComponent'
 import BoxBuyDetailComponent from './BoxBuyDetailComponent'
 import BlindBoxDetailInfo from './BlindBoxDetailInfo'
+import ViewNFT from '../ViewNft'
 
 type boxParam = {
   index: string;
@@ -15,6 +16,9 @@ type boxParam = {
 const IndividualCows = () => {
   const { index } = useParams<boxParam>();
   const { isDark } = useTheme();
+
+  const [isMinted, setIsMinted] = useState(false);
+  const [mintedNft, setMintedNft] = useState('');
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -27,7 +31,7 @@ const IndividualCows = () => {
 
   const BoxDetailContainer = styled.div`
     background: ${isDark ? 'rgb(11,51,75)' : 'rgb(11,51,75)'};
-    ${isDark ? 
+    ${isDark ?
       "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
       : ""
     };
@@ -111,33 +115,39 @@ const IndividualCows = () => {
       text-transform: uppercase;
     }
   `
-    return (
-      <Page style={{
-        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',}}
-      >
-        <StyledHero>
-          <Heading as="h1" size="lg" color="secondary" mb="20px" style={{color: isDark ? "white" : ''}}>
+  return (
+    <Page style={{
+      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <StyledHero>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
           Cows
-          </Heading>
-        </StyledHero>
-        <Heading as="h1" size="no" color="primary" mb="20px" style={{color: isDark ? "white" : ''}}>
-          CashCow Farm
         </Heading>
-        <BoxDetailContainer>
-          <GradientBack/>
-          <BoxContainerLeft>
-            <BoxContainerComponent boxImage="nftindividuals/cows.png"/>
-          </BoxContainerLeft>
-          <BoxContainerRight>
-            <BoxBuyDetailComponent />
-            <BlindBoxDetailInfo />
-          </BoxContainerRight>
-        </BoxDetailContainer>
-      </Page>
-    )
+      </StyledHero>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        CashCow Farm
+      </Heading>
+      <BoxDetailContainer>
+        <GradientBack />
+        <BoxContainerLeft>
+          <BoxContainerComponent boxImage="nftindividuals/cows.png" />
+        </BoxContainerLeft>
+        <BoxContainerRight>
+        <BoxBuyDetailComponent setIsMinted={setIsMinted} setMintedNft={setMintedNft} />
+          <BlindBoxDetailInfo />
+        </BoxContainerRight>
+      </BoxDetailContainer>
+      <ViewNFT
+        isOpen={isMinted}
+        closeDialog={() => setIsMinted(false)}
+        nft={mintedNft}
+      />
+    </Page>
+  )
 }
 
 export default IndividualCows

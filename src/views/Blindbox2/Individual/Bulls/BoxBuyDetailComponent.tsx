@@ -60,7 +60,7 @@ const AmountInput = styled.div`
     margin-right: 16px;
     width: 20%;
 `
-const BoxBuyDetailComponent = () => {
+const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
 
     const { setLoading } = useContext(LoadingContext);
     const { isDark } = useTheme()
@@ -134,6 +134,8 @@ const BoxBuyDetailComponent = () => {
                     console.log(receipt);
                     setMintingState(true);
                     setLoading(false);
+                    setMintedNft('BULL');
+                    setIsMinted(true);
                     toast.success('Mint succeed');
                 })
         } catch (err: unknown) {
