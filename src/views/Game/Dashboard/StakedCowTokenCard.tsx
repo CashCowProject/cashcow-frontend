@@ -10,7 +10,6 @@ export interface CardInterface {
 
 const Container = styled.div`
     width: 100%;
-    height: 150px;
     overflow: hidden;
     position: relative;
     border-radius: 32px;
@@ -34,29 +33,29 @@ const ImageContainer = styled.div`
 const TitleContainer = styled.div`
     width: 100%;
     margin-bottom: 10px;
-    font-size: 1.5vw;
+    font-size: 1.4em;
     font-weight: 600;
     line-height: 1.2;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
+    // @media (max-width: 768px) {
+    //     font-size: 5vw;
+    // }
       
 `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 1.5vw;
+    font-size: 1.4em;
     font-weight: 5000;
     line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
+    // @media (max-width: 768px) {
+    //     font-size: 5vw;
+    // }
 `
 
 const StakedCowTokenCard = ({title, value, image}: CardInterface) => {

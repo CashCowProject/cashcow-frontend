@@ -43,7 +43,7 @@ const Title = styled.div`
     line-height: 1.5;
     text-align: center;
     @media (max-width: 768px) {
-        font-size: 13px;
+        font-size: 1.1em;
         font-weight: 100;
         line-height: 1.0;
     }
@@ -54,7 +54,8 @@ const Value = styled.div`
     font-weight: 1000;
     text-align: center;
     @media (max-width: 768px) {
-        font-size: 13px;
+        margin-top: 4px;
+        font-size: 1.1em;
         font-weight: 100;
 
     }

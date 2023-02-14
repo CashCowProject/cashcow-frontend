@@ -123,7 +123,8 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
             for(let i = 0 ; i < amount ; i++) {
                 let _temp = Math.floor(Math.random() * 1000);
                 seed.push(_temp);
-            }               
+            }
+            
             await saleContract.methods
                 .buyCommonBull(amount, seed)
                 .send({from: account})

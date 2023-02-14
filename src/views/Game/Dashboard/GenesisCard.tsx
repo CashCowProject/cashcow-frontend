@@ -20,19 +20,19 @@ const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
     margin-bottom: 16px;
-    font-size: 1.6vw;
+    font-size: 1.4em;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
+    // @media (max-width: 768px) {
+    //     font-size: 5vw;
+    // }
     `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 1.6vw;
+    font-size: 1.4em;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;

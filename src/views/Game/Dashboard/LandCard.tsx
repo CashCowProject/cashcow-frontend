@@ -16,7 +16,7 @@ const web3 = new Web3(Web3.givenProvider);
 
 const Container = styled.div`
     width: 100%;
-    height: 150px;
+    // height: 150px;
     overflow: hidden;
     position: relative;
     border-radius: 32px;
@@ -40,27 +40,27 @@ const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
     margin-bottom: 5px;
-    font-size: 1.5vw;
+    font-size: 1.4em;
     font-weight: 600;
     line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
+    // @media (max-width: 768px) {
+    //     font-size: 5vw;
+    // }
 `
 const ValueContainer = styled.div`
     width: 100%;
-    font-size: 1.5vw;
+    font-size: 1.4em;
     font-weight: 500;
     line-height: 1.2;
     display: flex;
     align-items: center;
     justify-content: center;
-    @media (max-width: 768px) {
-        font-size: 5vw;
-    }
+    // @media (max-width: 768px) {
+    //     font-size: 5vw;
+    // }
     `
 const ActionContainer = styled.div`
     margin-left: 16px;
