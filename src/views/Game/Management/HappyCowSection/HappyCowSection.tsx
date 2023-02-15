@@ -15,20 +15,24 @@ const Container = styled.div`
     border-radius: 32px;
     background-color: rgb(11,51,75);
     color: white;
-    `
+    @media (max-width: 768px) {
+        margin-left: 5%;
+        width: 90%;
+    }
+`
 
 const TitleContainer = styled.div`
     width: 100%;
     margin-top: 16px;
     margin-bottom: 16px;
-    font-size: 1.6vw;
+    font-size: 1.5em;
     font-weight: 1000;
     line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
     @media (max-width: 768px) {
-        font-size: 5vw;
+        font-size: 1.7em;
     }
     `
 const ValueContainer = styled.div`

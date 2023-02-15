@@ -27,6 +27,11 @@ const Container = styled.div`
     background-color: rgb(11,51,75);
     color: white;
     display: flex;
+    @media (max-width: 768px) {
+        margin-top: 1em;
+        margin-left: 5%;
+        width: 90%;
+    }
 `
 const ContentContainer = styled.div`
     display: flex;

@@ -131,6 +131,15 @@
     text-align: center;
 }
 
+@media (max-width: 768px) {
+    .individual-happy-cow-box {
+        width: 40%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+}
+
+
 .individual-happy-cow-image {
     padding: 15% 10% 10% 10%;
     transition: all 0.5s;
@@ -214,6 +223,14 @@
     /* height: 100%; */
     border:1px solid white;
     text-align: center;
+}
+
+@media (max-width: 768px) {
+    .individual-genesis-box {
+        width: 40%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
 }
 
 .individual-genesis-image {

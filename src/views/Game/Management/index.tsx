@@ -173,7 +173,6 @@ const FarmManagement = () => {
     align-items: center;
     @media (max-width: 768px) {
       height: 10%;
-      width: 90%;
       min-width: 100px;
       justify-content: space-around;
     }
@@ -197,6 +196,33 @@ const FarmManagement = () => {
       margin-left:5px;
       min-width: 10px;
     }
+`
+
+  const FlexLayoutCards = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  & > * {
+    min-width: 200px;
+    max-width: 30%;
+    width: 100%;
+    margin: 0 8px;
+    margin-bottom: 32px;
+  }
+`
+
+  const MobileHappyCowsContainer = styled.div`
+    margin-top: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-left: 5%;
+    width: 90%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 32px;
+    background-color: rgb(11,51,75);
+    color: white;
+    text-align: center;
 `
 
   const nftIndividualData = [
@@ -237,7 +263,7 @@ const FarmManagement = () => {
         <HomeButton onClick={e => history.push('/farm/map')} />
       </StyledHero>
 
-      <FlexLayout style={{ minWidth: '150px'}}>
+      <FlexLayoutCards>
         {nftIndividualData.map((item) =>
           <div className="cards-mapper">
             <img
@@ -247,18 +273,41 @@ const FarmManagement = () => {
             />
           </div>
         )}
-      </FlexLayout>
+      </FlexLayoutCards>
 
-      <div className="happy-cow-nft-box">
-        <div className='happy-cow-nft'>
-          <div className='happy-cow-nft-box-left'>
-            <HappyCowSection
-              title='Happy Cow'
-              value={happyCowStatus}
-            />
+      {window.innerWidth > 767 ?
+        <>
+          <div className="happy-cow-nft-box">
+            <div className='happy-cow-nft'>
+              <div className='happy-cow-nft-box-left'>
+                <HappyCowSection
+                  title='Happy Cow'
+                  value={happyCowStatus}
+                />
+              </div>
+              <div className='happy-cow-nft-box-right'>
+                {happyCowOriginalBreeds.map((item, i) =>
+                  <EachHappyCowCard
+                    title={item.name}
+                    index={i}
+                    userHappyCow={(happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId']))[i]}
+                    userStakedHappyCows={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])}
+                    fetchUserHappyCows={fetchUserHappyCows}
+                    happyCowStakedBreeds={happyCowStakedBreeds}
+                  />
+                )}
+              </div>
+            </div>
           </div>
-          <div className='happy-cow-nft-box-right'>
-            {happyCowOriginalBreeds.map((item, i) =>
+        </>
+        :
+        <>
+          <HappyCowSection
+            title='Happy Cow'
+            value={happyCowStatus}
+          />
+          <MobileHappyCowsContainer>
+            {happyCowOriginalBreeds.map((item, i) => <>
               <EachHappyCowCard
                 title={item.name}
                 index={i}
@@ -267,48 +316,86 @@ const FarmManagement = () => {
                 fetchUserHappyCows={fetchUserHappyCows}
                 happyCowStakedBreeds={happyCowStakedBreeds}
               />
+              <br />
+            </>
             )}
+          </MobileHappyCowsContainer>
+
+        </>}
+
+      {window.innerWidth > 767 ?
+        <>
+
+          <div className="genesis-nft-box">
+            <div className='genesis-nft'>
+              <div className='genesis-nft-box-left'>
+
+                <GenesisSection />
+
+                {loadingGenesis ? <div className='loading-box'>
+                  <TailSpin
+                    height="80"
+                    width="80"
+                    color="#334B65"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div> : <>
+                  <EachGenesisCard
+                    genesisToken={genesisToken}
+                    genesisTokenId={genesisTokenId}
+                    hasGenesisStaked={hasGenesisStaked}
+                    fetchUserGenesis={fetchUserGenesis}
+                  />
+                </>}
+
+              </div>
+              <div className='genesis-nft-box-right'>
+                <StaticCard
+                  title='$COW In Wallet'
+                  value={0}
+                  image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+                />
+
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+        :
+        <>
+          <GenesisSection />
+          <MobileHappyCowsContainer>
 
-
-      <div className="genesis-nft-box">
-        <div className='genesis-nft'>
-          <div className='genesis-nft-box-left'>
-
-            <GenesisSection />
-
-            {loadingGenesis ? <div className='loading-box'>
-              <TailSpin
-                height="80"
-                width="80"
-                color="#334B65"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div> : <>
-              <EachGenesisCard
-                genesisToken={genesisToken}
-                genesisTokenId={genesisTokenId}
-                hasGenesisStaked={hasGenesisStaked}
-                fetchUserGenesis={fetchUserGenesis}
-              />
-            </>}
-
-          </div>
-          <div className='genesis-nft-box-right'>
-            <StaticCard
-              title='$COW In Wallet'
-              value={0}
-              image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+          {loadingGenesis ? <div className='loading-box'>
+            <TailSpin
+              height="80"
+              width="80"
+              color="#334B65"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
             />
-          </div>
-        </div>
-      </div>
+          </div> : <>
+            <EachGenesisCard
+              genesisToken={genesisToken}
+              genesisTokenId={genesisTokenId}
+              hasGenesisStaked={hasGenesisStaked}
+              fetchUserGenesis={fetchUserGenesis}
+            />
+          </>}
+          </MobileHappyCowsContainer>
+          <StaticCard
+                  title='$COW In Wallet'
+                  value={0}
+                  image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+                />
+
+        </>}
 
     </Page>
   )

@@ -10,6 +10,9 @@ const ModalTitle = styled.div`
 color: white;
 font-size: 1.1em;
 margin-bottom: 10px;
+@media (max-width: 768px) {
+  font-size: 1.5em;
+}
 `
 
 const CostWarning = styled.div`
@@ -18,6 +21,9 @@ margin-top: 15px;
 margin-bottom: 5px;
 font-size: 0.8em;
 border-radius: 10px;
+@media (max-width: 768px) {
+  font-size: 1.1em;
+}
 `
 
 const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow }) => {
@@ -46,9 +52,9 @@ const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow }) => {
           bottom: 'auto',
           marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
-          width: "25vw",
-          maxWidth: '25vw',
-          minWidth: '25vw',
+          width: '80vw',
+          maxWidth: '450px',
+          minWidth: '320px',
           borderRadius: '15px',
           background: '#27262c',
           zindex: 15,

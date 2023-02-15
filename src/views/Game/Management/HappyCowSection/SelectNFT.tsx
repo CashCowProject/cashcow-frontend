@@ -56,7 +56,7 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowSt
 
   const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263';
   const temporalFarmingContract = '0x7335A5c716E512FdD13667f04118B162e80345A9';
-  
+
   const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
   const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
   const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
@@ -179,7 +179,8 @@ const SelectNFT = ({ isOpen, closeDialog, fetchOriginalUserHappyCows, happyCowSt
           /></> : <>
           {_.map(userHappyCows, nft => (
             <div
-              className={"each-happy-cow-image-container"}>
+              className={"each-happy-cow-image-container"}
+            >
               {happyCowStakedBreeds.includes(nft.breed) ? <>
                 <img
                   src={nft.image}

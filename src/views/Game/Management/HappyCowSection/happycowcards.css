@@ -12,6 +12,12 @@
     -webkit-text-stroke-color: black;
 }
 
+@media (max-width: 748px) {
+    .each-happy-cow-image-container {
+        min-width: 55%;
+    }
+}
+
 .each-happy-cow-image-container:hover {
     transform: scale(0.95);
 }
