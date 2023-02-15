@@ -1,5 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import Web3 from "web3";
+import { fromWei, AbiItem } from "web3-utils";
+import NftFarmingV2 from 'config/abi/NftFarmingV2.json'
+import { getNftFarmingAddress } from 'utils/addressHelpers'
+import { useWallet } from '@binance-chain/bsc-use-wallet'
 
 const Container = styled.div`
     width: 50%;
@@ -47,16 +52,48 @@ const StatusContainer = styled.div`
     padding-top: 4px;
     margin-left: 8px;
     `
+
+const web3 = new Web3(Web3.givenProvider);
+
 const GenesisSection = () => {
-    
+
+    useEffect(() => {
+        fetchUserGenesis();
+    }, [])
+
+    const { account, connect } = useWallet()
+    const [genesisNftStatus, setGenesisNftStatus] = useState(true)
+
+    const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
+
+    const fetchUserGenesis = async () => {
+        try {
+            const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call();
+            if (userGenesis.length > 0) {
+                console.log('Genesis Tokens ', userGenesis);
+                setGenesisNftStatus(true);
+            } else {
+                console.log('No Genesis Staked');
+                setGenesisNftStatus(false);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
-        <Container>    
+        <Container>
             <TitleContainer>
                 Genesis NFT
             </TitleContainer>
             <ValueContainer>
                 <StatusContainer>
-                    <img src="/images/farms/management/check.svg" alt="" style={{width: "50px",  height: "50px"}}/>
+                    {genesisNftStatus ?
+                        <img src="/images/svgs/check.svg" alt="" style={{ width: "50px", height: "50px", marginRight: '8px' }} />
+                        :
+                        <img src="/images/svgs/none.svg" alt="" style={{ width: "50px", height: "50px", marginRight: '8px' }} />
+                    }
+
                 </StatusContainer>
             </ValueContainer>
         </Container>
