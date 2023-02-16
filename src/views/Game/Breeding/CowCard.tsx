@@ -15,7 +15,9 @@ const Container = styled.div`
     max-width: 200px;
     overflow: hidden;
     position: relative;
-    
+    @media (max-width: 768px) {
+        margin: 0 auto;
+    }
 `
 
 const TitleContainer = styled.div`

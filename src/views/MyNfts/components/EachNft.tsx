@@ -26,12 +26,19 @@ import landTypes from 'config/constants/landTypes'
 const NftEachItemContainer = styled.div`
   cursor: pointer;
   flex: 1;
+  // flex-wrap: wrap;
+  min-width: 200px;
+  max-width: 300px;
   margin-right: 15px;
   margin-bottom: 15px;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
   position: relative;
+  // margin: 0 auto;
+  @media (max-width: 768px) {
+    // margin: 0 auto;
+}
 `
 const ItemTop = styled.div`
   paddingtop: 2px;

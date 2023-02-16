@@ -28,7 +28,7 @@ const StyledHero = styled.div`
     margin-bottom: 20px;
     background-color: rgb(11,51,75);
     padding: 10px;
-    // width: 100%;
+    width: 100%;
     height: 30%;
     display: flex;
     overflow: hidden;
@@ -37,9 +37,7 @@ const StyledHero = styled.div`
     justify-content: space-around;
     @media (max-width: 768px) {
       height: 10%;
-      width: 90vw;
       min-width: 10px;
-      justify-content: space-around;
     }
 `
 const HomeButton = styled.div`
@@ -78,7 +76,7 @@ const BreedingContainer = styled.div`
   justify-content: center;
   flex-wrap: nowrap;
   width: 60%;
-  margin: auto;
+  margin: 0 auto;
   
   & > * {
     min-width: 270px;
@@ -87,8 +85,12 @@ const BreedingContainer = styled.div`
     margin: 0 8px;
     margin-bottom: 32px;
   }
+
   @media (max-width: 768px) {
+    width: 100%;
     flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
   }
 `
 const ActionContainer = styled.div`
@@ -107,6 +109,7 @@ const ActionContainer = styled.div`
   border-radius: 20px;
   @media (max-width: 768px) {
     min-width: 230px;
+    margin: 0 auto;
   }
 `
 const ImageContainer = styled.div`
@@ -245,6 +248,7 @@ const FarmBreeding = () => {
       <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
         TOTAL BREEDING FEES : 90 MILK
       </Heading>
+      
       <BreedingContainer>
         <CowCard
           selectTokenId={setSelectedCowTokenId}

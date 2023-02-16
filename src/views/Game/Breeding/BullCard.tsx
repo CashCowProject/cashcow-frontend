@@ -14,7 +14,10 @@ import { MDBMask, MDBView, MDBContainer } from 'mdbreact';
 const Container = styled.div`
     max-width: 200px;
     overflow: hidden;
-    position: relative;   
+    position: relative;
+    @media (max-width: 768px) {
+        margin: 2em auto;
+    }
 `
 const TitleContainer = styled.div`
     width: 100%;

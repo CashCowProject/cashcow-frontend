@@ -37,9 +37,9 @@ const SelectNFT = ({isOpen, closeDialog, addNFTHandler, index}) => {
           bottom: 'auto',
           marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
-          width: "70vw",
-          maxWidth: '70vw',
-          minWidth: '70vw',
+          width: '70vw',
+          maxWidth: '1000px',
+          minWidth: '320px',
           borderRadius: '15px',
           background: isDark ? '#27262c' : 'white',
           zindex: 15,
@@ -58,7 +58,7 @@ const SelectNFT = ({isOpen, closeDialog, addNFTHandler, index}) => {
           </div>
       </div>
       
-      <div style={{display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', maxHeight: "400px", overflow: 'auto' }}>
         {_.map(myNFTS, nft=>(
           <StakeCandidate data={nft} closeRequest={closeDialog} index={index}/>
         ))}

@@ -74,10 +74,14 @@ const StyledHero = styled.div`
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 20px;
   display: flex;
+  flex-wrap: wrap;
 `
 const LeftHeader = styled.div`
   display: flex;
-  width: 43%;
+  width: 20%;
+  @media (max-width: 893px) {
+    width: 100%;
+  }
 `
 const Blank = styled.div`
   display: flex;
@@ -86,13 +90,50 @@ const Blank = styled.div`
 const RightHeader = styled.div`
   display: flex;
   // flex: 3;
-  width: 150px;
+  flex-wrap: wrap;
   justify-content: end;
+  margin-bottom: 1em;
+  @media (max-width: 893px) {
+    width: 100%;
+  }
 `
 const NftItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 0 -15px;
+`
+
+const NftTypeFilter = styled.div`
+  display: flex;
+  @media (max-width: 893px) {
+    margin-bottom: .6em;
+    width: 100%;
+  }
+`
+
+const NftRarityFilter = styled.div`
+display: flex;
+@media (max-width: 893px) {
+  margin-bottom: .6em;
+  width: 100%;
+}
+`
+
+const NftClassFilter = styled.div`
+display: flex;
+@media (max-width: 893px) {
+  margin-bottom: .6em;
+  width: 100%;
+}
+`
+
+const NftResetFilterButton = styled.div`
+display: flex;
+@media (max-width: 893px) {
+  margin-bottom: .6em;
+  width: 100%;
+}
 `
 
 const web3 = new Web3(Web3.givenProvider)
@@ -288,37 +329,42 @@ const MyNfts = () => {
         <Blank />
         <RightHeader >
 
-          <Select
-            options={filterByCollection}
-            onOptionChange={(option) => {
-              console.log('From Select: ', option)
-              setCollectionFilter(option);
-              filterHandler(option, breedFilter, rarityFilter);
-            }
-            }
-            style={{
-              marginRight: '15px',
-              background: isDark ? '#27262c' : '',
-              // pointerEvents: collectionFilter.value.field != "All" ? 'none' : 'auto'
-            }}
-          />
+          <NftTypeFilter>
+            <Select
+              options={filterByCollection}
+              onOptionChange={(option) => {
+                console.log('From Select: ', option)
+                setCollectionFilter(option);
+                filterHandler(option, breedFilter, rarityFilter);
+              }}
+              style={{
+                marginRight: '15px',
+                background: isDark ? '#27262c' : '',
+                // pointerEvents: collectionFilter.value.field != "All" ? 'none' : 'auto'
+              }}
+            />
+          </NftTypeFilter>
 
-          <Select
-            options={filterByRarity}
-            onOptionChange={(option) => {
-              setRarityFilter(option)
-              filterHandler(collectionFilter, breedFilter, option);
-            }
-            }
-            style={{
-              marginRight: '15px',
-              background: isDark ? '#27262c' : '',
-              // pointerEvents: rarityFilter.value.field != "All" ? 'none' : 'auto'
-            }}
-          />
+
+          <NftRarityFilter>
+            <Select
+              options={filterByRarity}
+              onOptionChange={(option) => {
+                setRarityFilter(option)
+                filterHandler(collectionFilter, breedFilter, option);
+              }
+              }
+              style={{
+                marginRight: '15px',
+                background: isDark ? '#27262c' : '',
+                // pointerEvents: rarityFilter.value.field != "All" ? 'none' : 'auto'
+              }}
+            />
+          </NftRarityFilter>
+
 
           {collectionFilter.value.field === "All" ? <></> : <>
-            {collectionFilter.value.collection === getLandNftAddress() ? <>
+            {collectionFilter.value.collection === getLandNftAddress() ? <NftClassFilter>
               <Select
                 options={filterByType}
                 onOptionChange={(option) => {
@@ -326,9 +372,12 @@ const MyNfts = () => {
                   filterHandler(collectionFilter, option, rarityFilter);
                 }
                 }
-                style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+                style={{
+                  marginRight: '15px',
+                  background: isDark ? '#27262c' : '',
+                }}
               />
-            </> : <>
+            </NftClassFilter> : <NftClassFilter>
 
               <Select
                 options={filterByBreed}
@@ -337,18 +386,28 @@ const MyNfts = () => {
                   filterHandler(collectionFilter, option, rarityFilter);
                 }
                 }
-                style={{ marginRight: '15px', background: isDark ? '#27262c' : '' }}
+                style={{
+                  marginRight: '15px',
+                  background: isDark ? '#27262c' : '',
+                }}
               />
 
-            </>}
+            </NftClassFilter>
+            }
           </>}
 
-          <Button
-            onClick={handleFilterReset}
-            style={{ height: '2.5em' }}
-          >
-            Reset Filters
-          </Button>
+          <NftResetFilterButton>
+            <Button
+              onClick={handleFilterReset}
+              style={{
+                height: '2.5em',
+                width: '96%'
+              }}
+            >
+              Reset Filters
+            </Button>
+          </NftResetFilterButton>
+
 
         </RightHeader>
       </StyledHero>
@@ -359,7 +418,7 @@ const MyNfts = () => {
             <Link
               key={EachMyToken.tokenId + "_" + index}
               to={`/myNFTs/${EachMyToken.tokenId}/${EachMyToken.collection}`}
-              className="LinkItemContainer"
+              // className="LinkItemContainer"
               onClick={() => { localStorage.setItem("collection", EachMyToken.collection); localStorage.setItem("marketItemId", EachMyToken.itemId) }}
             >
               <EachNft
