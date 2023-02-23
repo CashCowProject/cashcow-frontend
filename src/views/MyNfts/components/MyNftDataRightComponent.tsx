@@ -106,7 +106,9 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
                 href={`https://bscscan.com/address/${account}`}
                 style={{ textDecoration: 'underline', color: isDark ? 'white' : 'white' }}
               >
-                {account}
+                {account?.substring(0, 5)}
+                ....
+                {account?.substring(account?.length - 5, account?.length)}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>
@@ -119,7 +121,9 @@ const MyNftDataRightComponent = ({ myToken }: MyNftDataRightComponentInterface) 
                 href={`https://bscscan.com/address/${myToken.collection}`}
                 style={{ textDecoration: 'underline', color: isDark ? 'white' : 'white' }}
               >
-                {myToken.collection}
+                {myToken?.collection?.substring(0, 5)}
+                ....
+                {myToken?.collection?.substring(myToken?.collection?.length - 5, myToken?.collection?.length)}
               </a>
             </NftOnChainLinkStyle>
           </NftOnChainEachData>

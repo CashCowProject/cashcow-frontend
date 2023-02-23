@@ -112,6 +112,9 @@ const NftSalePriceDetail = styled.div`
 `
 const BuyNowBtnContainer = styled.div`
   margin-top: 24px;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `
 
 const ItemValueToken = styled.div`

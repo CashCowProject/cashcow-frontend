@@ -19,7 +19,40 @@ const NftOnChainDataContainer = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     max-width: unset;
+    align-items: center;
   }
+`
+
+const Parent = styled.div`
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 80%;
+  max-width: 300px;
+  margin-top: 3.5vh;
+  margin-left: 10%;
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-bottom: 3em;
+  }
+ `
+
+const Image1 = styled.img`
+  position: relative;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  max-width: 300px;
+  top: 3.5vh;
+  @media (max-width: 768px) {
+    top: 3.5vh;
+  }
+`
+
+const Image2 = styled.img` 
+  position: absolute;
+  top: 0px;
+  left: 0px;
 `
 
 const web3 = new Web3(Web3.givenProvider)
@@ -69,10 +102,10 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
   return (
     <NftOnChainDataContainer>
 
-      <div className="parent">
-        <img className="image1" src={imageUrl} />
-        <img className="image2" src="/images/nfts/marcometal.png" />
-      </div>
+      <Parent>
+        <Image1 src={imageUrl} />
+        <Image2 src="/images/nfts/marcometal.png" />
+      </Parent>
 
     </NftOnChainDataContainer>
   )
