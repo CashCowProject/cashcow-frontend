@@ -95,9 +95,11 @@ const NftHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [myNfts, setMyNfts] = useState([]);
   const { setLoading } = useContext(LoadingContext);
+
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
+  
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
 
   const farmActionHandler = async (_tokenId: string) => {

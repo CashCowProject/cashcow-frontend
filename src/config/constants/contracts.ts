@@ -56,31 +56,33 @@ export default {
   },
   landnft: {
     56: '',
-    97: '0x91d06D792dcafEeab4714305CeAFF2bAa4AFd9b1'
+    // V1: Testnet
+    97: '0xDC12d7310fe9C6C841832fc5292739ab56CCca6f'
   },
   cownft: {
     56: '',
-    // 97: '0x4973b26663DF2cFD22f5Ce7B05Aa8d41ACb5CA24'
-    97:'0x09456F2341f0aa8f05E5d5f6CFFd67610f2F6e18'
+    // V1: Testnet
+    97:'0xb69D1b875F112b27c8e0696aE24E0576eB38D554'
   },
   bullnft: {
     56: '',
-    97: '0x5C4D9D3e26345728e9077A9c6Db83189070f510E'
+    // V1: Testnet
+    97: '0x3f7Da59Fe8927915620c6322A808afDF2f6aC678'
   },
   nftminter: {
     56: '',
-    97: '0x2F2ec58267983c8f56f893CD4c74610476Cd009B'
+    // V1: Testnet
+    97: '0x9D41862Ba3EAA3AeC8F0913FA8Cd153313689A0f'
   },
   nftsale: {
     56: '',
-    // 97: '0xC53499b7b8DD917D5F29B83EBF8472E458dAa429'
-    97: '0xd9136D92dF83F723659ba835660Ce8AECAF85bFf'
+    // V1: Testnet
+    97: '0xa908C9f54D35839B8eBC7ea5245ffE589666eF69'
   },
   nftfarming: {
     56: '',
-    // 97: '0xe5982E6D3237F462795d08Ab75F28d11EDD7F6Db'
-    97: '0x066F150502C8f8e73AFECd5D5710F12B0d9af269'
-    // 97: '0xedF36e6CA83b2C4fbb1A36764efB62115DDe3F48'
+    // V1: Testnet
+    97: '0x9Bb97c6d302e79833fb1535BEd2031247cbBcb94'
     // 100000000000000000 = milkPerBlock
     // 10k lp
   },
