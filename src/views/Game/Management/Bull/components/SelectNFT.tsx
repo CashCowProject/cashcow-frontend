@@ -111,7 +111,7 @@ const SelectNFT = ({isOpen, closeDialog, myNfts, actionHandler}) => {
           <ItemTop>
             <ItemMetaData>
               <img
-                src="/images/svgs/vida.svg"
+                src="/images/svgs/relojgreen.svg"
                 alt="token"
                 style={{ width: '18px', height: '18px' }}
               />

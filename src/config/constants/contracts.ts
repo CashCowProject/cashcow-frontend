@@ -57,6 +57,7 @@ export default {
     56: '',
     // V1: Testnet
     97: '0xa6fC9950810EB96a89fb81F31Fd9071A1d412ce5'
+    // BASEURI: https://ipfs.io/ipfs/QmXuQuyznCjvmGzucoisDKRYNFcWYyKX2W3rSSdMhBo8yb/
   },
   cownft: {
     56: '',
@@ -67,6 +68,7 @@ export default {
     56: '',
     // V1: Testnet
     97: '0x0d2EA58896e61F6D30Db625fFA68B1a5Fc7bC95b'
+    // BASEURI: https://ipfs.io/ipfs/QmNVyTfYTATb24hedYyRwX4zoNywTkKCwXbUAqbNxooDhd/
   },
   nftminter: {
     56: '',

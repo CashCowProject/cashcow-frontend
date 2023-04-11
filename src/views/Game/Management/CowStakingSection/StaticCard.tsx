@@ -122,7 +122,7 @@ const StaticCard = ({ title, value, image }: CardInterface) => {
             if (account) {
                 const userCowBalance = await cowContract.methods.balanceOf(account).call({ from: account });
                 console.log(userCowBalance / 10 ** 9)
-                setCowBalance((userCowBalance / 10 ** 9).toFixed(1));
+                setCowBalance((Math.floor(userCowBalance / 10 ** 9)).toFixed(0));
                 console.log('COW in wallet: ', (userCowBalance / 10 ** 18).toFixed(1))
             }
         } catch (e) {
@@ -136,7 +136,7 @@ const StaticCard = ({ title, value, image }: CardInterface) => {
             if (account) {
                 const userCowStaked = await farmingContract.methods.stakedCowOf(account).call({ from: account });
                 console.log(userCowStaked);
-                setCowStaked((userCowStaked / 10 ** 9).toFixed(1));
+                setCowStaked((Math.floor(userCowStaked / 10 ** 9)).toFixed(0));
             }
         } catch (e) {
             console.log(e)
@@ -151,10 +151,18 @@ const StaticCard = ({ title, value, image }: CardInterface) => {
             console.log('Staking cow...')
             setLoading(true);
             setIsOpen(false);
+            const txnAmount = (parseInt(val) * 10 ** 9).toFixed(0);
             try {
                 if (account) {
-                    await cowContract.methods.approve(getNftFarmingAddress(), val * (10 ** 9)).send({ from: account })
-                    await farmingContract.methods.depositCowTokens(val * (10 ** 9)).send({ from: account })
+                    const allowance = await cowContract.methods.allowance(account, getNftFarmingAddress()).call()
+                    console.log("Allowance ", allowance)
+                    console.log("Depositing ", txnAmount)
+                    if (allowance < txnAmount) {
+                        console.log("Falta")
+                        const approval = await cowContract.methods.approve(getNftFarmingAddress(), txnAmount).send({ from: account })
+                        console.log("Approval ", approval)
+                    }
+                    const tx = await farmingContract.methods.depositCowTokens(txnAmount).send({ from: account })
                     await initData();
                 }
             } catch (e) {

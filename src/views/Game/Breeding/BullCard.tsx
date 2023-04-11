@@ -10,6 +10,7 @@ import Web3 from 'web3'
 import { getBullNftAddress, getNftBreedingAddress, getNftFarmingAddress } from 'utils/addressHelpers'
 import { CATTLE_RARITY, BULL_BREED, CASH_BULLNFT_IMAGE_BASEURI } from "config/constants/nfts";
 import { MDBMask, MDBView, MDBContainer } from 'mdbreact';
+import { SelectBullCard } from './SelectBullCard'
 
 const Container = styled.div`
     max-width: 200px;
@@ -68,7 +69,7 @@ const ModalNftsContainer = styled.div`
     }
     `
 const NftItemContainer = styled.div`
-`    
+`
 const chainId = process.env.REACT_APP_CHAIN_ID
 const web3 = new Web3(Web3.givenProvider)
 
@@ -78,9 +79,9 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
     const { isDark } = useTheme();
     const { account } = useWallet()
     const [selectedNfts, setSelectedNfts] = useState([])
-    const [selectedImage, setTokenImage ] = useState('');
+    const [selectedImage, setTokenImage] = useState('');
 
-    const handleSelectNft = (tid : any, imageUrl: string) => {
+    const handleSelectNft = (tid: any, imageUrl: string) => {
         setModalOpen(false)
         setSelectedTokenId(tid)
         setTokenImage(imageUrl);
@@ -96,7 +97,7 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
 
     const fetchNftItems = useCallback(async () => {
 
-        const tokenIds = await farmingContract.methods.breedingBullTokenIdsOf(account).call({from: account})
+        const tokenIds = await farmingContract.methods.breedingBullTokenIdsOf(account).call({ from: account })
         console.log(tokenIds)
         const promises = []
         for (let i = 0; i < tokenIds.length; i++) {
@@ -111,7 +112,8 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
                 tokenId: tokenIds[i],
                 rarity: attrs[i].rarity,
                 breed: attrs[i].breed,
-                image: CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attrs[i].rarity)] + "-" + BULL_BREED[parseInt(attrs[i].breed)] + ".png"
+                image: CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attrs[i].rarity)] + "-" + BULL_BREED[parseInt(attrs[i].breed)] + ".png",
+                nftMetaData: await fetchBullRecoveryTime(tokenIds[i])
             };
             filteredItems.push(nftItem);
         }
@@ -119,24 +121,46 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
         setSelectedTokenId(0)
     }, [account, nftContract, updateFlag])
 
+    const fetchBullRecoveryTime = async (bullID) => {
+        console.log('Fetching recuperation time for bull: ', bullID)
+
+        const currentTimestamp = new Date().getTime() / 1000;
+        const maxRecoveryTime = 1080 * 60 * 60;
+        const maxAge = 730 * 24 * 60 * 60;
+
+        const res = await nftContract.methods.attrOf(bullID).call({ from: account })
+
+        const bullAge = currentTimestamp - res.birth;
+
+        const bullBreed = res.breed;
+        const bullRarity = parseInt(res.rarity);
+
+        const baseRecoveryTimes = [432000, 648000, 1080000, 1728000, 2592000]
+        let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+
+        console.log('>>>>> ', bullRecoveryTime)
+        return bullRecoveryTime.toFixed(0);
+    }
+
+
     useEffect(() => {
         fetchNftItems()
     }, [account, nftContract, updateFlag])
     return (
         <Container>
             <TitleContainer>
-                <MDBContainer className = "mt-1">
-                    {selectedTokenId == 0?
+                <MDBContainer className="mt-1">
+                    {selectedTokenId == 0 ?
                         <MDBView>
-                          < img src="/images/breeding/marcometal.png" alt="" style={{position:"relative", zIndex:"1", margin:"0 auto", width: "200px",  height: "200px"}}/>
-                         <img src="/images/svgs/masculino.svg" alt="" style={{position:"absolute", zIndex:"3", bottom:"90px", left:"25px", width: "140px",  height: "140px"}}/>
-                         <img src="/images/breeding/rejilla1.png" alt="" style={{margin:"5px", width: "200px",  height: "50px"}}/>
+                            < img src="/images/breeding/marcometal.png" alt="" style={{ position: "relative", zIndex: "1", margin: "0 auto", width: "200px", height: "200px" }} />
+                            <img src="/images/svgs/masculino.svg" alt="" style={{ position: "absolute", zIndex: "3", bottom: "90px", left: "25px", width: "140px", height: "140px" }} />
+                            <img src="/images/breeding/rejilla1.png" alt="" style={{ margin: "5px", width: "200px", height: "50px" }} />
 
                         </MDBView>
                         :
                         <MDBView rounded>
-                            <img src={selectedImage} alt="" style={{width: "200px",  height: "180px", borderRadius: '75px'}}/>
-                            <MDBMask className = 'flex-center' >
+                            <img src={selectedImage} alt="" style={{ width: "200px", height: "180px", borderRadius: '75px' }} />
+                            <MDBMask className='flex-center' >
                                 <img src="/images/breeding/marcometal.png" alt="" />
                             </MDBMask>
                         </MDBView>
@@ -145,13 +169,13 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
             </TitleContainer>
             <ActionContainer onClick={(e) => setModalOpen(true)}>
                 {selectedTokenId === 0 ? "ADD NFT" : "CHANGE NFT"}
-                {selectedTokenId == 0?
-                    <div style = {{height: '30px'}}>
-                        <img src="/images/breeding/boton-gris.png" alt="" style = {{width: '30px'}}/>
+                {selectedTokenId == 0 ?
+                    <div style={{ height: '30px' }}>
+                        <img src="/images/breeding/boton-gris.png" alt="" style={{ width: '30px' }} />
                     </div>
                     :
-                    <div style = {{height: '30px'}}>
-                        <img src="/images/breeding/boton-verde.png" alt="" style = {{width: '30px'}}/>
+                    <div style={{ height: '30px' }}>
+                        <img src="/images/breeding/boton-verde.png" alt="" style={{ width: '30px' }} />
                     </div>
                 }
             </ActionContainer>
@@ -178,11 +202,20 @@ const BullCard = ({ selectTokenId, updateFlag }) => {
             >
                 <ModalTitleContainer>Bulls</ModalTitleContainer>
                 <ModalNftsContainer>
-                    {selectedNfts.map((nftEachItem, idx) => {
-                        return <NftItemContainer onClick={() => handleSelectNft(nftEachItem.tokenId, nftEachItem.image)} key = {nftEachItem.tokenId + "_" + idx}>
-                            <img src={nftEachItem.image} alt="" style={{ width: "160px", height: "160px" }} key={nftEachItem.tokenId} />
-                        </NftItemContainer>
-                    })}
+                    <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', maxHeight: "400px", overflow: 'auto' }}>
+
+                        {selectedNfts.map((nftEachItem, idx) => {
+                            return (
+                                <SelectBullCard
+                                    nftEachItem={nftEachItem}
+                                    idx={idx}
+                                    handleSelectNft={handleSelectNft}
+                                />
+
+                            )
+                        })}
+
+                    </div>
                 </ModalNftsContainer>
             </Modal>
         </Container>

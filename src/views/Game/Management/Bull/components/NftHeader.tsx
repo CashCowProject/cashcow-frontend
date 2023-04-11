@@ -138,8 +138,8 @@ const NftHeader = () => {
     console.log('Fetching recuperation time for bull: ', bullID)
 
     const currentTimestamp = new Date().getTime() / 1000;
-    const maxRecoveryTime = 15 * 24 * 60 * 60;
-    const maxAge = 200 * 24 * 60 * 60;
+    const maxRecoveryTime = 1080 * 60 * 60;
+    const maxAge = 730 * 24 * 60 * 60;
 
     const res = await nftContract.methods.attrOf(bullID).call({ from: account })
 
@@ -148,7 +148,7 @@ const NftHeader = () => {
     const bullBreed = res.breed;
     const bullRarity = parseInt(res.rarity);
 
-    const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
+    const baseRecoveryTimes = [432000, 648000, 1080000, 1728000, 2592000]
     let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
 
     console.log('>>>>> ', bullRecoveryTime)

@@ -11,6 +11,7 @@ import { getNftFarmingAddress } from 'utils/addressHelpers'
 import { CATTLE_RARITY, COW_BREED,BULL_BREED, CASH_COWNFT_IMAGE_BASEURI, CASH_BULLNFT_IMAGE_BASEURI }  from "config/constants/nfts";
 import Button from 'views/Pools/components/HarvestButton'
 import { LoadingContext } from 'contexts/LoadingContext'
+import toast from 'react-hot-toast'
 const Container = styled.div`
     overflow: hidden;
     position: relative;
@@ -67,7 +68,8 @@ const BreedingCard = ({unLockTime, unit, bullId, rarity, cowBreed,bullBreed}) =>
             }
             await farmContract.methods.claimCattle(_bullId, _seed).send({ from: account });
             setIsClaimed(true);
-            setLoading(false)
+            setLoading(false);
+            // toast.success("Claimed Successfully!");
         }catch(error) {
             setLoading(false)
         }

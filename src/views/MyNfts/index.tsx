@@ -177,13 +177,18 @@ const MyNfts = () => {
   }, [])
 
   const getTokenHashes = useCallback(async () => {
+    console.log("Inside GetTokenHashes")
     setLoading(true);
+
     const tmpMyTokens = []
     const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({ from: account })
     const tokenIds = []
+
     _.map(happyCowTokens, (itm) => {
       tokenIds.push({ tokenId: itm, collection: getHappyCowAddress() })
     })
+
+    console.log(tokenIds)
 
     const cowTokens = await cownftContract.methods.tokenIdsOf(account).call({ from: account })
     _.map(cowTokens, (itm) => {
@@ -201,6 +206,8 @@ const MyNfts = () => {
     userGenesis.map((item, i) => {
       tokenIds.push({ tokenId: item, collection: getAirNftAddress() });
     })
+
+    console.log(tokenIds)
     // retrieve my nft from air
     // const airNftOwners = []
     // _.map(airNFTs, (nft) => {
@@ -238,12 +245,16 @@ const MyNfts = () => {
     }
     const result = await Promise.all(myTokenHashes)
 
+    console.log("RESULT: ", result)
+
     for (let i = 0; i < tokenIds.length; i++) {
       if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
       tmpMyTokens[i].tokenId = tokenIds[i].tokenId
       tmpMyTokens[i].tokenHash = result[i]
       tmpMyTokens[i].collection = tokenIds[i].collection
+
       const uniqueTokenData = await fetchNftData(result[i]);
+
       tmpMyTokens[i].attributes = uniqueTokenData.attributes;
     }
     setMyTokens(tmpMyTokens);
@@ -252,6 +263,7 @@ const MyNfts = () => {
   }, [account, happyCowsContract, marketContract, airnftContract])
 
   const fetchNftData = async (eachMyToken) => {
+    // console.log("Fetching: >>> ", eachMyToken)
     try {
       const res = await fetch(eachMyToken)
       const json = await res.json()

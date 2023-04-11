@@ -19,7 +19,7 @@ const BoxTitle = styled.div`
     word-break: break-word;
 `
 const RemainingAmount = styled.div`
-    font-size: 20px;
+    font-size: 16px;
     color: #694f4e;
     margin-top: 24px;
     word-break: break-word;
@@ -38,7 +38,7 @@ const BoxPriceContainer = styled.div`
 `
 
 const PriceDetailContainer = styled.div`
-    font-size: 30px;
+    font-size: 28px;
     color: #431216;
     font-weight: 700;
     margin-top: 6px;
@@ -54,7 +54,6 @@ const PriceDetailContainer = styled.div`
 const BuyNowBtnContainer = styled.div`
     margin-top: 40px;
 `
-
 const BoxBuyDetailComponent = () => {
 
     const { setLoading } = useContext(LoadingContext);
@@ -151,10 +150,10 @@ const BoxBuyDetailComponent = () => {
                 Common Pack
             </BoxTitle>
             <RemainingAmount style={{ color: isDark ? "white" : "" }}>
-                <p style={{fontSize: '1em'}}>Max 100K</p>
+                <p>Max 100K</p>
                 <p>5 Common Cow + 1 Common Bull + 1 Land</p>
             </RemainingAmount>
-            <BoxPrice style={{ background: isDark ? '#0b334b' : ''}}>
+            <BoxPrice style={{ background: isDark ? '#16151a' : '', boxShadow: isDark ? "0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)" : '' }}>
                 <BoxPriceContainer style={{ color: isDark ? "white" : "" }}>
                     Price
                     <PriceDetailContainer style={{ color: isDark ? "white" : "" }}>
@@ -163,22 +162,13 @@ const BoxBuyDetailComponent = () => {
                         <span style={{ fontSize: "14px", color: isDark ? 'white' : '#694f4e', fontWeight: 400, marginLeft: "4px" }}>{` ≈ $${fromWei(price, 'ether')}`}</span>
                         {
                             account && mintingState === true ?
-
-                                <Button
-                                    className="mint-button"
-                                    onClick={buyButtonHandler}
-                                    style={{
-                                        backgroundColor: 'transparent'
-                                    }}
-                                />
+                                <Button onClick={buyButtonHandler}>
+                                    Mint
+                                </Button>
                                 :
-                                <Button
-                                    disabled
-                                    className="mint-button"
-                                    style={{
-                                        backgroundColor: 'transparent',
-                                    }}
-                                />
+                                <Button disabled>
+                                    Mint
+                                </Button>
                         }
                     </PriceDetailContainer>
                 </BoxPriceContainer>

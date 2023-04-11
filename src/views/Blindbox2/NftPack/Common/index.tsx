@@ -21,8 +21,12 @@ const CommonPack = () => {
     margin-bottom: 20px;
   `
 
+  const StyledWrapper = styled(Page)`
+    position: relative;
+  `
+
   const BoxDetailContainer = styled.div`
-    background: ${isDark ? '#0b334b' : 'white'};
+    background: ${isDark ? '#27262c' : 'white'};
     ${isDark ?
       "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
       : ""
