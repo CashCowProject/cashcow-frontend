@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useMemo, useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
 import { Button, Input } from 'cashcow-uikit'
@@ -8,8 +8,10 @@ import BUSD from 'config/abi/BUSD.json'
 import { fromWei, AbiItem, toBN } from "web3-utils";
 import { LoadingContext } from 'contexts/LoadingContext'
 import { getNftSaleAddress, getBusdAddress } from 'utils/addressHelpers'
+import CowNFT from 'config/abi/CowNFT.json'
 import Web3 from "web3";
 import useTheme from 'hooks/useTheme'
+import { getCowNftAddress } from 'utils/addressHelpers'
 
 const BoxTitle = styled.div`
     font-size: 28px;
@@ -60,7 +62,9 @@ const AmountInput = styled.div`
     margin-right: 16px;
     width: 20%;
 `
-const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
+const web3 = new Web3(Web3.givenProvider);
+
+const BoxBuyDetailComponent = ({ setIsMinted, setMintedNft }) => {
 
     const { setLoading } = useContext(LoadingContext);
     const { isDark } = useTheme()
@@ -69,17 +73,20 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
     const [price, setPrice] = useState("0");
     const [amount, setAmount] = useState(1);
 
+    const cownftContract = useMemo(() => {
+        return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
+    }, [])
+
     /** Styles Div */
 
-    useEffect( () => {
+    useEffect(() => {
         if (!account && window.localStorage.getItem('accountStatus')) {
             connect('injected')
         }
     }, [account, connect])
 
-    useEffect( () => {
+    useEffect(() => {
         async function fetchPrice() {
-            const web3 = new Web3(Web3.givenProvider);
             const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
             const nftPrice = await saleContract.methods.cowPrice().call();
             setPrice(nftPrice);
@@ -90,28 +97,28 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
 
     const buyButtonHandler = async () => {
         const web3 = new Web3(Web3.givenProvider);
-        
+
         const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
         const packSaleEnd = await saleContract.methods.packSaleEnd().call();
         const currentTimestamp = Date.now();
-        if(packSaleEnd > (currentTimestamp / 1000)) {
+        if (packSaleEnd > (currentTimestamp / 1000)) {
             toast.error('Pack Sale is not ended');
             return;
         }
-        
+
         setMintingState(false);
         setLoading(true);
         const busdTokenContract = new web3.eth.Contract(BUSD.abi as AbiItem[], getBusdAddress());
         const busdBalance = await busdTokenContract.methods.balanceOf(account).call();
-        if(toBN(busdBalance).lt(toBN(price))) {
+        if (toBN(busdBalance).lt(toBN(price))) {
             setLoading(false);
             toast.error("busd balance is insufficient. you must have " + fromWei(price) + " busd in your wallet")
             return;
         }
-        
+
         try {
             const allowance = await busdTokenContract.methods.allowance(account, getNftSaleAddress()).call();
-            if(parseInt(allowance.toString()) < parseInt(price)){
+            if (parseInt(allowance.toString()) < parseInt(price)) {
                 const _approveAmount = toBN(price).mul(toBN(100));
                 await busdTokenContract.methods.approve(getNftSaleAddress(), _approveAmount).send({ from: account });
             }
@@ -120,22 +127,26 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
             //     .buyCommonCow()
             //     .estimateGas({from: account});
             let seed = [];
-            for(let i = 0 ; i < amount ; i++) {
+            for (let i = 0; i < amount; i++) {
                 let _temp = Math.floor(Math.random() * 1000);
                 seed.push(_temp);
-            }            
+            }
             await saleContract.methods
                 .buyCommonCow(amount, seed)
-                .send({from: account})
-                .on('transactionHash', function() {
+                .send({ from: account })
+                .on('transactionHash', function () {
                     toast.success('Transaction submitted');
                 })
-                .on('receipt', function(receipt) {
-                    console.log('MINTED RECEIPT: ', receipt);
+                .on('receipt', async function (receipt) {
+                    
+                    const tokenId = parseInt(receipt.events[2].raw.topics[3], 16)
+                    const tokenHash = await fetchNftMetaData(tokenId);
+
                     setMintingState(true);
                     setLoading(false);
-                    setMintedNft('COW');
+                    setMintedNft(tokenHash);
                     setIsMinted(true);
+
                     toast.success('Mint succeed');
                 })
         } catch (err: unknown) {
@@ -148,9 +159,16 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
         }
         // setMintingState(true);
     }
-    const changeAmountHandler = (e) =>{
+
+    const fetchNftMetaData = async (tokenId) => {
+        console.log("Fetching...")
+        const tokenHash = await cownftContract.methods.tokenURI(tokenId).call()
+        return tokenHash;
+    }
+
+    const changeAmountHandler = (e) => {
         let value = e.target.value;
-        if(value <=0 ) {
+        if (value <= 0) {
             setAmount(1);
         } else if (value >= 20) {
             setAmount(20)
@@ -161,31 +179,31 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
     }
     return (
         <div>
-            <BoxTitle style={{color: isDark ? "white" : "white"}}>
+            <BoxTitle style={{ color: isDark ? "white" : "white" }}>
                 Common Cows
             </BoxTitle>
-            <RemainingAmount style={{color: isDark ? "white" : "white"}}>
+            <RemainingAmount style={{ color: isDark ? "white" : "white" }}>
                 <p>There are 5 breeds</p>
             </RemainingAmount>
-            <BoxPrice style={{background: isDark ? 'rgb (11, 51, 75)' : 'rgb (11, 51, 75)', boxShadow: isDark ? "0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)" : ''}}>
-                <BoxPriceContainer style={{color: isDark ? "white" : "white"}}>
+            <BoxPrice style={{ background: isDark ? 'rgb (11, 51, 75)' : 'rgb (11, 51, 75)', boxShadow: isDark ? "0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)" : '' }}>
+                <BoxPriceContainer style={{ color: isDark ? "white" : "white" }}>
                     Price
-                    <PriceDetailContainer style={{color: isDark ? "white" : "white"}}>
+                    <PriceDetailContainer style={{ color: isDark ? "white" : "white" }}>
                         <AmountInput>
-                            <Input type = "Number" value = {amount} onChange = {(e)=>changeAmountHandler(e)}></Input>
+                            <Input type="Number" value={amount} onChange={(e) => changeAmountHandler(e)}></Input>
                         </AmountInput>
-                        <img src="/images/tokens/busd.png" alt="" style={{width: "24px",  height: "24px", marginRight: '8px'}}/>
+                        <img src="/images/tokens/busd.png" alt="" style={{ width: "24px", height: "24px", marginRight: '8px' }} />
                         {fromWei(toBN(price).mul(toBN(amount)), 'ether')}
-                        <span style={{fontSize: "14px", color: isDark ? 'white' : 'white', fontWeight:400, marginLeft: "4px"}}>{` ≈ $${fromWei(price, 'ether')}`}</span>
+                        <span style={{ fontSize: "14px", color: isDark ? 'white' : 'white', fontWeight: 400, marginLeft: "4px" }}>{` ≈ $${fromWei(price, 'ether')}`}</span>
                         {
-                            account && mintingState === true ? 
-                            <Button onClick={buyButtonHandler}>
-                                Mint
-                            </Button>
-                            : 
-                            <Button disabled>
-                                Mint
-                            </Button>
+                            account && mintingState === true ?
+                                <Button onClick={buyButtonHandler}>
+                                    Mint
+                                </Button>
+                                :
+                                <Button disabled>
+                                    Mint
+                                </Button>
                         }
                     </PriceDetailContainer>
                 </BoxPriceContainer>

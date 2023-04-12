@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useMemo, useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
 import { Button, Input } from 'cashcow-uikit'
@@ -10,6 +10,9 @@ import { LoadingContext } from 'contexts/LoadingContext'
 import { getNftSaleAddress, getBusdAddress } from 'utils/addressHelpers'
 import Web3 from "web3";
 import useTheme from 'hooks/useTheme'
+import BullNFT from 'config/abi/BullNFT.json'
+import { getBullNftAddress } from 'utils/addressHelpers'
+
 
 const BoxTitle = styled.div`
     font-size: 28px;
@@ -60,6 +63,9 @@ const AmountInput = styled.div`
     margin-right: 16px;
     width: 20%;
 `
+
+const web3 = new Web3(Web3.givenProvider);
+
 const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
 
     const { setLoading } = useContext(LoadingContext);
@@ -68,6 +74,10 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
     const [mintingState, setMintingState] = useState(true);
     const [price, setPrice] = useState("0");
     const [amount, setAmount] = useState(1);
+
+    const bullnftContract = useMemo(() => {
+        return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
+      }, [])
 
     /** Styles Div */
 
@@ -79,7 +89,6 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
 
     useEffect( () => {
         async function fetchPrice() {
-            const web3 = new Web3(Web3.givenProvider);
             const saleContract = new web3.eth.Contract(NftSale.abi as AbiItem[], getNftSaleAddress());
             const nftPrice = await saleContract.methods.bullPrice().call();
             setPrice(nftPrice);
@@ -131,12 +140,16 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
                 .on('transactionHash', function() {
                     toast.success('Transaction submitted');
                 })
-                .on('receipt', function(receipt) {
-                    console.log(receipt);
+                .on('receipt', async function(receipt) {
+                    
+                    const tokenId = parseInt(receipt.events[2].raw.topics[3], 16)
+                    const tokenHash = await fetchNftMetaData(tokenId);
+
                     setMintingState(true);
                     setLoading(false);
-                    setMintedNft('BULL');
+                    setMintedNft(tokenHash);
                     setIsMinted(true);
+
                     toast.success('Mint succeed');
                 })
         } catch (err: unknown) {
@@ -149,6 +162,13 @@ const BoxBuyDetailComponent = ({setIsMinted, setMintedNft}) => {
         }
         // setMintingState(true);
     }
+
+    const fetchNftMetaData = async (tokenId) => {
+        console.log("Fetching...")
+        const tokenHash = await bullnftContract.methods.tokenURI(tokenId).call()
+        return tokenHash;
+    }
+
     const changeAmountHandler = (e) =>{
         let value = e.target.value;
         if(value <=0 ) {
