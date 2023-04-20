@@ -191,13 +191,11 @@ const MyNfts = () => {
     console.log(tokenIds)
     console.log("Hola")
 
-    // const cowTokens = await cownftContract.methods.tokenIdsOf(account).call({ from: account })
-    // console.log(cowTokens);
-    // _.map(cowTokens, (itm) => {
-    //   tokenIds.push({ tokenId: itm, collection: getCowNftAddress() })
-    // })
-
-    
+    const cowTokens = await cownftContract.methods.tokenIdsOf(account).call({ from: account })
+    console.log(cowTokens);
+    _.map(cowTokens, (itm) => {
+      tokenIds.push({ tokenId: itm, collection: getCowNftAddress() })
+    })
 
     const bullTokens = await bullnftContract.methods.tokenIdsOf(account).call({ from: account })
     _.map(bullTokens, (itm) => {
