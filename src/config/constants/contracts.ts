@@ -62,12 +62,12 @@ export default {
   cownft: {
     56: '',
     // V1: Testnet
-    97:'0xC562EC641f9A5398C59817ff31dd099e633461c7'
+    97:'0x62C54f58D6f50339561e5F043255B7d59AA4c3C8'
   },
   bullnft: {
     56: '',
     // V1: Testnet
-    97: '0x0d2EA58896e61F6D30Db625fFA68B1a5Fc7bC95b'
+    97: '0x0E844540d2212EF9331d7d77F9Ce041e41C5E609'
     // BASEURI: https://ipfs.io/ipfs/QmNVyTfYTATb24hedYyRwX4zoNywTkKCwXbUAqbNxooDhd/
   },
   nftminter: {
