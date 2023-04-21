@@ -9,12 +9,12 @@ import BoxBuyDetailComponent from './BoxBuyDetailComponent'
 import BlindBoxDetailInfo from './BlindBoxDetailInfo'
 
 type boxParam = {
-  index: string;
-};
+  index: string
+}
 
 const RarePack = () => {
-  const { index } = useParams<boxParam>();
-  const { isDark } = useTheme();
+  const { index } = useParams<boxParam>()
+  const { isDark } = useTheme()
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -27,10 +27,7 @@ const RarePack = () => {
 
   const BoxDetailContainer = styled.div`
     background: ${isDark ? '#27262c' : 'white'};
-    ${isDark ?
-      "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
-      : ""
-    };
+    ${isDark ? 'box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)' : ''};
     position: relative;
     border-radius: 32px;
     display: flex;
@@ -61,15 +58,28 @@ const RarePack = () => {
     }
   `
   const GradientBack = styled.div`
-    background: linear-gradient( 45deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100% );
+    background: linear-gradient(
+      45deg,
+      rgba(255, 0, 0, 1) 0%,
+      rgba(255, 154, 0, 1) 10%,
+      rgba(208, 222, 33, 1) 20%,
+      rgba(79, 220, 74, 1) 30%,
+      rgba(63, 218, 216, 1) 40%,
+      rgba(47, 201, 226, 1) 50%,
+      rgba(28, 127, 238, 1) 60%,
+      rgba(95, 21, 242, 1) 70%,
+      rgba(186, 12, 248, 1) 80%,
+      rgba(251, 7, 217, 1) 90%,
+      rgba(255, 0, 0, 1) 100%
+    );
     background-size: 300% 300%;
     animation: ilqnTz 2s linear infinite;
     filter: blur(10px);
     position: absolute;
-    top:-2px;
-    right:-2px;
-    bottom:-2px;
-    left:-2px;
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
     z-index: -1;
   `
 
@@ -82,7 +92,7 @@ const RarePack = () => {
     width: calc(20% - 20px);
     box-sizing: border-box;
     display: flex;
-    transition: transform .3s ease,-webkit-transform .3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
     padding-top: calc(20% - 50px);
     position: relative;
     background-size: cover;
@@ -112,19 +122,20 @@ const RarePack = () => {
     }
   `
   return (
-    <Page style={{
-      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-    }}
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
           Blind Box
         </Heading>
       </StyledHero>
-      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
         CashCow Farm
       </Heading>
       <BoxDetailContainer>

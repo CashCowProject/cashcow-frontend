@@ -8,14 +8,12 @@ import { Menu as UikitMenu } from 'cashcow-uikit'
 
 import config from './config'
 
-
 const Menu = (props) => {
   const { account, connect, reset } = useWallet()
   const { selectedLanguage, setSelectedLanguage } = useContext(LanguageContext)
   const { isDark, toggleTheme } = useTheme()
   const cakePriceUsd = usePriceCakeBusd()
   const cowPriceUsd = usePriceCowBusd()
-  
 
   return (
     <UikitMenu

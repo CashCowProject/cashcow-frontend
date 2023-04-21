@@ -48,34 +48,28 @@ const fetchFarms = async () => {
         },
       ]
 
-      const [
-        tokenBalanceLP,
-        quoteTokenBlanceLP,
-        lpTokenBalanceMC,
-        lpTotalSupply,
-        tokenDecimals,
-        quoteTokenDecimals
-      ] = await multicall(erc20, calls)
+      const [tokenBalanceLP, quoteTokenBlanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
+        await multicall(erc20, calls)
 
-      let tokenAmount;
-      let lpTotalInQuoteToken;
-      let tokenPriceVsQuote;
-      if(farmConfig.isTokenOnly){
-        tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+      let tokenAmount
+      let lpTotalInQuoteToken
+      let tokenPriceVsQuote
+      if (farmConfig.isTokenOnly) {
+        tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals))
 
-        if(farmConfig.tokenSymbol === QuoteToken.BUSD && farmConfig.quoteTokenSymbol === QuoteToken.BUSD){
-          tokenPriceVsQuote = new BigNumber(1);
-        } else{
-          tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP));
+        if (farmConfig.tokenSymbol === QuoteToken.BUSD && farmConfig.quoteTokenSymbol === QuoteToken.BUSD) {
+          tokenPriceVsQuote = new BigNumber(1)
+        } else {
+          tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP))
 
           // Added by CryptoWhatElse to fix the 9 decimals issue!
-          if(farmConfig.decimals && farmConfig.decimals === 9) {
-            tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP)).div(1e9);
+          if (farmConfig.decimals && farmConfig.decimals === 9) {
+            tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP)).div(1e9)
           }
         }
 
-        lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote);
-      } else { 
+        lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
+      } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
         const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
 
@@ -92,10 +86,10 @@ const fetchFarms = async () => {
           .div(new BigNumber(10).pow(quoteTokenDecimals))
           .times(lpTokenRatio)
 
-        if(tokenAmount.comparedTo(0) > 0){
-          tokenPriceVsQuote = quoteTokenAmount.div(tokenAmount);
-        }else{
-          tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP));
+        if (tokenAmount.comparedTo(0) > 0) {
+          tokenPriceVsQuote = quoteTokenAmount.div(tokenAmount)
+        } else {
+          tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP))
         }
       }
 

@@ -24,7 +24,7 @@ import {
   getAirNftAddress,
   getCowNftAddress,
   getBullNftAddress,
-  getLandNftAddress
+  getLandNftAddress,
 } from 'utils/addressHelpers'
 import toast from 'react-hot-toast'
 
@@ -107,33 +107,33 @@ const NftItemContainer = styled.div`
 const NftTypeFilter = styled.div`
   display: flex;
   @media (max-width: 893px) {
-    margin-bottom: .6em;
+    margin-bottom: 0.6em;
     width: 100%;
   }
 `
 
 const NftRarityFilter = styled.div`
-display: flex;
-@media (max-width: 893px) {
-  margin-bottom: .6em;
-  width: 100%;
-}
+  display: flex;
+  @media (max-width: 893px) {
+    margin-bottom: 0.6em;
+    width: 100%;
+  }
 `
 
 const NftClassFilter = styled.div`
-display: flex;
-@media (max-width: 893px) {
-  margin-bottom: .6em;
-  width: 100%;
-}
+  display: flex;
+  @media (max-width: 893px) {
+    margin-bottom: 0.6em;
+    width: 100%;
+  }
 `
 
 const NftResetFilterButton = styled.div`
-display: flex;
-@media (max-width: 893px) {
-  margin-bottom: .6em;
-  width: 100%;
-}
+  display: flex;
+  @media (max-width: 893px) {
+    margin-bottom: 0.6em;
+    width: 100%;
+  }
 `
 
 const web3 = new Web3(Web3.givenProvider)
@@ -141,17 +141,26 @@ const web3 = new Web3(Web3.givenProvider)
 const MyNfts = () => {
   const { account } = useWallet()
   const [myTokens, setMyTokens] = useState([])
-  const [myFilteredTokens, setMyFilteredTokens] = useState([]);
-  const [filteredBreed, setFilteredBreed] = useState([]);
-  const { isDark } = useTheme();
+  const [myFilteredTokens, setMyFilteredTokens] = useState([])
+  const [filteredBreed, setFilteredBreed] = useState([])
+  const { isDark } = useTheme()
   const { setLoading } = useContext(LoadingContext)
-  const [allNfts, setAllNfts] = useState([]);
-  const [filteredCollection, setFilteredCollection] = useState();
-  // 
-  const [collectionFilter, setCollectionFilter] = useState({ label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } });
-  const [breedFilter, setBreedFilter] = useState({ label: 'All Breeds', value: { field: 'All', direction: 'asc', collection: '' } });
-  const [rarityFilter, setRarityFilter] = useState({ label: 'All Rarity', value: { field: 'All', direction: 'asc', collection: '' } });
-  // 
+  const [allNfts, setAllNfts] = useState([])
+  const [filteredCollection, setFilteredCollection] = useState()
+  //
+  const [collectionFilter, setCollectionFilter] = useState({
+    label: 'All NFTs',
+    value: { field: 'All', direction: 'asc', collection: '' },
+  })
+  const [breedFilter, setBreedFilter] = useState({
+    label: 'All Breeds',
+    value: { field: 'All', direction: 'asc', collection: '' },
+  })
+  const [rarityFilter, setRarityFilter] = useState({
+    label: 'All Rarity',
+    value: { field: 'All', direction: 'asc', collection: '' },
+  })
+  //
   const happyCowsContract = useMemo(() => {
     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
   }, [])
@@ -164,7 +173,7 @@ const MyNfts = () => {
     return new web3.eth.Contract(AirNfts.abi as AbiItem[], getAirNftAddress())
   }, [])
 
-  const genesisContract = new web3.eth.Contract(Genesis.abi as AbiItem[], getAirNftAddress());
+  const genesisContract = new web3.eth.Contract(Genesis.abi as AbiItem[], getAirNftAddress())
 
   const cownftContract = useMemo(() => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
@@ -177,8 +186,8 @@ const MyNfts = () => {
   }, [])
 
   const getTokenHashes = useCallback(async () => {
-    console.log("Inside GetTokenHashes")
-    setLoading(true);
+    console.log('Inside GetTokenHashes')
+    setLoading(true)
 
     const tmpMyTokens = []
     const happyCowTokens = await happyCowsContract.methods.fetchMyNfts().call({ from: account })
@@ -189,10 +198,10 @@ const MyNfts = () => {
     })
 
     console.log(tokenIds)
-    console.log("Hola")
+    console.log('Hola')
 
     const cowTokens = await cownftContract.methods.tokenIdsOf(account).call({ from: account })
-    console.log(cowTokens);
+    console.log(cowTokens)
     _.map(cowTokens, (itm) => {
       tokenIds.push({ tokenId: itm, collection: getCowNftAddress() })
     })
@@ -205,9 +214,9 @@ const MyNfts = () => {
     _.map(landTokens, (itm) => {
       tokenIds.push({ tokenId: itm, collection: getLandNftAddress() })
     })
-    const userGenesis = await genesisContract.methods.fetchMyNfts().call({ from: account });
+    const userGenesis = await genesisContract.methods.fetchMyNfts().call({ from: account })
     userGenesis.map((item, i) => {
-      tokenIds.push({ tokenId: item, collection: getAirNftAddress() });
+      tokenIds.push({ tokenId: item, collection: getAirNftAddress() })
     })
 
     console.log(tokenIds)
@@ -240,15 +249,20 @@ const MyNfts = () => {
 
     const myTokenHashes = []
     for (let i = 0; i < tokenIds.length; i++) {
-      if (tokenIds[i].collection == getHappyCowAddress()) myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if (tokenIds[i].collection == getAirNftAddress()) myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if (tokenIds[i].collection == getCowNftAddress()) myTokenHashes.push(cownftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if (tokenIds[i].collection == getBullNftAddress()) myTokenHashes.push(bullnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
-      else if (tokenIds[i].collection == getLandNftAddress()) myTokenHashes.push(landnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      if (tokenIds[i].collection == getHappyCowAddress())
+        myTokenHashes.push(happyCowsContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getAirNftAddress())
+        myTokenHashes.push(airnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getCowNftAddress())
+        myTokenHashes.push(cownftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getBullNftAddress())
+        myTokenHashes.push(bullnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
+      else if (tokenIds[i].collection == getLandNftAddress())
+        myTokenHashes.push(landnftContract.methods.tokenURI(tokenIds[i].tokenId).call())
     }
     const result = await Promise.all(myTokenHashes)
 
-    console.log("RESULT: ", result)
+    console.log('RESULT: ', result)
 
     for (let i = 0; i < tokenIds.length; i++) {
       if (!tmpMyTokens[i]) tmpMyTokens[i] = {}
@@ -256,14 +270,13 @@ const MyNfts = () => {
       tmpMyTokens[i].tokenHash = result[i]
       tmpMyTokens[i].collection = tokenIds[i].collection
 
-      const uniqueTokenData = await fetchNftData(result[i]);
+      const uniqueTokenData = await fetchNftData(result[i])
 
-      tmpMyTokens[i].attributes = uniqueTokenData.attributes;
+      tmpMyTokens[i].attributes = uniqueTokenData.attributes
     }
-    setMyTokens(tmpMyTokens);
-    setAllNfts(tmpMyTokens);
+    setMyTokens(tmpMyTokens)
+    setAllNfts(tmpMyTokens)
     setLoading(false)
-
   }, [account, happyCowsContract, marketContract, airnftContract])
 
   const fetchNftData = async (eachMyToken) => {
@@ -271,7 +284,7 @@ const MyNfts = () => {
     try {
       const res = await fetch(eachMyToken)
       const json = await res.json()
-      return json;
+      return json
     } catch (e) {
       // toast.error('e', e);
       console.log('Error on: ', e)
@@ -283,47 +296,47 @@ const MyNfts = () => {
   }, [account])
 
   const filterHandler = async (collection, breed, rarity) => {
-    let filteredMarketItems = allNfts;
-    let filteredByCollection;
-    let filteredByBreed;
-    let filteredByRarity;
+    let filteredMarketItems = allNfts
+    let filteredByCollection
+    let filteredByBreed
+    let filteredByRarity
 
     console.log(collection)
     console.log(breed)
     console.log(rarity)
     console.log(filteredMarketItems)
     //   { label: 'All NFTs', value: { field: 'All', direction: 'asc', collection: '' } },
-    if (collection.value.field === "All") {
-      filteredByCollection = filteredMarketItems;
+    if (collection.value.field === 'All') {
+      filteredByCollection = filteredMarketItems
     } else {
       filteredByCollection = filteredMarketItems.filter(function (item) {
-        return item.collection.toLowerCase() === collection.value.collection.toLowerCase();
+        return item.collection.toLowerCase() === collection.value.collection.toLowerCase()
       })
     }
 
-    if (breed.value.field === "All") {
-      filteredByBreed = filteredByCollection;
+    if (breed.value.field === 'All') {
+      filteredByBreed = filteredByCollection
     } else {
       filteredByBreed = filteredByCollection.filter(function (item) {
         console.log(item.attributes[1].value, breed.value.field)
-        return item.attributes[1].value === breed.value.field;
+        return item.attributes[1].value === breed.value.field
       })
     }
 
-    if (rarity.value.field === "All") {
-      filteredByRarity = filteredByBreed;
+    if (rarity.value.field === 'All') {
+      filteredByRarity = filteredByBreed
     } else {
       filteredByRarity = filteredByBreed.filter(function (item) {
-        return item.attributes[0].value === rarity.value.field;
+        return item.attributes[0].value === rarity.value.field
       })
     }
 
-    setMyTokens(filteredByRarity);
+    setMyTokens(filteredByRarity)
   }
 
   const handleFilterReset = () => {
     console.log('Reset Filters')
-    window.location.reload();
+    window.location.reload()
   }
 
   return (
@@ -333,25 +346,24 @@ const MyNfts = () => {
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
+        backgroundAttachment: 'fixed',
       }}
     >
       <StyledHero>
-        <LeftHeader >
+        <LeftHeader>
           <Heading as="h1" size="lg" color="text" mb="20px">
             My NFTs
           </Heading>
         </LeftHeader>
         <Blank />
-        <RightHeader >
-
+        <RightHeader>
           <NftTypeFilter>
             <Select
               options={filterByCollection}
               onOptionChange={(option) => {
                 console.log('From Select: ', option)
-                setCollectionFilter(option);
-                filterHandler(option, breedFilter, rarityFilter);
+                setCollectionFilter(option)
+                filterHandler(option, breedFilter, rarityFilter)
               }}
               style={{
                 marginRight: '15px',
@@ -361,15 +373,13 @@ const MyNfts = () => {
             />
           </NftTypeFilter>
 
-
           <NftRarityFilter>
             <Select
               options={filterByRarity}
               onOptionChange={(option) => {
                 setRarityFilter(option)
-                filterHandler(collectionFilter, breedFilter, option);
-              }
-              }
+                filterHandler(collectionFilter, breedFilter, option)
+              }}
               style={{
                 marginRight: '15px',
                 background: isDark ? '#27262c' : '',
@@ -378,53 +388,53 @@ const MyNfts = () => {
             />
           </NftRarityFilter>
 
-
-          {collectionFilter.value.field === "All" ? <></> : <>
-            {collectionFilter.value.collection === getLandNftAddress() ? <NftClassFilter>
-              <Select
-                options={filterByType}
-                onOptionChange={(option) => {
-                  setBreedFilter(option)
-                  filterHandler(collectionFilter, option, rarityFilter);
-                }
-                }
-                style={{
-                  marginRight: '15px',
-                  background: isDark ? '#27262c' : '',
-                }}
-              />
-            </NftClassFilter> : <NftClassFilter>
-
-              <Select
-                options={filterByBreed}
-                onOptionChange={(option) => {
-                  setBreedFilter(option)
-                  filterHandler(collectionFilter, option, rarityFilter);
-                }
-                }
-                style={{
-                  marginRight: '15px',
-                  background: isDark ? '#27262c' : '',
-                }}
-              />
-
-            </NftClassFilter>
-            }
-          </>}
+          {collectionFilter.value.field === 'All' ? (
+            <></>
+          ) : (
+            <>
+              {collectionFilter.value.collection === getLandNftAddress() ? (
+                <NftClassFilter>
+                  <Select
+                    options={filterByType}
+                    onOptionChange={(option) => {
+                      setBreedFilter(option)
+                      filterHandler(collectionFilter, option, rarityFilter)
+                    }}
+                    style={{
+                      marginRight: '15px',
+                      background: isDark ? '#27262c' : '',
+                    }}
+                  />
+                </NftClassFilter>
+              ) : (
+                <NftClassFilter>
+                  <Select
+                    options={filterByBreed}
+                    onOptionChange={(option) => {
+                      setBreedFilter(option)
+                      filterHandler(collectionFilter, option, rarityFilter)
+                    }}
+                    style={{
+                      marginRight: '15px',
+                      background: isDark ? '#27262c' : '',
+                    }}
+                  />
+                </NftClassFilter>
+              )}
+            </>
+          )}
 
           <NftResetFilterButton>
             <Button
               onClick={handleFilterReset}
               style={{
                 height: '2.5em',
-                width: '96%'
+                width: '96%',
               }}
             >
               Reset Filters
             </Button>
           </NftResetFilterButton>
-
-
         </RightHeader>
       </StyledHero>
       <NftItemContainer>
@@ -432,15 +442,15 @@ const MyNfts = () => {
           console.log('To Map: ', myTokens)
           return (
             <Link
-              key={EachMyToken.tokenId + "_" + index}
+              key={EachMyToken.tokenId + '_' + index}
               to={`/myNFTs/${EachMyToken.tokenId}/${EachMyToken.collection}`}
               // className="LinkItemContainer"
-              onClick={() => { localStorage.setItem("collection", EachMyToken.collection); localStorage.setItem("marketItemId", EachMyToken.itemId) }}
+              onClick={() => {
+                localStorage.setItem('collection', EachMyToken.collection)
+                localStorage.setItem('marketItemId', EachMyToken.itemId)
+              }}
             >
-              <EachNft
-                eachMyToken={EachMyToken}
-                key={EachMyToken.tokenId}
-              />
+              <EachNft eachMyToken={EachMyToken} key={EachMyToken.tokenId} />
             </Link>
           )
         })}

@@ -12,26 +12,28 @@ const StyledHero = styled.div`
 `
 
 const NftMarket = () => {
-    const { isDark } = useTheme();
-    
-    return (
-        <Page
-            style={{
-                backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-            }}
-        >
-            <StyledHero>
-                <Heading as="h1" size="lg" color="text" mb="20px">
-                    NFT MARKETPLACE
-                </Heading>
-            </StyledHero>
-            <NftHeader />
-            <NftItems />
-        </Page>
-    )
+  const { isDark } = useTheme()
+
+  return (
+    <Page
+      style={{
+        backgroundImage: isDark
+          ? `url(/images/cow/home-backgrounddark.png)`
+          : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <StyledHero>
+        <Heading as="h1" size="lg" color="text" mb="20px">
+          NFT MARKETPLACE
+        </Heading>
+      </StyledHero>
+      <NftHeader />
+      <NftItems />
+    </Page>
+  )
 }
 
 export default NftMarket

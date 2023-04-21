@@ -114,7 +114,7 @@ const NftHeader = () => {
 
   const fetchInfo = useCallback(async () => {
     const nftAmount = await nftContract.methods.balanceOf(account).call()
-    setTotalAmount(nftAmount);
+    setTotalAmount(nftAmount)
   }, [account, nftContract])
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const NftHeader = () => {
   return (
     <NftHeaderContainer>
       <LeftContainer style={{ color: isDark ? 'white' : '' }}>
-        { account ? <>Total : {totalAmount}</> : <>Connect your wallet</> }
+        {account ? <>Total : {totalAmount}</> : <>Connect your wallet</>}
       </LeftContainer>
       <RightContainer>
         <Select

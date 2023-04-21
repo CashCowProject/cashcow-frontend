@@ -1,27 +1,26 @@
 /* eslint-disable */
 import React, { useCallback, useMemo, useState } from 'react'
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 import { Button } from 'cashcow-uikit'
 import ModalActions from 'components/ModalActions'
 import TokenInput from 'components/TokenInput'
 import styled from 'styled-components'
 
 const ModalTitle = styled.div`
-color: white;
-font-size: 1.1em;
-margin-bottom: 10px;
+  color: white;
+  font-size: 1.1em;
+  margin-bottom: 10px;
 `
 
 const CostWarning = styled.div`
-color: #bfbfbf;
-margin-top: 15px;
-margin-bottom: 5px;
-font-size: 0.8em;
-border-radius: 10px;
+  color: #bfbfbf;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 0.8em;
+  border-radius: 10px;
 `
 
-const DepositModal = ({ isOpen, cowBalance, setIsOpen, handleStakeCow}) => {
-
+const DepositModal = ({ isOpen, cowBalance, setIsOpen, handleStakeCow }) => {
   const [val, setVal] = useState('')
 
   const handleChange = useCallback(
@@ -52,31 +51,25 @@ const DepositModal = ({ isOpen, cowBalance, setIsOpen, handleStakeCow}) => {
           borderRadius: '15px',
           background: '#27262c',
           zindex: 15,
-        }
+        },
       }}
     >
-      <ModalTitle>
-        Stake COW Tokens
-      </ModalTitle>
+      <ModalTitle>Stake COW Tokens</ModalTitle>
       <TokenInput
         value={val}
         onSelectMax={handleSelectMax}
         onChange={handleChange}
         max={cowBalance}
         symbol={'COW'}
-      // depositFeeBP={depositFeeBP}
+        // depositFeeBP={depositFeeBP}
       />
-      <CostWarning>
-        Remember that $COW transactions are subject to a 10% fee.
-      </CostWarning>
+      <CostWarning>Remember that $COW transactions are subject to a 10% fee.</CostWarning>
 
       <ModalActions>
         <Button variant="secondary" onClick={() => setIsOpen(false)}>
           Cancel
         </Button>
-        <Button onClick={() => handleStakeCow(val)}>
-          Confirm
-        </Button>
+        <Button onClick={() => handleStakeCow(val)}>Confirm</Button>
       </ModalActions>
     </Modal>
   )

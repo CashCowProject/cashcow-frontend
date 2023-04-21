@@ -58,7 +58,7 @@ const CakeStats = () => {
           <Text fontSize="14px">{TranslateString(538, 'Total Burned')}</Text>
           <CardValue fontSize="14px" value={getBalanceNumber(burnedBalance)} decimals={0} />
         </Row>
-        
+
         <Row>
           <Text fontSize="14px">{TranslateString(10004, 'Circulating Supply')}</Text>
           {cakeSupply && <CardValue fontSize="14px" value={cakeSupply} decimals={0} />}

@@ -30,7 +30,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const bnbPrice = usePriceBnbBusd()
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
   const { tokenMode } = farmsProps
-  const {isDark} = useTheme()
+  const { isDark } = useTheme()
 
   const dispatch = useDispatch()
   const { fastRefresh } = useRefresh()
@@ -42,8 +42,12 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
   const [stakedOnly, setStakedOnly] = useState(false)
 
-  const activeFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && !farm.hide && farm.multiplier !== '0X')
-  const inactiveFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && !farm.hide && farm.multiplier === '0X')
+  const activeFarms = farmsLP.filter(
+    (farm) => !!farm.isTokenOnly === !!tokenMode && !farm.hide && farm.multiplier !== '0X',
+  )
+  const inactiveFarms = farmsLP.filter(
+    (farm) => !!farm.isTokenOnly === !!tokenMode && !farm.hide && farm.multiplier === '0X',
+  )
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
@@ -95,7 +99,9 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   return (
     <Page
       style={{
-        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundImage: isDark
+          ? `url(/images/cow/home-backgrounddark.png)`
+          : `url(/images/cow/home-backgroundlight.png)`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',

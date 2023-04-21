@@ -10,7 +10,14 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress, getBullNftAddress, getCowNftAddress, getLandNftAddress } from 'utils/addressHelpers'
+import {
+  getHappyCowAddress,
+  getMarketAddress,
+  getAirNftAddress,
+  getBullNftAddress,
+  getCowNftAddress,
+  getLandNftAddress,
+} from 'utils/addressHelpers'
 import airNFTs from 'config/constants/airnfts'
 import MyNftData from './components/MyNftData'
 import MyNftDetailHeader from './components/MyNftDetailHeader'
@@ -38,7 +45,7 @@ const MyNftsDeatail = () => {
   const { account } = useWallet()
   const [myToken, setMyToken] = useState({})
   const [collectionName, setCollectionName] = useState('')
-  const [collectionAddress, setCollectionAddress] = useState("");
+  const [collectionAddress, setCollectionAddress] = useState('')
 
   const happyCowsContract = useMemo(() => {
     return new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
@@ -53,33 +60,32 @@ const MyNftsDeatail = () => {
   }, [])
 
   const getTokenHashes = useCallback(async () => {
-
-    const collectionAddress = localStorage.getItem('collection');
-    const marketItemId = localStorage.getItem('marketItemId');
+    const collectionAddress = localStorage.getItem('collection')
+    const marketItemId = localStorage.getItem('marketItemId')
     console.log(collectionAddress)
-    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], collectionAddress);
-    const tokenhash = await nftContract.methods.tokenURI(myTokenId);
-    let collectionName = "";
+    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], collectionAddress)
+    const tokenhash = await nftContract.methods.tokenURI(myTokenId)
+    let collectionName = ''
     if (collectionAddress == getAirNftAddress()) {
-      collectionName = "Air NFT"
+      collectionName = 'Air NFT'
     }
     if (collectionAddress == getHappyCowAddress()) {
-      collectionName = "HappyCow"
+      collectionName = 'HappyCow'
     }
     if (collectionAddress == getCowNftAddress()) {
-      collectionName = "Cow NFT"
+      collectionName = 'Cow NFT'
     }
     if (collectionAddress == getLandNftAddress()) {
-      collectionName = "Land NFT"
+      collectionName = 'Land NFT'
     }
     if (collectionAddress == getBullNftAddress()) {
-      collectionName = "Bull NFT"
+      collectionName = 'Bull NFT'
     }
     const _temp = {
-      'tokenId': myTokenId,
-      'collection': collectionAddress,
-      'tokenHash': tokenhash,
-      'itemId': marketItemId,
+      tokenId: myTokenId,
+      collection: collectionAddress,
+      tokenHash: tokenhash,
+      itemId: marketItemId,
     }
     setCollectionName(collectionName)
 
@@ -99,20 +105,13 @@ const MyNftsDeatail = () => {
       }}
     >
       <StyledHero>
-        <Heading
-          as="h1"
-          size="lg"
-          color={isDark ? 'white' : '#0B3D4C'}
-          mb="20px"
-        >
+        <Heading as="h1" size="lg" color={isDark ? 'white' : '#0B3D4C'} mb="20px">
           My NFT Detail
         </Heading>
       </StyledHero>
       <MyNftDetailHeader collectionName={collectionName} />
       <NftDetailContainer>
-        <MyNftData
-          myToken={myToken}
-        />
+        <MyNftData myToken={myToken} />
       </NftDetailContainer>
     </Page>
   )

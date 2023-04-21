@@ -10,14 +10,14 @@ import BackLoader from 'components/BackLoader'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import PageLoader from './components/PageLoader'
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
     },
   },
-});
+})
 // import NftGlobalNotification from './views/Nft/components/NftGlobalNotification'
 
 // Route-based code splitting
@@ -73,10 +73,9 @@ const App: React.FC = () => {
     if (!account && window.localStorage.getItem('accountStatus')) {
       connect('injected')
     }
+  }, [account, connect])
 
-  }, [account, connect]);
-
-  const { loading } = useContext(LoadingContext);
+  const { loading } = useContext(LoadingContext)
 
   useFetchPublicData()
 
@@ -85,10 +84,8 @@ const App: React.FC = () => {
       <Router>
         <ResetCSS />
         <GlobalStyle />
-        {loading &&
-          <BackLoader/>
-        }
-        <Toaster 
+        {loading && <BackLoader />}
+        <Toaster
           position="top-right"
           reverseOrder={false}
           toastOptions={{
@@ -177,9 +174,9 @@ const App: React.FC = () => {
               <Route exact path="/farm/management">
                 <FarmManagement />
               </Route>
-              
+
               <Route exact path="/market">
-                <NftMarket/>
+                <NftMarket />
               </Route>
 
               <Route path="/nft-market/:itemId">
@@ -215,7 +212,6 @@ const App: React.FC = () => {
               {/* </Route> */}
               {/* 404 */}
               <Route component={NotFound} />
-              
             </Switch>
           </Suspense>
         </Menu>

@@ -108,7 +108,7 @@ const NftHeader = () => {
           options={filterByCollection}
           onOptionChange={(option) => dispatch(setCollectionType(option.value))}
           style={{ marginRight: '15px' }}
-        /> 
+        />
         {/* <SearchBox>
           <InputTag placeholder="Please enter keywords to search" />
           <LinkTag>
@@ -116,7 +116,7 @@ const NftHeader = () => {
           </LinkTag>
         </SearchBox>*/}
       </RightContainer>
-  </NftHeaderContainer>
+    </NftHeaderContainer>
   )
 }
 

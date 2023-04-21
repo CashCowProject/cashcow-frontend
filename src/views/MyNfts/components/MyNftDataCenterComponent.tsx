@@ -21,7 +21,7 @@ import {
   getCowNftAddress,
   getBullNftAddress,
   getLandNftAddress,
-  getNftMinterAddress
+  getNftMinterAddress,
 } from 'utils/addressHelpers'
 import { LoadingContext } from 'contexts/LoadingContext'
 import useTheme from 'hooks/useTheme'
@@ -184,7 +184,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
   const nftminterContract = new web3.eth.Contract(NftMinter.abi as AbiItem[], getNftMinterAddress())
 
   const fetchNft = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
 
     console.log('Fetching from Center component')
 
@@ -204,16 +204,16 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
     if (!tmpTokenId) return
 
-    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection);
+    const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
     let nftHash = await nftContract.methods.tokenURI(toBN(tmpTokenId)).call({ from: account })
     const res = await fetch(nftHash)
     const json = await res.json()
     console.log(' >> Center Component Data: ', json)
     setTokenType(json.name)
 
-    setDescription(json.description ? json.description : "")
+    setDescription(json.description ? json.description : '')
 
-    let imageUrl = json.image;
+    let imageUrl = json.image
 
     if (myToken.collection == getHappyCowAddress()) {
       setTokenName(json.name)
@@ -224,14 +224,13 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
       setImage(imageUrl)
     } else if (myToken.collection == getCowNftAddress()) {
       setTokenName('Cow #' + myToken.tokenId)
-      setImage(imageUrl);
+      setImage(imageUrl)
     } else {
-      setTokenName(json.name + "#" + myToken.tokenId)
+      setTokenName(json.name + '#' + myToken.tokenId)
       setImage(imageUrl)
     }
 
-    setLoading(false);
-
+    setLoading(false)
   }, [account, myToken])
 
   useEffect(() => {
@@ -251,14 +250,9 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
       toast.success('Approved AirtNFT token.')
     }
 
-
     try {
       await marketContract.methods
-        .createMarketItem(
-          myToken.collection,
-          toBN(myToken.tokenId),
-          toWei(priceNft, 'ether'),
-        )
+        .createMarketItem(myToken.collection, toBN(myToken.tokenId), toWei(priceNft, 'ether'))
         .send({ from: account })
         .on('transactionHash', function () {
           toast.success('Transaction submitted.')
@@ -268,7 +262,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
           setItemId(returnItemId)
           setSalePrice(priceNft)
           setFlgList(true)
-          history.push("/myNFTs")
+          history.push('/myNFTs')
           toast.success('Successfully listed NFT.')
         })
     } catch (e) {
@@ -293,7 +287,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
         })
         .on('receipt', function () {
           setFlgList(false)
-          history.push("/myNFTs")
+          history.push('/myNFTs')
           toast.success('Successfully unlisted NFT.')
         })
     } catch (e) {
@@ -306,28 +300,32 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
   const moveToBreeding = async () => {
     try {
-      console.log("move to breeding")
-      setLoading(true);
-      if (myToken.collection == getHappyCowAddress() || myToken.collection == getAirNftAddress() || myToken.collection == getLandNftAddress()) {
+      console.log('move to breeding')
+      setLoading(true)
+      if (
+        myToken.collection == getHappyCowAddress() ||
+        myToken.collection == getAirNftAddress() ||
+        myToken.collection == getLandNftAddress()
+      ) {
         toast.success('not available to stake for the breeding.')
         setLoading(false)
-        return;
+        return
       }
       const nftContract = new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
       const approvedAddress = await nftContract.methods.getApproved(toBN(myToken.tokenId)).call()
       if (approvedAddress !== getNftBreedingAddress()) {
         await nftContract.methods.approve(getNftBreedingAddress(), toBN(myToken.tokenId)).send({ from: account })
-        toast.success("Approved successfully")
+        toast.success('Approved successfully')
       }
       if (myToken.collection == getCowNftAddress()) {
-        await breedingContract.methods.stakeCow(myToken.tokenId).send({ from: account });
+        await breedingContract.methods.stakeCow(myToken.tokenId).send({ from: account })
       } else if (myToken.collection == getBullNftAddress()) {
-        await breedingContract.methods.stakeBull(myToken.tokenId).send({ from: account });
+        await breedingContract.methods.stakeBull(myToken.tokenId).send({ from: account })
       }
-      setLoading(false);
-      history.push("/myNFTs")
+      setLoading(false)
+      history.push('/myNFTs')
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
   }
   const openModal = () => {
@@ -350,7 +348,6 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
     setBurnModalIsOpen(false)
   }
 
-
   const handleChange = (e) => {
     const { value, maxLength } = e.target
     const message = value.slice(0, maxLength)
@@ -359,51 +356,47 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
   const handleOpenBurnModal = () => {
     if (flgList) {
-      toast.error('You cannot burn a listed nft.');
-    } else if (tokenType === "Land") {
-      toast.error('You cannot burn a Land.');
-    } else if (tokenName.includes("HappyCows")) {
+      toast.error('You cannot burn a listed nft.')
+    } else if (tokenType === 'Land') {
+      toast.error('You cannot burn a Land.')
+    } else if (tokenName.includes('HappyCows')) {
       toast.error('You cannot burn a HappyCow')
     } else {
-      setBurnModalIsOpen(true);
+      setBurnModalIsOpen(true)
     }
   }
 
   const handleBurn = async () => {
     if (!myToken) return
 
-    closeBurnModal();
-    setLoading(true);
+    closeBurnModal()
+    setLoading(true)
 
-    if (tokenType === "Bull") {
+    if (tokenType === 'Bull') {
       try {
         await nftminterContract.methods
-          .burnBull(
-            myToken.tokenId
-          )
+          .burnBull(myToken.tokenId)
           .send({ from: account })
           .on('transactionHash', function () {
             toast.success('Transaction submitted.')
           })
           .on('receipt', function () {
-            history.push("/myNFTs")
+            history.push('/myNFTs')
             toast.success('Successfully burned NFT.')
           })
       } catch (e) {
         console.log(e)
       }
-    } else if (tokenType === "Cow") {
+    } else if (tokenType === 'Cow') {
       try {
         await nftminterContract.methods
-          .burnCow(
-            myToken.tokenId
-          )
+          .burnCow(myToken.tokenId)
           .send({ from: account })
           .on('transactionHash', function () {
             toast.success('Transaction submitted.')
           })
           .on('receipt', function () {
-            history.push("/myNFTs")
+            history.push('/myNFTs')
             toast.success('Successfully burned NFT.')
           })
       } catch (e) {
@@ -411,20 +404,13 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
       }
     }
 
-    setLoading(false);
-
+    setLoading(false)
   }
 
   return (
     <NftMetaDataContainer>
-
       <NftInfo>
-
-        <NftTitleContainer
-          style={{ color: isDark ? 'white' : 'white' }}
-        >
-          {tokenName}
-        </NftTitleContainer>
+        <NftTitleContainer style={{ color: isDark ? 'white' : 'white' }}>{tokenName}</NftTitleContainer>
 
         <NftSalePriceContainer>
           {flgList ? (
@@ -477,7 +463,7 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
             {account && flgButtonState ? (
               <>
                 <Button
-                  className={flgList ? "unlist-button" : "sell-button"}
+                  className={flgList ? 'unlist-button' : 'sell-button'}
                   style={{
                     backgroundColor: 'transparent',
                   }}
@@ -489,16 +475,19 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
                 {/* We need to check if the tokenType is not Land, because we cannot burn lands */}
                 <Button
                   style={{ backgroundColor: 'transparent' }}
-                  className={flgList || tokenType === "Land" || tokenName.includes("HappyCows") ? "burn-button-disabled" : "burn-button"}
+                  className={
+                    flgList || tokenType === 'Land' || tokenName.includes('HappyCows')
+                      ? 'burn-button-disabled'
+                      : 'burn-button'
+                  }
                   onClick={handleOpenBurnModal}
                 >
                   {/* {flgList ? 'Unlist NFT' : 'List NFT'} */}
                 </Button>
               </>
-
             ) : (
               <Button
-                // style={{ width: '100%' }} 
+                // style={{ width: '100%' }}
                 disabled
                 style={{ backgroundImage: '/images/nfts/buttons/burngray.png' }}
               >
@@ -507,7 +496,6 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
             )}
           </div>
         </BuyNowBtnContainer>
-
       </NftInfo>
 
       {/* Sell Modal */}
@@ -587,13 +575,12 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
             // maxWidth: '500px',
             // minWidth: '400px',
             borderRadius: '15px',
-            backgroundColor: '#0B3D4C'
+            backgroundColor: '#0B3D4C',
           },
         }}
         contentLabel="Example Modal"
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-
           {/* <Heading as="h1" size="no" color="primary" mb="20px">
             Burn NFT
           </Heading> */}
@@ -610,20 +597,13 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
 
           <div className="burn-alien-image">
             <img src="/images/nfts/extraterrestre.png" className="burn-alien-image-png" />
-            <div
-              className="burn-confirm-button"
-              onClick={handleBurn}
-            >
+            <div className="burn-confirm-button" onClick={handleBurn}>
               Yes
             </div>
-            <div
-              className="burn-cancel-button"
-              onClick={closeBurnModal}
-            >
+            <div className="burn-cancel-button" onClick={closeBurnModal}>
               No
             </div>
           </div>
-
         </div>
 
         <div className="burn-alien-text">
@@ -632,7 +612,6 @@ const MyNftDataCenterComponent = ({ myToken }: NftDataCenterComponentInterface) 
           Are you sure you want to continue?
         </div>
       </Modal>
-
     </NftMetaDataContainer>
   )
 }

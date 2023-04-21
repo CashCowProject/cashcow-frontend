@@ -63,7 +63,6 @@ export interface BullState {
 
 // Global state
 
-
 export interface State {
   farms: FarmsState
   pools: PoolsState

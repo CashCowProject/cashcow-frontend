@@ -46,9 +46,9 @@ const FarmedStakingCard = () => {
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
   const cakeBalance = getBalanceNumber(useTokenBalance(getCakeAddress()))
-  
+
   // const cakeBalance = getBalanceNumber(useTokenBalance(getMilkAddress()))
-  
+
   const eggPrice = usePriceCakeBusd().toNumber()
   const allEarnings = useAllEarnings()
   const earningsSum = allEarnings.reduce((accum, earning) => {

@@ -3,14 +3,21 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import AirNfts from 'config/abi/AirNft.json'
 import Market from 'config/abi/Market.json'
-import HappyCows from 'config/abi/HappyCows.json';
-import CowNFT from 'config/abi/CowNFT.json';
-import BullNFT from 'config/abi/BullNFT.json';
-import LandNFT from 'config/abi/LandNFT.json';
+import HappyCows from 'config/abi/HappyCows.json'
+import CowNFT from 'config/abi/CowNFT.json'
+import BullNFT from 'config/abi/BullNFT.json'
+import LandNFT from 'config/abi/LandNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { AbiItem, toBN } from 'web3-utils'
 import Web3 from 'web3'
-import { getHappyCowAddress, getMarketAddress, getAirNftAddress, getCowNftAddress, getBullNftAddress, getLandNftAddress } from 'utils/addressHelpers'
+import {
+  getHappyCowAddress,
+  getMarketAddress,
+  getAirNftAddress,
+  getCowNftAddress,
+  getBullNftAddress,
+  getLandNftAddress,
+} from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 
 const NftOnChainDataContainer = styled.div`
@@ -75,10 +82,10 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const [ownerAddress, setOwnerAddress] = useState('')
   const [dna, setDna] = useState('')
   const [attr, setAttr] = useState([])
-  const [collectionAddress, setAddress] = useState("");
+  const [collectionAddress, setAddress] = useState('')
   // FIXME: Add NFT Metadata
-  const [nftMetaData, setNftMetaData] = useState("");
-  const [nftType, setNftType] = useState("");
+  const [nftMetaData, setNftMetaData] = useState('')
+  const [nftType, setNftType] = useState('')
 
   const marketContract = useMemo(() => {
     return new web3.eth.Contract(Market.abi as AbiItem[], getMarketAddress())
@@ -99,7 +106,7 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const BullContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
-  
+
   const LandContract = useMemo(() => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [])
@@ -107,19 +114,19 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const fetchNft = useCallback(async () => {
     const marketItems = await marketContract.methods.fetchMarketItems().call({ from: account })
     let index = 0
-    let isTokenAir = false;
-    let isCowNFT = false;
-    let isBullNFT = false;
-    let isHappyCow = false;
-    let isLandNFT = false;
+    let isTokenAir = false
+    let isCowNFT = false
+    let isBullNFT = false
+    let isHappyCow = false
+    let isLandNFT = false
 
     for (let i = 0; i < marketItems.length; i++) {
       if (marketItems[i].itemId === itemId) {
         isTokenAir = marketItems[i].nftContract === getAirNftAddress()
-        isCowNFT = marketItems[i].nftContract === getCowNftAddress();
-        isBullNFT = marketItems[i].nftContract === getBullNftAddress();
-        isHappyCow = marketItems[i].nftContract === getHappyCowAddress();
-        isLandNFT = marketItems[i].nftContract === getLandNftAddress();
+        isCowNFT = marketItems[i].nftContract === getCowNftAddress()
+        isBullNFT = marketItems[i].nftContract === getBullNftAddress()
+        isHappyCow = marketItems[i].nftContract === getHappyCowAddress()
+        isLandNFT = marketItems[i].nftContract === getLandNftAddress()
         setTokenId(marketItems[i].tokenId.toString())
         setOwnerAddress(marketItems[i].seller.toString())
         index = i
@@ -130,27 +137,23 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
     let nftHash = null
     if (isTokenAir) {
       nftHash = await airnftContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
-      setAddress(getAirNftAddress());
-    }
-    else if (isHappyCow) {
+      setAddress(getAirNftAddress())
+    } else if (isHappyCow) {
       nftHash = await happyCowsContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
       setAddress(getHappyCowAddress())
-    }
-    else if (isCowNFT) {
+    } else if (isCowNFT) {
       nftHash = await CowContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
-      const cowAge = await fetchCowAge(marketItems[index].tokenId);
-      setNftType("COW");
-      setNftMetaData(cowAge);
+      const cowAge = await fetchCowAge(marketItems[index].tokenId)
+      setNftType('COW')
+      setNftMetaData(cowAge)
       setAddress(getCowNftAddress())
-    }
-    else if (isBullNFT) {
+    } else if (isBullNFT) {
       nftHash = await BullContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
-      setNftType("BULL");
+      setNftType('BULL')
       const bullRT = await fetchBullRecoveryTime(marketItems[index].tokenId)
-      setNftMetaData(bullRT);
-      setAddress(getBullNftAddress());
-    }
-    else {
+      setNftMetaData(bullRT)
+      setAddress(getBullNftAddress())
+    } else {
       nftHash = await LandContract.methods.tokenURI(toBN(marketItems[index].tokenId)).call({ from: account })
       setAddress(getLandNftAddress())
     }
@@ -166,30 +169,23 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
     fetchNft()
   }, [itemId, fetchNft])
 
-
   const fetchCowAge = async (cowID) => {
     console.log('Fetching Age For: ', cowID)
-    const currentTimestamp = new Date().getTime() / 1000;
-    const maxAge = 200 * 24 * 60 * 60;
+    const currentTimestamp = new Date().getTime() / 1000
+    const maxAge = 200 * 24 * 60 * 60
     const res = await CowContract.methods.attrOf(cowID).call({ from: account })
 
-    const cowBreed = parseInt(res.breed);
+    const cowBreed = parseInt(res.breed)
     const cowRarity = parseInt(res.rarity)
 
-    const cowAge = currentTimestamp - res.birth;
-    let cowAgingMultiplier = 0;
+    const cowAge = currentTimestamp - res.birth
+    let cowAgingMultiplier = 0
 
     if (maxAge > cowAge) {
-      cowAgingMultiplier = 1 - (cowAge / maxAge);
+      cowAgingMultiplier = 1 - cowAge / maxAge
     }
 
-    const cowRarityMilkPower = [
-      2000,
-      3000,
-      5000,
-      8000,
-      13000
-    ]
+    const cowRarityMilkPower = [2000, 3000, 5000, 8000, 13000]
 
     const cowMilkPower = cowRarityMilkPower[cowRarity] * cowAgingMultiplier
 
@@ -199,27 +195,25 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
   const fetchBullRecoveryTime = async (bullID) => {
     console.log('Fetching recuperation time for bull: ', bullID)
 
-    const currentTimestamp = new Date().getTime() / 1000;
-    const maxRecoveryTime = 15 * 24 * 60 * 60;
-    const maxAge = 200 * 24 * 60 * 60;
+    const currentTimestamp = new Date().getTime() / 1000
+    const maxRecoveryTime = 15 * 24 * 60 * 60
+    const maxAge = 200 * 24 * 60 * 60
 
     const res = await BullContract.methods.attrOf(bullID).call({ from: account })
 
-    const bullAge = currentTimestamp - res.birth;
+    const bullAge = currentTimestamp - res.birth
 
-    const bullBreed = res.breed;
-    const bullRarity = parseInt(res.rarity);
+    const bullBreed = res.breed
+    const bullRarity = parseInt(res.rarity)
 
     const baseRecoveryTimes = [3000, 2400, 1800, 1200, 600]
-    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+    let bullRecoveryTime =
+      (baseRecoveryTimes[bullRarity] + (maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge)) /
+      (60 * 60)
 
     console.log('>>>>> ', bullRecoveryTime)
-    return bullRecoveryTime.toFixed(0);
+    return bullRecoveryTime.toFixed(0)
   }
-
-
-
-
 
   return (
     <NftOnChainDataContainer>
@@ -280,17 +274,15 @@ const NftDataRightComponent = ({ itemId }: NftDataRightComponentInterface) => {
               <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{item.value}</NftOnChainLinkStyle>
             </NftOnChainEachData>
           ))}
-          {nftMetaData != '' &&
+          {nftMetaData != '' && (
             <NftOnChainEachData>
               <div style={{ color: isDark ? 'white' : '#694f4e' }}>
-                {nftType == "COW" && <>Milk Power</>}
-                {nftType == "BULL" && <>Recovery Time</>}
+                {nftType == 'COW' && <>Milk Power</>}
+                {nftType == 'BULL' && <>Recovery Time</>}
               </div>
-              <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>
-                {nftMetaData}
-              </NftOnChainLinkStyle>
+              <NftOnChainLinkStyle style={{ color: isDark ? 'white' : '' }}>{nftMetaData}</NftOnChainLinkStyle>
             </NftOnChainEachData>
-          }
+          )}
         </NftOnChainDetail>
       </NftOnChainDetailContainer>
     </NftOnChainDataContainer>

@@ -12,8 +12,8 @@ export default configureStore({
     farms: farmsReducer,
     pools: poolsReducer,
     markets: marketsReducer,
-    land:landReducer,
-    cow:cowReducer,
-    bull: bullReducer
+    land: landReducer,
+    cow: cowReducer,
+    bull: bullReducer,
   },
 })

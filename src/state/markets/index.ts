@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { 
+const initialState = {
   sortOrder: {
     field: 'RecentlyListed',
-    direction: 'desc'
+    direction: 'desc',
   },
   collectionType: {
     field: 'All',
-    direction: 'asc'
+    direction: 'asc',
   },
- }
+}
 
 export const MarketsSlice = createSlice({
   name: 'Markets',
@@ -18,11 +18,11 @@ export const MarketsSlice = createSlice({
   reducers: {
     setSortOrder: (state, action) => {
       state.sortOrder = action.payload
-      console.log(action.payload);
+      console.log(action.payload)
     },
     setCollectionType: (state, action) => {
       state.collectionType = action.payload
-      console.log(action.payload);
+      console.log(action.payload)
     },
   },
 })

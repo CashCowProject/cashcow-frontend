@@ -35,7 +35,7 @@ const Parent = styled.div`
     margin-left: 0;
     margin-bottom: 3em;
   }
- `
+`
 
 const Image1 = styled.img`
   position: relative;
@@ -49,7 +49,7 @@ const Image1 = styled.img`
   }
 `
 
-const Image2 = styled.img` 
+const Image2 = styled.img`
   position: absolute;
   top: 0px;
   left: 0px;
@@ -67,7 +67,7 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
   const [tokenId, setTokenId] = useState('')
   const [dna, setDna] = useState('')
   const [attr, setAttr] = useState([])
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('')
 
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(ERC721.abi as AbiItem[], myToken.collection)
@@ -86,7 +86,7 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
     const json = await res.json()
     console.log('FETCHED NFT >>>> ', json)
     setDna(json.dna)
-    if (json.name == "Land") {
+    if (json.name == 'Land') {
       setImageUrl(useLocalImage(json))
     } else {
       setImageUrl(json.image.replace('ipfs://', 'https://ipfs.io/ipfs/'))
@@ -101,14 +101,12 @@ const MyNftDataLeftComponent = ({ myToken }: MyNftDataLeftComponentInterface) =>
 
   return (
     <NftOnChainDataContainer>
-
       <Parent>
         <Image1 src={imageUrl} />
         <Image2 src="/images/nfts/marcometal.png" />
       </Parent>
-
     </NftOnChainDataContainer>
   )
 }
 
-export default MyNftDataLeftComponent;
+export default MyNftDataLeftComponent

@@ -13,7 +13,7 @@ import { getNftFarmingAddress, getBullNftAddress } from 'utils/addressHelpers'
 import Web3 from 'web3'
 import { fromWei, AbiItem, toBN, toWei } from 'web3-utils'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import SelectNFT from "./SelectNFT"
+import SelectNFT from './SelectNFT'
 import { CASH_BULLNFT_IMAGE_BASEURI, CATTLE_RARITY, BULL_BREED } from 'config/constants/nfts'
 import { LoadingContext } from 'contexts/LoadingContext'
 import { setBullNftCount, updating } from 'state/bullManagement'
@@ -32,10 +32,10 @@ const NftHeaderContainer = styled.div`
   }
 `
 const LeftContainer = styled.div`
-  display:flex;
+  display: flex;
   flex: left;
-  width:50%;
-  height:70px;
+  width: 50%;
+  height: 70px;
   align-items: center;
   padding: 10px;
   border-radius: 15px;
@@ -62,11 +62,11 @@ const RightContainer = styled.div`
 const Total = styled.div`
   font-size: 1.5em;
   padding-left: 1em;
-  display:flex;
+  display: flex;
   flex: 5;
 `
 const ButtonContainer = styled.div`
-  display:flex;
+  display: flex;
   flex: 5;
   justify-content: flex-end;
 `
@@ -91,10 +91,10 @@ const NftHeader = () => {
   const updated = useSelector((state: State) => state.bull.updated)
   const { isDark } = useTheme()
   const itemCount = useSelector((state: State) => state.bull.bullItemCount)
-  const { account }: { account: string; } = useWallet()
-  const [isOpen, setIsOpen] = useState(false);
-  const [myNfts, setMyNfts] = useState([]);
-  const { setLoading } = useContext(LoadingContext);
+  const { account }: { account: string } = useWallet()
+  const [isOpen, setIsOpen] = useState(false)
+  const [myNfts, setMyNfts] = useState([])
+  const { setLoading } = useContext(LoadingContext)
   const nftContract = useMemo(() => {
     return new web3.eth.Contract(BullNFT.abi as AbiItem[], getBullNftAddress())
   }, [])
@@ -102,59 +102,64 @@ const NftHeader = () => {
 
   const farmActionHandler = async (_tokenId: string) => {
     try {
-      setLoading(true);
-      setIsOpen(false);
-      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account });
-      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account });
+      setLoading(true)
+      setIsOpen(false)
+      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account })
+      await NFTFarmingContract.methods.depositBull(_tokenId).send({ from: account })
       dispatch(updating(!updated))
       setLoading(false)
     } catch (error) {
-      setLoading(false);
+      setLoading(false)
       console.log(error)
     }
   }
   const fetchNftItems = useCallback(async () => {
-    const tokenIds = await nftContract.methods.tokenIdsOf(account).call();
+    const tokenIds = await nftContract.methods.tokenIdsOf(account).call()
     let attrs = []
     for (let i = 0; i < tokenIds.length; i++) {
-      const temp = {};
-      const attr = await nftContract.methods.attrOf(tokenIds[i]).call();
-      const _image = CASH_BULLNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attr.rarity)] + "-" + BULL_BREED[parseInt(attr.breed)] + ".png";
-      const _rarity = CATTLE_RARITY[parseInt(attr.rarity)];
-      const _name = BULL_BREED[parseInt(attr.breed)];
-      const _data = _name + _rarity;
-      temp['data'] = _data;
-      temp["image"] = _image;
-      temp["rarity"] = _rarity;
-      temp["tokenId"] = tokenIds[i];
-      temp["nftMetaData"] = await fetchBullRecoveryTime(tokenIds[i]);
-      attrs.push(temp);
+      const temp = {}
+      const attr = await nftContract.methods.attrOf(tokenIds[i]).call()
+      const _image =
+        CASH_BULLNFT_IMAGE_BASEURI +
+        CATTLE_RARITY[parseInt(attr.rarity)] +
+        '-' +
+        BULL_BREED[parseInt(attr.breed)] +
+        '.png'
+      const _rarity = CATTLE_RARITY[parseInt(attr.rarity)]
+      const _name = BULL_BREED[parseInt(attr.breed)]
+      const _data = _name + _rarity
+      temp['data'] = _data
+      temp['image'] = _image
+      temp['rarity'] = _rarity
+      temp['tokenId'] = tokenIds[i]
+      temp['nftMetaData'] = await fetchBullRecoveryTime(tokenIds[i])
+      attrs.push(temp)
     }
-    setMyNfts(attrs);
-
+    setMyNfts(attrs)
   }, [account, updated])
 
   const fetchBullRecoveryTime = async (bullID) => {
     console.log('Fetching recuperation time for bull: ', bullID)
 
-    const currentTimestamp = new Date().getTime() / 1000;
-    const maxRecoveryTime = 1080 * 60 * 60;
-    const maxAge = 730 * 24 * 60 * 60;
+    const currentTimestamp = new Date().getTime() / 1000
+    const maxRecoveryTime = 1080 * 60 * 60
+    const maxAge = 730 * 24 * 60 * 60
 
     const res = await nftContract.methods.attrOf(bullID).call({ from: account })
 
-    const bullAge = currentTimestamp - res.birth;
+    const bullAge = currentTimestamp - res.birth
 
-    const bullBreed = res.breed;
-    const bullRarity = parseInt(res.rarity);
+    const bullBreed = res.breed
+    const bullRarity = parseInt(res.rarity)
 
     const baseRecoveryTimes = [432000, 648000, 1080000, 1728000, 2592000]
-    let bullRecoveryTime = (baseRecoveryTimes[bullRarity] + ((maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge))) / (60 * 60)
+    let bullRecoveryTime =
+      (baseRecoveryTimes[bullRarity] + (maxRecoveryTime - baseRecoveryTimes[bullRarity]) * (bullAge / maxAge)) /
+      (60 * 60)
 
     console.log('>>>>> ', bullRecoveryTime)
-    return bullRecoveryTime.toFixed(0);
+    return bullRecoveryTime.toFixed(0)
   }
-
 
   useEffect(() => {
     fetchNftItems()
@@ -168,11 +173,11 @@ const NftHeader = () => {
           fontWeight: 'bold',
           background: isDark ? '#0b334b' : '#0b334b',
           paddingTop: '10px',
-          paddingBottom: '10px'
+          paddingBottom: '10px',
         }}
-      >        <Total>
-          Total Bulls: {itemCount}
-        </Total>
+      >
+        {' '}
+        <Total>Total Bulls: {itemCount}</Total>
         <Blank />
         <ButtonContainer>
           <div className="add-nft-div">

@@ -3,9 +3,8 @@ import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
 import { Spinner } from 'cashcow-uikit'
 
-
 const BackLoader: React.FC = () => {
-  const { isDark } = useTheme();
+  const { isDark } = useTheme()
 
   const Wrapper = styled.div`
     display: flex;
@@ -21,7 +20,7 @@ const BackLoader: React.FC = () => {
     z-index: 20;
 
     svg {
-      filter: drop-shadow(2px 4px 6px  ${isDark ? '#ffffff80' : '#00000090'});
+      filter: drop-shadow(2px 4px 6px ${isDark ? '#ffffff80' : '#00000090'});
     }
   `
 

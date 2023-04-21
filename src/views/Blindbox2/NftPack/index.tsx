@@ -8,33 +8,33 @@ import useTheme from 'hooks/useTheme'
 import NftPackItem from './NftPackItem'
 
 type boxParam = {
-  index: string;
-};
+  index: string
+}
 
 const nftPackData = [
   {
-    id: "common-pack",
+    id: 'common-pack',
     image: 'common-pack-new.png',
     title: 'Common Pack',
-    tab: 1
+    tab: 1,
   },
   {
-    id: "uncommon-pack",
+    id: 'uncommon-pack',
     image: 'uncommon-pack-new.png',
     title: 'Uncommon Pack',
-    tab: 2
+    tab: 2,
   },
   {
-    id: "rare-pack",
+    id: 'rare-pack',
     image: 'rare-pack-new.png',
     title: 'Rare Pack',
-    tab: 3
-  }
+    tab: 3,
+  },
 ]
 
 const NftPack = () => {
-  const { index } = useParams<boxParam>();
-  const { isDark } = useTheme();
+  const { index } = useParams<boxParam>()
+  const { isDark } = useTheme()
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -46,33 +46,30 @@ const NftPack = () => {
   `
 
   return (
-    <Page style={{
-      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-    }}
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
           Blind Box
         </Heading>
       </StyledHero>
-      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
         CashCow Farm
       </Heading>
       <FlexLayout>
-        {
-          nftPackData.map((item) => {
-
-            return (
-              <Link key={item.id} to={`/blind-box/${item.id}`}>
-                <NftPackItem background={item.image} title={item.title} />
-              </Link>
-            )
-
-          })
-        }
+        {nftPackData.map((item) => {
+          return (
+            <Link key={item.id} to={`/blind-box/${item.id}`}>
+              <NftPackItem background={item.image} title={item.title} />
+            </Link>
+          )
+        })}
       </FlexLayout>
     </Page>
   )

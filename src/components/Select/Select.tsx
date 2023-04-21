@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 
-
-
 export interface SelectProps extends BoxProps {
   options: OptionProps[]
   onOptionChange?: (option: OptionProps) => void
@@ -22,7 +20,6 @@ const Select: React.FunctionComponent<SelectProps> = ({
   defaultOptionIndex = 0,
   ...props
 }) => {
-
   const { isDark } = useTheme()
 
   const DropDownHeader = styled.div`
@@ -114,7 +111,6 @@ const Select: React.FunctionComponent<SelectProps> = ({
     }
   `
 
-
   const dropdownRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(defaultOptionIndex)
@@ -145,7 +141,6 @@ const Select: React.FunctionComponent<SelectProps> = ({
   }, [])
 
   return (
-    
     <DropDownContainer isOpen={isOpen} {...props}>
       <DropDownHeader onClick={toggling}>
         <Text>{options[selectedOptionIndex].label}</Text>

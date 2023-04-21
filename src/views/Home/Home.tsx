@@ -15,16 +15,17 @@ const Hero = styled.div`
   justify-content: center;
   flex-direction: column;
   margin: auto;
-  margin-bottom: 32px;  
+  margin-bottom: 32px;
   padding-top: 116px;
   text-align: center;
   height: 175px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'), url('/images/cow/2cowdrinkmilk.png');
+    background-image: url('/images/cow/2milkgenerator.png'), url('/images/cow/2bottle.png'),
+      url('/images/cow/2cowdrinkmilk.png');
     background-position: left center, center bottom, right center;
-    height: 300px, 185px, 185px;  
-    width:  300px, 185px, 185px;
+    height: 300px, 185px, 185px;
+    width: 300px, 185px, 185px;
     margin-right: 3%;
     margin-left: 3%;
     padding-top: 0;
@@ -51,27 +52,28 @@ const Cards = styled(BaseLayout)`
     & > div {
       grid-column: span 6;
     }
-  }  
+  }
 `
 
 const Home: React.FC = () => {
-
-  const {isDark}=useTheme(); 
+  const { isDark } = useTheme()
 
   return (
     <Page
       style={{
-        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundImage: isDark
+          ? `url(/images/cow/home-backgrounddark.png)`
+          : `url(/images/cow/home-backgroundlight.png)`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',        
+        backgroundRepeat: 'no-repeat',
       }}
     >
       <Hero>
-        <Heading as="h1" style={{fontSize: '3.5vw'}}>
-        CashCow Protocol
-        </Heading>        
-        <Text style={{fontSize: '1vw'}}>Earn MILK By Simply Staking Your COW</Text>
+        <Heading as="h1" style={{ fontSize: '3.5vw' }}>
+          CashCow Protocol
+        </Heading>
+        <Text style={{ fontSize: '1vw' }}>Earn MILK By Simply Staking Your COW</Text>
       </Hero>
       <div>
         <Cards>

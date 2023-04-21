@@ -11,31 +11,25 @@ const StyledHero = styled.div`
   margin-bottom: 20px;
 `
 const CowManage = () => {
-
-    const { isDark } = useTheme();
-    return (
-        <Page
-            style={{
-                backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-            }}
-        >
-            <StyledHero>
-                <Heading
-                    as="h1"
-                    size="lg"
-                    color={isDark ? "white" : "#0b334b"}
-                    mb="20px"
-                >
-                    Management - Cows
-                </Heading>
-            </StyledHero>
-            <NftHeader />
-            <NftItems />
-        </Page>
-    )
+  const { isDark } = useTheme()
+  return (
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <StyledHero>
+        <Heading as="h1" size="lg" color={isDark ? 'white' : '#0b334b'} mb="20px">
+          Management - Cows
+        </Heading>
+      </StyledHero>
+      <NftHeader />
+      <NftItems />
+    </Page>
+  )
 }
 
 export default CowManage

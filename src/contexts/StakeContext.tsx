@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 const StakeContext = React.createContext({
-  selectedNFTS: [], 
-  myNFTS: [], 
+  selectedNFTS: [],
+  myNFTS: [],
   appendCandidate: (data) => undefined,
   initMyNFTS: (datas) => undefined,
-  initSelectedNFTs: (datas) => undefined
+  initSelectedNFTs: (datas) => undefined,
 })
 
 const StakeContextProvider = ({ children }) => {
@@ -24,7 +24,11 @@ const StakeContextProvider = ({ children }) => {
     setMyNFTS([...datas])
   }
 
-  return <StakeContext.Provider value={{selectedNFTS, myNFTS, appendCandidate, initMyNFTS, initSelectedNFTs}}>{children}</StakeContext.Provider>
+  return (
+    <StakeContext.Provider value={{ selectedNFTS, myNFTS, appendCandidate, initMyNFTS, initSelectedNFTs }}>
+      {children}
+    </StakeContext.Provider>
+  )
 }
 
 export { StakeContext, StakeContextProvider }

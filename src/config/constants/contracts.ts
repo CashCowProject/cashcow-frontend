@@ -6,7 +6,7 @@ export default {
   masterChef: {
     56: '0x94098E24FCf4701237CF58ef2A222C1cF5003c86', // COW MasterChef address here
     97: '0xB11C302675FD4a0bD725ecB7e0c3b9F6a3caEa8b', // COW MasterChef address here
-  }, 
+  },
   lottery: {
     56: '',
     97: '',
@@ -47,50 +47,50 @@ export default {
   },
   airnft: {
     56: '0xF5db804101d8600c26598A1Ba465166c33CdAA4b',
-    97: '0x74A9Bb4F6b05236507614cA70d32f65436064786'
+    97: '0x74A9Bb4F6b05236507614cA70d32f65436064786',
   },
   staking: {
     56: '0x812825164c271DDb89d494E41488c0409BdEA724',
-    97: '0x835e824722A3EE84dF6AA9f5f4F4149609fB567F'
+    97: '0x835e824722A3EE84dF6AA9f5f4F4149609fB567F',
   },
   landnft: {
     56: '',
     // V1: Testnet
-    97: '0xa6fC9950810EB96a89fb81F31Fd9071A1d412ce5'
+    97: '0xa6fC9950810EB96a89fb81F31Fd9071A1d412ce5',
     // BASEURI: https://ipfs.io/ipfs/QmXuQuyznCjvmGzucoisDKRYNFcWYyKX2W3rSSdMhBo8yb/
   },
   cownft: {
     56: '',
     // V1: Testnet
-    97:'0x62C54f58D6f50339561e5F043255B7d59AA4c3C8'
+    97: '0x62C54f58D6f50339561e5F043255B7d59AA4c3C8',
   },
   bullnft: {
     56: '',
     // V1: Testnet
-    97: '0x0E844540d2212EF9331d7d77F9Ce041e41C5E609'
+    97: '0x0E844540d2212EF9331d7d77F9Ce041e41C5E609',
     // BASEURI: https://ipfs.io/ipfs/QmNVyTfYTATb24hedYyRwX4zoNywTkKCwXbUAqbNxooDhd/
   },
   nftminter: {
     56: '',
     // V1: Testnet
-    97: '0x512681F29cE31b159cC5E13A0b11DD577135eafE'
+    97: '0x512681F29cE31b159cC5E13A0b11DD577135eafE',
   },
   nftsale: {
     56: '',
     // V1: Testnet
-    97: '0xDbfE374D0994dda6bf8D863D548B16e4595E92c3'
+    97: '0xDbfE374D0994dda6bf8D863D548B16e4595E92c3',
   },
   nftfarming: {
     56: '',
     // V1: Testnet
-    97: '0xC05C40d90a4D7655f6554C08ba0AEef3C0d3454D'
+    97: '0xC05C40d90a4D7655f6554C08ba0AEef3C0d3454D',
   },
   nftbreeding: {
     56: '',
-    97: '0x35EB60cC8223D62ad1B4e73E2733d356F8481d79'
+    97: '0x35EB60cC8223D62ad1B4e73E2733d356F8481d79',
   },
   proxyAdmin: {
     56: '',
-    97: "0x59358715a300C5946A029DB639f78238A45f6dFC"
-  }
+    97: '0x59358715a300C5946A029DB639f78238A45f6dFC',
+  },
 }

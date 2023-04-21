@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo,useContext, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import CowNFT from 'config/abi/CowNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { getCowNftAddress } from 'utils/addressHelpers'
 import NftEachItem from './NftEachItem'
 import { State } from '../../../../state/types'
-import { LoadingContext } from 'contexts/LoadingContext';
+import { LoadingContext } from 'contexts/LoadingContext'
 const NftItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -19,8 +19,8 @@ const web3 = new Web3(Web3.givenProvider)
 
 const NftItems = () => {
   const { account } = useWallet()
-  const [selectedNfts, setSelectedNfts] = useState([]);
-  const { setLoading } = useContext(LoadingContext);
+  const [selectedNfts, setSelectedNfts] = useState([])
+  const { setLoading } = useContext(LoadingContext)
   const sortOrder = useSelector((state: State) => state.markets.sortOrder)
 
   const nftContract = useMemo(() => {
@@ -28,20 +28,20 @@ const NftItems = () => {
   }, [])
 
   const fetchNftItems = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
     const tokenIds = await nftContract.methods.tokenIdsOf(account).call()
     const filteredItems = []
     // const filteredTmpMarketItems = []
-    for (let i = 0; i < tokenIds.length;i ++) {
+    for (let i = 0; i < tokenIds.length; i++) {
       const nftItem = {
-        collectionName: "Cow",
+        collectionName: 'Cow',
         tokenId: tokenIds[i],
-      };
-      console.log(tokenIds[i]);
-      filteredItems.push(nftItem);
+      }
+      console.log(tokenIds[i])
+      filteredItems.push(nftItem)
     }
     setLoading(false)
-    setSelectedNfts(filteredItems);
+    setSelectedNfts(filteredItems)
   }, [account, nftContract])
 
   useEffect(() => {

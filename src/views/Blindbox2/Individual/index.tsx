@@ -9,33 +9,33 @@ import CategoryItem from './CategoryItem'
 import ViewNFT from 'views/Blindbox/components/ViewNft'
 
 type boxParam = {
-  index: string;
-};
+  index: string
+}
 
 const nftIndividualData = [
   {
-    id: "cow",
+    id: 'cow',
     image: 'cows.png',
     title: 'Cows',
-    tab: 1
+    tab: 1,
   },
   {
-    id: "bull",
+    id: 'bull',
     image: 'bulls.png',
     title: 'Bulls',
-    tab: 2
+    tab: 2,
   },
   {
-    id: "land",
+    id: 'land',
     image: 'lands.png',
     title: 'Lands',
-    tab: 3
-  }
+    tab: 3,
+  },
 ]
 
 const NftIndividual = () => {
-  const { index } = useParams<boxParam>();
-  const { isDark } = useTheme();
+  const { index } = useParams<boxParam>()
+  const { isDark } = useTheme()
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -46,31 +46,30 @@ const NftIndividual = () => {
     position: relative;
   `
   return (
-    <Page style={{
-      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-    }}
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       <StyledHero>
-        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+        <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
           Blind Box
         </Heading>
       </StyledHero>
-      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+      <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
         CashCow Farm
       </Heading>
       <FlexLayout>
-        {
-          nftIndividualData.map((item) => {
-            return (
-              <Link key={item.id} to={`/blind-box/${item.id}`}>
-                <CategoryItem background={item.image} />
-              </Link>
-            )
-          })
-        }
+        {nftIndividualData.map((item) => {
+          return (
+            <Link key={item.id} to={`/blind-box/${item.id}`}>
+              <CategoryItem background={item.image} />
+            </Link>
+          )
+        })}
       </FlexLayout>
     </Page>
   )

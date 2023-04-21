@@ -12,9 +12,9 @@ const BoxImageFlur = styled.div`
   background-size: 600%;
   filter: blur(30px);
   background-position: 70% 50%;
-  top:0;
+  top: 0;
   left: 0;
-  width: 100%; 
+  width: 100%;
   height: 100%;
   position: absolute;
 `
@@ -29,23 +29,23 @@ const BoxImageContainer = styled.div`
 `
 
 const BoxImage = styled.div`
-  background-size : cover;
+  background-size: cover;
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
-  width: 100%; 
+  width: 100%;
   height: 100%;
   background-repeat: no-repeat;
   background-position: 50%;
-  transition: transform .3s ease,-webkit-transform .3s ease;
-  &:hover{
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  &:hover {
     transform: scale(1.02);
   }
 `
 const BoxTitle = styled.div`
   position: absolute;
   bottom: 12px;
-  background: rgba(0,0,0,.16);
+  background: rgba(0, 0, 0, 0.16);
   border-radius: 6px;
   left: 50%;
   transform: translateX(-50%);
@@ -57,20 +57,20 @@ const BoxTitle = styled.div`
 `
 
 export interface BoxContainerComponentInterface {
-  boxTitle?: string;
-  boxImage?: string;
+  boxTitle?: string
+  boxImage?: string
 }
 
-const BoxContainerComponent = ({boxTitle, boxImage}:BoxContainerComponentInterface) => {
-    return (
-        <BoxContainer>
-            <BoxImageContainer>
-                <BoxImageFlur style={{backgroundImage: `url(../images/${boxImage})`}}/>
-                <BoxImage style={{backgroundImage: `url(../images/${boxImage})`}}/>
-                <BoxTitle>{boxTitle}</BoxTitle>
-            </BoxImageContainer>
-        </BoxContainer>
-    )
+const BoxContainerComponent = ({ boxTitle, boxImage }: BoxContainerComponentInterface) => {
+  return (
+    <BoxContainer>
+      <BoxImageContainer>
+        <BoxImageFlur style={{ backgroundImage: `url(../images/${boxImage})` }} />
+        <BoxImage style={{ backgroundImage: `url(../images/${boxImage})` }} />
+        <BoxTitle>{boxTitle}</BoxTitle>
+      </BoxImageContainer>
+    </BoxContainer>
+  )
 }
 
 export default BoxContainerComponent

@@ -13,7 +13,7 @@ import { StakeContextProvider } from 'contexts/StakeContext'
 import store from 'state'
 
 const Providers: React.FC = ({ children }) => {
-  const rpcUrl = getRpcUrl();
+  const rpcUrl = getRpcUrl()
 
   return (
     <Provider store={store}>

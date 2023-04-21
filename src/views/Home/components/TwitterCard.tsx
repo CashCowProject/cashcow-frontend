@@ -30,7 +30,7 @@ const TwitterCard = () => {
   return (
     <StyledTwitterCard>
       <CardBody>
-        <Heading size="xl" mb="24px" style={{textAlign: 'left'}}>
+        <Heading size="xl" mb="24px" style={{ textAlign: 'left' }}>
           {TranslateString(10003, 'Announcements')}
         </Heading>
         <Timeline

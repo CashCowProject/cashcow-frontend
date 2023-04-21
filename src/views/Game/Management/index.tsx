@@ -2,144 +2,144 @@ import React, { useState, useEffect, useContext } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useHistory } from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import Web3 from "web3";
+import Web3 from 'web3'
 import NftFarmingV2 from 'config/abi/NftFarmingV2.json'
 import HappyCows from 'config/abi/HappyCows.json'
-import { fromWei, AbiItem } from "web3-utils";
+import { fromWei, AbiItem } from 'web3-utils'
 import Page from 'components/layout/Page'
 import FlexLayout from 'components/layout/Flex'
 import HappyCowSection from './HappyCowSection/HappyCowSection'
 import EachHappyCowCard from './HappyCowSection/EachHappyCowCard'
-import GenesisSection from './GenesisSection/GenesisSection';
-import EachGenesisCard from './GenesisSection/EachGenesisCard';
+import GenesisSection from './GenesisSection/GenesisSection'
+import EachGenesisCard from './GenesisSection/EachGenesisCard'
 import { TailSpin } from 'react-loader-spinner'
 import { getNftFarmingAddress, getHappyCowAddress } from 'utils/addressHelpers'
 import './management.css'
-import CowStakingCard from './CowStakingSection/CowStakingCard';
-import StaticCard from './CowStakingSection/StaticCard';
+import CowStakingCard from './CowStakingSection/CowStakingCard'
+import StaticCard from './CowStakingSection/StaticCard'
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(Web3.givenProvider)
 
 const FarmManagement = () => {
-
-  const history = useHistory();
+  const history = useHistory()
   const { account, connect } = useWallet()
 
-  const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false];
+  const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false]
 
   const happyCowOriginalBreeds = [
     {
-      "id": 0,
-      "name": "holstein"
+      id: 0,
+      name: 'holstein',
     },
     {
-      "id": 1,
-      "name": "highland"
+      id: 1,
+      name: 'highland',
     },
     {
-      "id": 2,
-      "name": "hereford"
+      id: 2,
+      name: 'hereford',
     },
     {
-      "id": 3,
-      "name": "brahman"
+      id: 3,
+      name: 'brahman',
     },
     {
-      "id": 4,
-      "name": "angus"
-    }
+      id: 4,
+      name: 'angus',
+    },
   ]
 
   // FIXME: To be deleted in next version dev@topospec
-  const temporalFarmingContract = '0x7335A5c716E512FdD13667f04118B162e80345A9';
-  const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263';
-  const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
-  const temporalGenesisUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
+  const temporalFarmingContract = '0x7335A5c716E512FdD13667f04118B162e80345A9'
+  const temporalHappyCowsContract = '0xD220d3E1bab3A30f170E81b3587fa382BB4A6263'
+  const temporalFullTokenUriPrefix =
+    'https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB'
+  const temporalGenesisUriPrefix =
+    'https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB'
 
   const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
-  const [happyCowTokenIds, setHappyCowTokenIds] = useState([]);
-  const [happyCowUserBreeds, setHappyCowUserBreeds] = useState([]);
-  const [happyCowStakedBreeds, setHappyCowStakedBreeds] = useState([]);
+  const [happyCowTokenIds, setHappyCowTokenIds] = useState([])
+  const [happyCowUserBreeds, setHappyCowUserBreeds] = useState([])
+  const [happyCowStakedBreeds, setHappyCowStakedBreeds] = useState([])
 
-  const [loadingGenesis, setLoadingGenesis] = useState(true);
-  const [hasGenesisStaked, setHasGenesisStaked] = useState(false);
-  const [genesisTokenId, setGenesisTokenId] = useState(0);
-  const [genesisToken, setGenesisToken] = useState([]);
+  const [loadingGenesis, setLoadingGenesis] = useState(true)
+  const [hasGenesisStaked, setHasGenesisStaked] = useState(false)
+  const [genesisTokenId, setGenesisTokenId] = useState(0)
+  const [genesisToken, setGenesisToken] = useState([])
 
-  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
-  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress());
+  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress())
+  const happyCowsContract = new web3.eth.Contract(HappyCows.abi as AbiItem[], getHappyCowAddress())
 
   useEffect(() => {
-    fetchUserHappyCows();
-    fetchUserGenesis();
+    fetchUserHappyCows()
+    fetchUserGenesis()
   }, [account])
 
   const fetchUserHappyCows = async () => {
     // Empty Arrays before continue
-    setHappyCowUserBreeds([]);
-    setHappyCowStakedBreeds([]);
+    setHappyCowUserBreeds([])
+    setHappyCowStakedBreeds([])
     // Fetch Staked Happy Cows dev@topospec
     try {
-      const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call();
-      console.log('happy cows: ', userHappyCows);
+      const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call()
+      console.log('happy cows: ', userHappyCows)
       // Itero alrededor de los UserHappyCows dev@topospec
-      userHappyCows.forEach(async element => {
+      userHappyCows.forEach(async (element) => {
         const tokenUri = `${temporalFullTokenUriPrefix}/${element}.json`
         console.log('Full token URI: ', tokenUri)
-        const fullTokenData = await fetchIndividualHappyCow(tokenUri);
+        const fullTokenData = await fetchIndividualHappyCow(tokenUri)
         const currentHappyCowBreed = {
-          "tokenId": element,
-          "breed": fullTokenData.attributes[1].value,
-          "breedId": getBreedIdForNft(fullTokenData.attributes[1].value)
-        };
-        setHappyCowStakedBreeds(stakedBreeds => [...stakedBreeds, fullTokenData.attributes[1].value]);
-        setHappyCowUserBreeds(oldBreeds => [...oldBreeds, currentHappyCowBreed]);
-      });
-      setHappyCowTokenIds(userHappyCows);
+          tokenId: element,
+          breed: fullTokenData.attributes[1].value,
+          breedId: getBreedIdForNft(fullTokenData.attributes[1].value),
+        }
+        setHappyCowStakedBreeds((stakedBreeds) => [...stakedBreeds, fullTokenData.attributes[1].value])
+        setHappyCowUserBreeds((oldBreeds) => [...oldBreeds, currentHappyCowBreed])
+      })
+      setHappyCowTokenIds(userHappyCows)
     } catch (error) {
       console.log('error :', error)
     }
   }
 
   const fetchUserGenesis = async () => {
-    setLoadingGenesis(true);
+    setLoadingGenesis(true)
     setGenesisToken([])
     try {
-      const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call();
+      const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call()
       if (userGenesis.length > 0) {
-        console.log('Genesis Tokens ', userGenesis);
+        console.log('Genesis Tokens ', userGenesis)
         const tokenUri = `${temporalGenesisUriPrefix}/${userGenesis[0]}.json`
         console.log('Genesis URI ', tokenUri)
-        const fullTokenData = await fetchIndividualHappyCow(tokenUri);
-        setGenesisToken(fullTokenData);
-        setGenesisTokenId(userGenesis[0]);
-        setHasGenesisStaked(true);
+        const fullTokenData = await fetchIndividualHappyCow(tokenUri)
+        setGenesisToken(fullTokenData)
+        setGenesisTokenId(userGenesis[0])
+        setHasGenesisStaked(true)
       } else {
         setGenesisToken([])
-        setHasGenesisStaked(false);
+        setHasGenesisStaked(false)
       }
-      setLoadingGenesis(false);
+      setLoadingGenesis(false)
     } catch (e) {
       console.log(e)
     }
-
   }
 
   const getBreedIdForNft = (currentBreed) => {
     switch (currentBreed) {
-      case "Holstein":
-        return 0;
-      case "Highland":
-        return 1;
-      case "Hereford":
-        return 2;
-      case "Brahman":
-        return 3;
-      case "Angus":
-        return 4;
+      case 'Holstein':
+        return 0
+      case 'Highland':
+        return 1
+      case 'Hereford':
+        return 2
+      case 'Brahman':
+        return 3
+      case 'Angus':
+        return 4
       default:
-        return "Error";
-        break;
+        return 'Error'
+        break
     }
   }
 
@@ -147,10 +147,10 @@ const FarmManagement = () => {
     try {
       const response = await fetch(tokenUri)
       const json = await response.json()
-      return json;
+      return json
     } catch (e) {
       console.log('error fetching: ', e)
-      return e;
+      return e
     }
   }
 
@@ -162,7 +162,7 @@ const FarmManagement = () => {
   const StyledHero = styled.div`
     border-bottom: 0px solid #e8e8e8;
     margin-bottom: 20px;
-    background-color: rgb(11,51,75);
+    background-color: rgb(11, 51, 75);
     padding: 10px;
     height: 30%;
     display: flex;
@@ -176,7 +176,7 @@ const FarmManagement = () => {
       min-width: 100px;
       justify-content: space-around;
     }
-`
+  `
 
   const HomeButton = styled.div`
     margin-left: 20px;
@@ -185,7 +185,7 @@ const FarmManagement = () => {
     width: 80px;
     height: 70px;
     background-size: contain;
-    cursor:pointer;
+    cursor: pointer;
     &:hover {
       background-image: url(/images/farms/dashboard/buttons/botonmapverde.png);
     }
@@ -193,23 +193,23 @@ const FarmManagement = () => {
     @media (max-width: 768px) {
       height: 60px;
       width: 70px;
-      margin-left:5px;
+      margin-left: 5px;
       min-width: 10px;
     }
-`
+  `
 
   const FlexLayoutCards = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  & > * {
-    min-width: 200px;
-    max-width: 30%;
-    width: 100%;
-    margin: 0 8px;
-    margin-bottom: 32px;
-  }
-`
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    & > * {
+      min-width: 200px;
+      max-width: 30%;
+      width: 100%;
+      margin: 0 8px;
+      margin-bottom: 32px;
+    }
+  `
 
   const MobileHappyCowsContainer = styled.div`
     margin-top: 1em;
@@ -220,36 +220,36 @@ const FarmManagement = () => {
     overflow: hidden;
     position: relative;
     border-radius: 32px;
-    background-color: rgb(11,51,75);
+    background-color: rgb(11, 51, 75);
     color: white;
     text-align: center;
-`
+  `
 
   const nftIndividualData = [
     {
-      id: "cow",
+      id: 'cow',
       image: 'cows.png',
       title: 'Cows',
       url: '/management/cow',
-      tab: 1
+      tab: 1,
     },
     {
-      id: "bull",
+      id: 'bull',
       image: 'bulls.png',
       title: 'Bulls',
       url: '/management/bull',
-      tab: 2
+      tab: 2,
     },
     {
-      id: "land",
+      id: 'land',
       image: 'lands.png',
       title: 'Lands',
       url: '/management/land',
-      tab: 3
-    }
+      tab: 3,
+    },
   ]
 
-  const { isDark } = useTheme();
+  const { isDark } = useTheme()
   return (
     <Page
       style={{
@@ -260,11 +260,11 @@ const FarmManagement = () => {
       }}
     >
       <StyledHero>
-        <HomeButton onClick={e => history.push('/farm/map')} />
+        <HomeButton onClick={(e) => history.push('/farm/map')} />
       </StyledHero>
 
       <FlexLayoutCards>
-        {nftIndividualData.map((item) =>
+        {nftIndividualData.map((item) => (
           <div className="cards-mapper">
             <img
               onClick={() => history.push(item.url)}
@@ -272,131 +272,128 @@ const FarmManagement = () => {
               src={`/images/nftindividuals/${item.image}`}
             />
           </div>
-        )}
+        ))}
       </FlexLayoutCards>
 
-      {window.innerWidth > 767 ?
+      {window.innerWidth > 767 ? (
         <>
           <div className="happy-cow-nft-box">
-            <div className='happy-cow-nft'>
-              <div className='happy-cow-nft-box-left'>
-                <HappyCowSection
-                  title='Happy Cow'
-                  value={happyCowStatus}
-                />
+            <div className="happy-cow-nft">
+              <div className="happy-cow-nft-box-left">
+                <HappyCowSection title="Happy Cow" value={happyCowStatus} />
               </div>
-              <div className='happy-cow-nft-box-right'>
-                {happyCowOriginalBreeds.map((item, i) =>
+              <div className="happy-cow-nft-box-right">
+                {happyCowOriginalBreeds.map((item, i) => (
                   <EachHappyCowCard
                     title={item.name}
                     index={i}
-                    userHappyCow={(happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId']))[i]}
+                    userHappyCow={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])[i]}
                     userStakedHappyCows={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])}
                     fetchUserHappyCows={fetchUserHappyCows}
                     happyCowStakedBreeds={happyCowStakedBreeds}
                   />
-                )}
+                ))}
               </div>
             </div>
           </div>
         </>
-        :
+      ) : (
         <>
-          <HappyCowSection
-            title='Happy Cow'
-            value={happyCowStatus}
-          />
+          <HappyCowSection title="Happy Cow" value={happyCowStatus} />
           <MobileHappyCowsContainer>
-            {happyCowOriginalBreeds.map((item, i) => <>
-              <EachHappyCowCard
-                title={item.name}
-                index={i}
-                userHappyCow={(happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId']))[i]}
-                userStakedHappyCows={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])}
-                fetchUserHappyCows={fetchUserHappyCows}
-                happyCowStakedBreeds={happyCowStakedBreeds}
-              />
-              <br />
-            </>
-            )}
+            {happyCowOriginalBreeds.map((item, i) => (
+              <>
+                <EachHappyCowCard
+                  title={item.name}
+                  index={i}
+                  userHappyCow={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])[i]}
+                  userStakedHappyCows={happyCowUserBreeds.sort((a, b) => a['breedId'] - b['breedId'])}
+                  fetchUserHappyCows={fetchUserHappyCows}
+                  happyCowStakedBreeds={happyCowStakedBreeds}
+                />
+                <br />
+              </>
+            ))}
           </MobileHappyCowsContainer>
+        </>
+      )}
 
-        </>}
-
-      {window.innerWidth > 767 ?
+      {window.innerWidth > 767 ? (
         <>
-
           <div className="genesis-nft-box">
-            <div className='genesis-nft'>
-              <div className='genesis-nft-box-left'>
-
+            <div className="genesis-nft">
+              <div className="genesis-nft-box-left">
                 <GenesisSection />
 
-                {loadingGenesis ? <div className='loading-box'>
-                  <TailSpin
-                    height="80"
-                    width="80"
-                    color="#334B65"
-                    ariaLabel="tail-spin-loading"
-                    radius="1"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                  />
-                </div> : <>
-                  <EachGenesisCard
-                    genesisToken={genesisToken}
-                    genesisTokenId={genesisTokenId}
-                    hasGenesisStaked={hasGenesisStaked}
-                    fetchUserGenesis={fetchUserGenesis}
-                  />
-                </>}
-
+                {loadingGenesis ? (
+                  <div className="loading-box">
+                    <TailSpin
+                      height="80"
+                      width="80"
+                      color="#334B65"
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <EachGenesisCard
+                      genesisToken={genesisToken}
+                      genesisTokenId={genesisTokenId}
+                      hasGenesisStaked={hasGenesisStaked}
+                      fetchUserGenesis={fetchUserGenesis}
+                    />
+                  </>
+                )}
               </div>
-              <div className='genesis-nft-box-right'>
+              <div className="genesis-nft-box-right">
                 <StaticCard
-                  title='$COW In Wallet'
+                  title="$COW In Wallet"
                   value={0}
                   image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
                 />
-
               </div>
             </div>
           </div>
         </>
-        :
+      ) : (
         <>
           <GenesisSection />
           <MobileHappyCowsContainer>
-
-          {loadingGenesis ? <div className='loading-box'>
-            <TailSpin
-              height="80"
-              width="80"
-              color="#334B65"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div> : <>
-            <EachGenesisCard
-              genesisToken={genesisToken}
-              genesisTokenId={genesisTokenId}
-              hasGenesisStaked={hasGenesisStaked}
-              fetchUserGenesis={fetchUserGenesis}
-            />
-          </>}
+            {loadingGenesis ? (
+              <div className="loading-box">
+                <TailSpin
+                  height="80"
+                  width="80"
+                  color="#334B65"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </div>
+            ) : (
+              <>
+                <EachGenesisCard
+                  genesisToken={genesisToken}
+                  genesisTokenId={genesisTokenId}
+                  hasGenesisStaked={hasGenesisStaked}
+                  fetchUserGenesis={fetchUserGenesis}
+                />
+              </>
+            )}
           </MobileHappyCowsContainer>
           <StaticCard
-                  title='$COW In Wallet'
-                  value={0}
-                  image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
-                />
-
-        </>}
-
+            title="$COW In Wallet"
+            value={0}
+            image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+          />
+        </>
+      )}
     </Page>
   )
 }

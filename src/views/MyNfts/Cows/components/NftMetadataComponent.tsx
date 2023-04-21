@@ -16,34 +16,54 @@ import NftBreeding from 'config/abi/NftBreeding.json'
 import NftSale from 'config/abi/NftSale.json'
 import Market from 'config/abi/Market.json'
 import Minter from 'config/abi/NftMinter.json'
-import { getCowNftAddress, getNftFarmingAddress, getNftBreedingAddress, getNftSaleAddress, getMarketAddress, getNftMinterAddress } from 'utils/addressHelpers'
+import {
+  getCowNftAddress,
+  getNftFarmingAddress,
+  getNftBreedingAddress,
+  getNftSaleAddress,
+  getMarketAddress,
+  getNftMinterAddress,
+} from 'utils/addressHelpers'
 import { provider } from 'web3-core'
 
 const Container = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
-    border-radius: 32px;
-    position: relative;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 3%), 0 4px 6px -2px rgb(0 0 0 / 1%);
+  border-radius: 32px;
+  position: relative;
 
-    @media (max-width: 768px) {
-        flex-direction: column;
-    }
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `
 
 const GradientBack = styled.div`
-    background: linear-gradient( 45deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100% );
-    background-size: 300% 300%;
-    animation: ilqnTz 2s linear infinite;
-    filter: blur(10px);
-    position: absolute;
-    top:-2px;
-    right:-2px;
-    bottom:-2px;
-    left:-2px;
-    z-index: -1;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(255, 154, 0, 1) 10%,
+    rgba(208, 222, 33, 1) 20%,
+    rgba(79, 220, 74, 1) 30%,
+    rgba(63, 218, 216, 1) 40%,
+    rgba(47, 201, 226, 1) 50%,
+    rgba(28, 127, 238, 1) 60%,
+    rgba(95, 21, 242, 1) 70%,
+    rgba(186, 12, 248, 1) 80%,
+    rgba(251, 7, 217, 1) 90%,
+    rgba(255, 0, 0, 1) 100%
+  );
+  background-size: 300% 300%;
+  animation: ilqnTz 2s linear infinite;
+  filter: blur(10px);
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  left: -2px;
+  z-index: -1;
 `
 
 const MetadataContainer = styled.div`
@@ -154,9 +174,9 @@ export interface NftDataLeftComponentInterface {
 }
 
 const timestampToStr = (_secs) => {
-  const _tmp = new Date();
-  _tmp.setTime(_secs * 1000);
-  return _tmp.toDateString();
+  const _tmp = new Date()
+  _tmp.setTime(_secs * 1000)
+  return _tmp.toDateString()
 }
 
 const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
@@ -165,7 +185,7 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
   const [nftImage, setNftImage] = useState('')
   const [nftAttrs, setNftAttrs] = useState([])
   const [nftBirth, setNftBirth] = useState(0)
-  const [salePrice, setSalePrice] = useState(0);
+  const [salePrice, setSalePrice] = useState(0)
   const { setLoading } = useContext(LoadingContext)
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
@@ -192,51 +212,53 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
     return new web3.eth.Contract(Minter.abi as AbiItem[], getNftMinterAddress())
   }, [])
   const NFTFarmingContract = new web3.eth.Contract(NftFarming.abi as AbiItem[], getNftFarmingAddress())
-  const farmActionHandler = async (_tokenId: string) =>{
-    try{
-      setLoading(true);
-      await nftContract.methods.approve(getNftFarmingAddress() ,_tokenId).send({ from: account });
-      await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account });
+  const farmActionHandler = async (_tokenId: string) => {
+    try {
+      setLoading(true)
+      await nftContract.methods.approve(getNftFarmingAddress(), _tokenId).send({ from: account })
+      await NFTFarmingContract.methods.depositCow(_tokenId).send({ from: account })
       setLoading(false)
-    }catch (error) {
+    } catch (error) {
       setLoading(false)
       console.log(error)
     }
   }
 
-  const saleActionHandler = async (_tokenId: string) =>{
-    try{
-      if(salePrice <= 0) {
-        toast.error("Please input the NFT price")
-        return;
+  const saleActionHandler = async (_tokenId: string) => {
+    try {
+      if (salePrice <= 0) {
+        toast.error('Please input the NFT price')
+        return
       }
-      setLoading(true);
-      await nftContract.methods.approve(getMarketAddress(), _tokenId).send({from: account});
-      await marketContract.methods.createMarketItem(getCowNftAddress(), _tokenId, toBN(toWei(salePrice.toString()))).send({ from: account });
-      history.push('/cows')
-      setLoading(false);
-    }catch (error) {
-      setLoading(false);
-    }    
-  }
-  const priceChangeHandler = (e) =>{
-    const _price = e.target.value;
-    setSalePrice(_price);
-  }
-  const burnActionHandler = async (tokenId) =>{
-    try{
       setLoading(true)
-      await minterContract.methods.burnCow(tokenId).send({ from: account });
+      await nftContract.methods.approve(getMarketAddress(), _tokenId).send({ from: account })
+      await marketContract.methods
+        .createMarketItem(getCowNftAddress(), _tokenId, toBN(toWei(salePrice.toString())))
+        .send({ from: account })
       history.push('/cows')
-      toast.success("successfully slaughtered.")
-    }catch(error) {
       setLoading(false)
-      toast.error("failed slaughtered")
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+  const priceChangeHandler = (e) => {
+    const _price = e.target.value
+    setSalePrice(_price)
+  }
+  const burnActionHandler = async (tokenId) => {
+    try {
+      setLoading(true)
+      await minterContract.methods.burnCow(tokenId).send({ from: account })
+      history.push('/cows')
+      toast.success('successfully slaughtered.')
+    } catch (error) {
+      setLoading(false)
+      toast.error('failed slaughtered')
     }
   }
 
   return (
-    <Container style={{background: isDark ? "#27262c" : ''}}>
+    <Container style={{ background: isDark ? '#27262c' : '' }}>
       <GradientBack />
       <MetadataContainer>
         <ImageContainer>
@@ -251,58 +273,60 @@ const NftMetadataComponent = ({ tokenId }: NftDataLeftComponentInterface) => {
               boxShadow: isDark ? '0 6px 12px 0 rgb(255 255 255 / 6%), 0 -1px 2px 0 rgb(255 255 255 / 2%)' : '',
             }}
           >
-            { 
-              nftAttrs.length >0 &&
-                  <NftAttributes>
-                  {nftAttrs.map((attrItem) => {
-                    return <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
-                            <img
-                              style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                              src={`/images/svgs/${attrItem.value.toLowerCase()}.svg`}
-                              alt="Token Icon"
-                            />
-                            { attrItem.trait_type } : { attrItem.value}
-                          </NftAttributeItem>
-                  })}
+            {nftAttrs.length > 0 && (
+              <NftAttributes>
+                {nftAttrs.map((attrItem) => {
+                  return (
+                    <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                      <img
+                        style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                        src={`/images/svgs/${attrItem.value.toLowerCase()}.svg`}
+                        alt="Token Icon"
+                      />
+                      {attrItem.trait_type} : {attrItem.value}
+                    </NftAttributeItem>
+                  )
+                })}
 
-                  <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
-                    <img
-                      style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                      src='/images/svgs/reloj.svg'
-                      alt="Token Icon"
-                    />
-                    Birth : { timestampToStr(nftBirth) }
-                  </NftAttributeItem>
-                </NftAttributes>
-
-            }
-            { 
-              nftAttrs.length ===0 && <div style = {{fontSize: 20, color: isDark ? 'white' : '', padding: '30px' }}>Loading ...</div>
-            }
+                <NftAttributeItem style={{ color: isDark ? 'white' : '' }}>
+                  <img
+                    style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                    src="/images/svgs/reloj.svg"
+                    alt="Token Icon"
+                  />
+                  Birth : {timestampToStr(nftBirth)}
+                </NftAttributeItem>
+              </NftAttributes>
+            )}
+            {nftAttrs.length === 0 && (
+              <div style={{ fontSize: 20, color: isDark ? 'white' : '', padding: '30px' }}>Loading ...</div>
+            )}
           </AttributesContainer>
           <div style={{ flex: 1 }} />
 
           <PriceInfoContainer>
-            <span style={{marginRight: '8px', color:'#689330'}}>Sale Price</span>
-            <Input 
-              type = "number" 
-              onChange={(e) => priceChangeHandler(e)}
-              style = {{flex: "auto", width:"60%"}}
-            />
-            <div style = {{ flex: 2, marginLeft:10 }}>MILK</div>
-          </PriceInfoContainer>       
+            <span style={{ marginRight: '8px', color: '#689330' }}>Sale Price</span>
+            <Input type="number" onChange={(e) => priceChangeHandler(e)} style={{ flex: 'auto', width: '60%' }} />
+            <div style={{ flex: 2, marginLeft: 10 }}>MILK</div>
+          </PriceInfoContainer>
 
           <ActionContainer>
-            <Button style={{marginRight: "10px"}} onClick = {()=>farmActionHandler(tokenId)}>Stake to Farm</Button>
-            <Button style={{marginRight: "10px"}} onClick = {()=> saleActionHandler(tokenId)}>Move to Sale</Button>
-            <Button style={{marginRight: "10px"}} onClick = {()=> burnActionHandler(tokenId)}>Delete</Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => farmActionHandler(tokenId)}>
+              Stake to Farm
+            </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => saleActionHandler(tokenId)}>
+              Move to Sale
+            </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => burnActionHandler(tokenId)}>
+              Delete
+            </Button>
           </ActionContainer>
-       </NftInfo>
+        </NftInfo>
       </MetadataContainer>
 
       <ContractInfoContainer>
-        <span style={{marginRight: '8px', color:'#689330'}}>Contract Address</span>
-        { getCowNftAddress() }
+        <span style={{ marginRight: '8px', color: '#689330' }}>Contract Address</span>
+        {getCowNftAddress()}
       </ContractInfoContainer>
     </Container>
   )

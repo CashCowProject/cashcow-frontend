@@ -40,7 +40,7 @@ const farms: FarmConfig[] = [
   },
 
   {
-    pid: 2, 
+    pid: 2,
     risk: 3,
     isTokenOnly: false,
     lpSymbol: 'COW-BUSD LP',
@@ -64,7 +64,7 @@ const farms: FarmConfig[] = [
     isTokenOnly: true,
     lpSymbol: 'COW',
     lpAddresses: {
-      97: '0xc214b43d8f7cccffc28c273ae74cf946538c2037',  // COW BUSD LP
+      97: '0xc214b43d8f7cccffc28c273ae74cf946538c2037', // COW BUSD LP
       56: '0xAd1230E155ba671D5fb860a515970C253DD49361', // COW BUSD LP
     },
     tokenSymbol: 'COW',
@@ -72,8 +72,8 @@ const farms: FarmConfig[] = [
       97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14', // COW
       56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483', // COW
     },
-     quoteTokenSymbol: QuoteToken.BUSD,
-     quoteTokenAdresses: contracts.busd,
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
   },
 
   {
@@ -112,9 +112,8 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.busd,
   },
 
-
   {
-    pid: 6, 
+    pid: 6,
     risk: 3,
     isTokenOnly: false,
     lpSymbol: 'MILK-BNB GLP',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import { LoadingContext } from "contexts/LoadingContext"
+import { LoadingContext } from 'contexts/LoadingContext'
 import NftFarming from 'config/abi/NftFarming.json'
 import CowNFT from 'config/abi/CowNFT.json'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
@@ -29,7 +29,7 @@ const web3 = new Web3(Web3.givenProvider)
 const NftItems = () => {
   const { account } = useWallet()
   const [nftItems, setNftItems] = useState([])
-  const { setLoading } = useContext(LoadingContext);
+  const { setLoading } = useContext(LoadingContext)
   const dispatch = useDispatch()
   const updated = useSelector((state: State) => state.cow.updated)
   const farmContract = useMemo(() => {
@@ -39,25 +39,30 @@ const NftItems = () => {
     return new web3.eth.Contract(CowNFT.abi as AbiItem[], getCowNftAddress())
   }, [])
   const fetchNftItems = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const cowTokenIds = await farmContract.methods.cowTokenIdsOf(account).call({ from: account });
-      const items = [];
+      const cowTokenIds = await farmContract.methods.cowTokenIdsOf(account).call({ from: account })
+      const items = []
       for (let id of cowTokenIds) {
-        let attr = await nftContract.methods.attrOf(id).call();
-        let _image = CASH_COWNFT_IMAGE_BASEURI + CATTLE_RARITY[parseInt(attr.rarity)] + "-" + COW_BREED[parseInt(attr.breed)] + ".png";
+        let attr = await nftContract.methods.attrOf(id).call()
+        let _image =
+          CASH_COWNFT_IMAGE_BASEURI +
+          CATTLE_RARITY[parseInt(attr.rarity)] +
+          '-' +
+          COW_BREED[parseInt(attr.breed)] +
+          '.png'
         let item = {
-          "image": _image,
-          "tokenId": id,
-          "rarity": attr.rarity
+          image: _image,
+          tokenId: id,
+          rarity: attr.rarity,
         }
-        items.push(item);
+        items.push(item)
       }
       setLoading(false)
       dispatch(setCowNftCount(items.length))
       setNftItems(items)
     } catch (error) {
-      setLoading(false);
+      setLoading(false)
     }
   }, [account, updated])
 
@@ -74,7 +79,8 @@ const NftItems = () => {
             tokenId={nftEachItem.tokenId}
             rarity={nftEachItem.rarity}
             key={nftEachItem.itemId}
-          />)
+          />
+        )
       })}
     </NftItemContainer>
   )

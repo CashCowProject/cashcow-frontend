@@ -12,41 +12,40 @@ import BlindBoxDetailInfo from './components/BlindBoxDetailInfo'
 import ViewNFT from './components/ViewNft'
 
 type boxParam = {
-  index: string;
-};
+  index: string
+}
 
 const BlindboxDetail = () => {
-  const { index } = useParams<boxParam>();
-  const { isDark } = useTheme();
-  const [breedsList, setBreedsList] = useState<Array<any>>([]);
+  const { index } = useParams<boxParam>()
+  const { isDark } = useTheme()
+  const [breedsList, setBreedsList] = useState<Array<any>>([])
 
-  const [isMinted, setIsMinted] = useState(false);
+  const [isMinted, setIsMinted] = useState(false)
   const [mintedNft, setMintedNft] = useState([])
 
   const fetchBreeds = useCallback(async () => {
     const promises = breeds.map(async (item) => {
       try {
-        const res = await fetch(item);
-        const json = await res.json();
+        const res = await fetch(item)
+        const json = await res.json()
 
         return {
           image: `${PINATA_BASE_URI}${json.image.slice(7)}`,
-          breed: json.attributes[1].value
-        };
+          breed: json.attributes[1].value,
+        }
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
 
-      return {};
-    });
+      return {}
+    })
 
-    setBreedsList(await Promise.all(promises));
-  }, [setBreedsList]);
-
+    setBreedsList(await Promise.all(promises))
+  }, [setBreedsList])
 
   useEffect(() => {
-    fetchBreeds();
-  }, []);
+    fetchBreeds()
+  }, [])
 
   const StyledHero = styled.div`
     border-bottom: 1px solid #e8e8e8;
@@ -59,10 +58,7 @@ const BlindboxDetail = () => {
 
   const BoxDetailContainer = styled.div`
     background: ${isDark ? '#27262c' : 'white'};
-    ${isDark ?
-      "box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)"
-      : ""
-    };
+    ${isDark ? 'box-shadow: 0px 2px 12px -8px rgb(25 19 38 / 10%), 0px 1px 1px rgb(25 19 38 / 5%)' : ''};
     position: relative;
     border-radius: 32px;
     padding-bottom: 20px;
@@ -102,15 +98,28 @@ const BlindboxDetail = () => {
     }
   `
   const GradientBack = styled.div`
-    background: linear-gradient( 45deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100% );
+    background: linear-gradient(
+      45deg,
+      rgba(255, 0, 0, 1) 0%,
+      rgba(255, 154, 0, 1) 10%,
+      rgba(208, 222, 33, 1) 20%,
+      rgba(79, 220, 74, 1) 30%,
+      rgba(63, 218, 216, 1) 40%,
+      rgba(47, 201, 226, 1) 50%,
+      rgba(28, 127, 238, 1) 60%,
+      rgba(95, 21, 242, 1) 70%,
+      rgba(186, 12, 248, 1) 80%,
+      rgba(251, 7, 217, 1) 90%,
+      rgba(255, 0, 0, 1) 100%
+    );
     background-size: 300% 300%;
     animation: ilqnTz 2s linear infinite;
     filter: blur(10px);
     position: absolute;
-    top:-2px;
-    right:-2px;
-    bottom:-2px;
-    left:-2px;
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
     z-index: -1;
   `
 
@@ -123,7 +132,7 @@ const BlindboxDetail = () => {
     width: calc(20% - 20px);
     box-sizing: border-box;
     display: flex;
-    transition: transform .3s ease,-webkit-transform .3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
     padding-top: calc(20% - 50px);
     position: relative;
     background-size: cover;
@@ -157,11 +166,11 @@ const BlindboxDetail = () => {
       <StyledWrapper>
         <Page>
           <StyledHero>
-            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+            <Heading as="h1" size="lg" color="secondary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
               Blind Box
             </Heading>
           </StyledHero>
-          <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? "white" : '' }}>
+          <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
             HappyCow Box
           </Heading>
           <BoxDetailContainer>
@@ -174,27 +183,28 @@ const BlindboxDetail = () => {
               <BlindBoxDetailInfo />
             </BoxContainerRight>
           </BoxDetailContainer>
-          <Heading as="h1" size="no" color="primary" mt="35px" mb="15px" style={{ textAlign: "center", color: isDark ? 'white' : '' }}>
+          <Heading
+            as="h1"
+            size="no"
+            color="primary"
+            mt="35px"
+            mb="15px"
+            style={{ textAlign: 'center', color: isDark ? 'white' : '' }}
+          >
             HappyCows Breeds
           </Heading>
           <ItemContainer>
-            {
-              breedsList.map((item) => {
-                return (
-                  <ItemEachContainer key={item.image} style={{ backgroundImage: `url('${item.image}')` }}>
-                    <span>{item.breed}</span>
-                  </ItemEachContainer>
-                )
-              })
-            }
+            {breedsList.map((item) => {
+              return (
+                <ItemEachContainer key={item.image} style={{ backgroundImage: `url('${item.image}')` }}>
+                  <span>{item.breed}</span>
+                </ItemEachContainer>
+              )
+            })}
           </ItemContainer>
         </Page>
       </StyledWrapper>
-      <ViewNFT
-        isOpen={isMinted}
-        closeDialog={() => setIsMinted(false)}
-        nft={mintedNft}
-      />
+      <ViewNFT isOpen={isMinted} closeDialog={() => setIsMinted(false)} nft={mintedNft} />
     </>
   )
 }

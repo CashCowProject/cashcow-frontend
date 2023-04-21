@@ -1,18 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { 
+const initialState = {
   sortOrder: {
     field: 'RecentlyListed',
-    direction: 'desc'
+    direction: 'desc',
   },
   collectionType: {
     field: 'All',
-    direction: 'asc'
+    direction: 'asc',
   },
   cowItemCount: 0,
-  updated:false
- }
+  updated: false,
+}
 
 export const CowSlice = createSlice({
   name: 'Game',
@@ -24,12 +24,12 @@ export const CowSlice = createSlice({
     setCollectionType: (state, action) => {
       state.collectionType = action.payload
     },
-    setCowNftCount:(state, action) =>{
+    setCowNftCount: (state, action) => {
       state.cowItemCount = action.payload
     },
-    updating:(state, action) =>{
-      state.updated = action.payload;
-    }
+    updating: (state, action) => {
+      state.updated = action.payload
+    },
   },
 })
 

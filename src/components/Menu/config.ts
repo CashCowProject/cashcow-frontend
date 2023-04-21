@@ -36,7 +36,6 @@ const config: MenuEntry[] = [
     ],
   },
 
-
   // {
   //   label: 'Farms',
   //   icon: 'FarmIcon',
@@ -47,9 +46,9 @@ const config: MenuEntry[] = [
     label: 'NFT Blind Box',
     // icon: 'NftIcon',
     icon: 'TicketIcon',
-    href: '/blind-box'
+    href: '/blind-box',
   },
-  
+
   {
     label: 'My Farm',
     icon: 'FarmIcon',
@@ -68,11 +67,11 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Management',
-        href: '/farm/management'
-      }
-    ]
+        href: '/farm/management',
+      },
+    ],
   },
-  // { 
+  // {
   //   label: "Farm Management",
   //   icon: 'TicketIcon',
   //   items: [
@@ -102,15 +101,14 @@ const config: MenuEntry[] = [
       {
         label: 'Genesis',
         href: '/stakes/2',
-      }
-    ]
+      },
+    ],
   },
   // {
   //   label: 'Milk Bar',
   //   icon: 'PoolIcon',
   //   href: '/milkbar',
   // },
-
 
   // {
   //   label: 'Pools',
@@ -134,23 +132,23 @@ const config: MenuEntry[] = [
     // items:[
     //   {
     //     label: "HAPPY COWS",
-    //     href: '/market/HappyCows'  
+    //     href: '/market/HappyCows'
     //   },
     //   {
     //     label: "GENESIS",
-    //     href: '/market/airnft'  
+    //     href: '/market/airnft'
     //   },
     //   {
     //     label: "LANDS",
-    //     href: '/market/land'  
+    //     href: '/market/land'
     //   },
     //   {
     //     label: "COWS",
-    //     href: '/market/cow'  
+    //     href: '/market/cow'
     //   },
     //   {
     //     label: "BULLS",
-    //     href: '/market/bull'  
+    //     href: '/market/bull'
     //   }
     // ]
   },
@@ -158,7 +156,7 @@ const config: MenuEntry[] = [
     label: 'My NFTs',
     icon: 'NftIcon',
     // icon: 'TicketIcon',
-    href: '/myNFTs'
+    href: '/myNFTs',
     // items: [
     //   {
     //     label: 'My NFTs',
@@ -178,7 +176,7 @@ const config: MenuEntry[] = [
     //   }
     // ]
   },
-  
+
   {
     label: 'Info',
     icon: 'InfoIcon',
@@ -193,7 +191,7 @@ const config: MenuEntry[] = [
       },
     ],
   },
-  
+
   // {
   //   label: 'More',
   //   icon: 'MoreIcon',

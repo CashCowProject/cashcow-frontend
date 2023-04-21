@@ -1,33 +1,32 @@
 /* eslint-disable */
 import React, { useCallback, useMemo, useState } from 'react'
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 import { Button } from 'cashcow-uikit'
 import ModalActions from 'components/ModalActions'
 import TokenInput from 'components/TokenInput'
 import styled from 'styled-components'
 
 const ModalTitle = styled.div`
-color: white;
-font-size: 1.1em;
-margin-bottom: 10px;
-@media (max-width: 768px) {
-  font-size: 1.5em;
-}
+  color: white;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  @media (max-width: 768px) {
+    font-size: 1.5em;
+  }
 `
 
 const CostWarning = styled.div`
-color: #bfbfbf;
-margin-top: 15px;
-margin-bottom: 5px;
-font-size: 0.8em;
-border-radius: 10px;
-@media (max-width: 768px) {
-  font-size: 1.1em;
-}
+  color: #bfbfbf;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 0.8em;
+  border-radius: 10px;
+  @media (max-width: 768px) {
+    font-size: 1.1em;
+  }
 `
 
 const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow }) => {
-
   const [val, setVal] = useState('')
 
   const handleChange = useCallback(
@@ -58,32 +57,26 @@ const WithdrawModal = ({ isOpen, cowStaked, setIsOpen, handleUnstakeCow }) => {
           borderRadius: '15px',
           background: '#27262c',
           zindex: 15,
-        }
+        },
       }}
     >
-      <ModalTitle>
-        Unstake COW Tokens
-      </ModalTitle>
+      <ModalTitle>Unstake COW Tokens</ModalTitle>
       <TokenInput
         value={val}
         onSelectMax={handleSelectMax}
         onChange={handleChange}
         max={cowStaked}
         symbol={'COW'}
-      // depositFeeBP={depositFeeBP}
+        // depositFeeBP={depositFeeBP}
       />
 
-      <CostWarning>
-        Remember that $COW transactions are subject to a 10% fee.
-      </CostWarning>
+      <CostWarning>Remember that $COW transactions are subject to a 10% fee.</CostWarning>
 
       <ModalActions>
         <Button variant="secondary" onClick={() => setIsOpen(false)}>
           Cancel
         </Button>
-        <Button onClick={() => handleUnstakeCow(val)}>
-          Confirm
-        </Button>
+        <Button onClick={() => handleUnstakeCow(val)}>Confirm</Button>
       </ModalActions>
     </Modal>
   )

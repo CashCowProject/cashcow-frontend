@@ -98,7 +98,9 @@ const Stakes = () => {
   return (
     <Page
       style={{
-        backgroundImage: isDark ? `url(/images/cow/home-backgrounddark.png)` : `url(/images/cow/home-backgroundlight.png)`,
+        backgroundImage: isDark
+          ? `url(/images/cow/home-backgrounddark.png)`
+          : `url(/images/cow/home-backgroundlight.png)`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',

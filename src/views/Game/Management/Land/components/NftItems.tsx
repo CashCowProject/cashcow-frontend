@@ -13,7 +13,7 @@ import { CASH_LANDNFT_IMAGE_BASEURI, LAND_RARITY, LAND_KIND } from 'config/const
 
 import { useDispatch } from 'react-redux'
 import { setLandNftCount } from 'state/landManagement'
-import { LoadingContext } from "contexts/LoadingContext"
+import { LoadingContext } from 'contexts/LoadingContext'
 
 const NftItemContainer = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ const web3 = new Web3(Web3.givenProvider)
 const NftItems = () => {
   const { account } = useWallet()
   const [nftItems, setNftItems] = useState([])
-  const { setLoading } = useContext(LoadingContext);
+  const { setLoading } = useContext(LoadingContext)
   const dispatch = useDispatch()
   const updated = useSelector((state: State) => state.land.updated)
   const farmContract = useMemo(() => {
@@ -39,25 +39,30 @@ const NftItems = () => {
     return new web3.eth.Contract(LandNFT.abi as AbiItem[], getLandNftAddress())
   }, [account])
   const fetchNftItems = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const landTokenIds = await farmContract.methods.landTokenIdsOf(account).call({ from: account });
-      let items = [];
+      const landTokenIds = await farmContract.methods.landTokenIdsOf(account).call({ from: account })
+      let items = []
       for (let id of landTokenIds) {
-        let attr = await nftContract.methods.attrOf(id).call();
-        let _image = CASH_LANDNFT_IMAGE_BASEURI + LAND_RARITY[parseInt(attr.rarity)] + "-" + LAND_KIND[parseInt(attr.landType)] + ".png";
+        let attr = await nftContract.methods.attrOf(id).call()
+        let _image =
+          CASH_LANDNFT_IMAGE_BASEURI +
+          LAND_RARITY[parseInt(attr.rarity)] +
+          '-' +
+          LAND_KIND[parseInt(attr.landType)] +
+          '.png'
         let item = {
-          "image": _image,
-          "tokenId": id,
-          "rarity": attr.rarity
+          image: _image,
+          tokenId: id,
+          rarity: attr.rarity,
         }
-        items.push(item);
+        items.push(item)
       }
       setLoading(false)
       dispatch(setLandNftCount(items.length))
       setNftItems(items)
     } catch (error) {
-      setLoading(false);
+      setLoading(false)
     }
   }, [account, updated])
 
@@ -74,7 +79,8 @@ const NftItems = () => {
             tokenId={nftEachItem.tokenId}
             rarity={nftEachItem.rarity}
             key={nftEachItem.itemId}
-          />)
+          />
+        )
       })}
     </NftItemContainer>
   )

@@ -12,11 +12,18 @@ interface DepositModalProps {
   onConfirm: (amount: string) => void
   onDismiss?: () => void
   tokenName?: string
-  depositFeeBP?: number,
-  decimals?: number,
+  depositFeeBP?: number
+  decimals?: number
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', depositFeeBP = 0, decimals = 18 }) => {
+const DepositModal: React.FC<DepositModalProps> = ({
+  max,
+  onConfirm,
+  onDismiss,
+  tokenName = '',
+  depositFeeBP = 0,
+  decimals = 18,
+}) => {
   const [val, setVal] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const TranslateString = useI18n()

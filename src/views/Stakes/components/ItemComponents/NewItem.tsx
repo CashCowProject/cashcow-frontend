@@ -16,7 +16,7 @@ const ImageContainer = styled.div`
 `
 
 const AddImage = styled.div`
-  transition: transform .3s ease,-webkit-transform .3s ease;
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
   transform-origin: center;
   background-size: auto 100%;
   background-position: 50%;
@@ -27,22 +27,22 @@ const AddImage = styled.div`
   height: 100%;
   position: absolute;
   top: 0;
-  &:hover{
+  &:hover {
     transform: scale(1.04);
   }
 `
 
 const Divider = styled.div`
-    height: 1px;
-    min-width: unset;
-    background-image: url(../images/line.jpg);
-    background-repeat: repeat-x;
-    position: relative;
-    background-size: contain;
-    background-position: 50%;
+  height: 1px;
+  min-width: unset;
+  background-image: url(../images/line.jpg);
+  background-repeat: repeat-x;
+  position: relative;
+  background-size: contain;
+  background-position: 50%;
 `
 
-const NewItem = ({index}) => {
+const NewItem = ({ index }) => {
   const TranslateString = useI18n()
   const { isDark } = useTheme()
   const [isOpen, setModalOpen] = useState(false)
@@ -52,7 +52,8 @@ const NewItem = ({index}) => {
     margin-bottom: 15px;
     border-radius: 16px;
     background: ${!isDark ? 'white' : '#27262c'};
-    box-shadow: 0px 2px 12px -8px ${!isDark ? 'rgba(25, 19, 38, 0.7)' : 'rgba(203, 203, 203, 0.7)'}, 0px 1px 1px ${!isDark ? 'rgba(25, 19, 38, 0.05)' : 'rgba(203, 203, 203, 0.05)'};
+    box-shadow: 0px 2px 12px -8px ${!isDark ? 'rgba(25, 19, 38, 0.7)' : 'rgba(203, 203, 203, 0.7)'},
+      0px 1px 1px ${!isDark ? 'rgba(25, 19, 38, 0.05)' : 'rgba(203, 203, 203, 0.05)'};
     position: relative;
   `
   const StakeBtn = styled(Tag)`
@@ -81,30 +82,27 @@ const NewItem = ({index}) => {
   `
 
   const closeDialog = () => {
-    setModalOpen(false);
+    setModalOpen(false)
   }
 
   const addNFT2Stake = (val) => {
-    return false;
+    return false
   }
 
   return (
-    <ItemContainer style={{background : isDark ? '#27262c' : ''}}>
+    <ItemContainer style={{ background: isDark ? '#27262c' : '' }}>
       <Flex flexDirection="column">
-        <ImageContainer style={{background: isDark ? '#101820' : 'white'}} onClick={e=>setModalOpen(true)}>
+        <ImageContainer style={{ background: isDark ? '#101820' : 'white' }} onClick={(e) => setModalOpen(true)}>
           <AddImage />
         </ImageContainer>
         <Divider />
-        <Flex flexDirection="column" style={{padding: '24px'}}>
-          <Text fontSize="24px" style={{textAlign: 'center'}}>Add NFT</Text>
+        <Flex flexDirection="column" style={{ padding: '24px' }}>
+          <Text fontSize="24px" style={{ textAlign: 'center' }}>
+            Add NFT
+          </Text>
         </Flex>
       </Flex>
-      <SelectNFT 
-        isOpen={isOpen}
-        closeDialog={closeDialog}
-        addNFTHandler={addNFT2Stake}
-        index={index}
-      />
+      <SelectNFT isOpen={isOpen} closeDialog={closeDialog} addNFTHandler={addNFT2Stake} index={index} />
     </ItemContainer>
   )
 }

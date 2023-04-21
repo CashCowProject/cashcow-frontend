@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import Web3 from "web3";
-import { fromWei, AbiItem } from "web3-utils";
+import Web3 from 'web3'
+import { fromWei, AbiItem } from 'web3-utils'
 import Page from 'components/layout/Page'
 import { Heading } from 'cashcow-uikit'
 import useTheme from 'hooks/useTheme'
@@ -14,7 +14,12 @@ import CowTokenABI from 'config/abi/cow.json'
 import HappyCows from 'config/abi/HappyCows.json'
 import happyCowBreeds from 'config/constants/happycowbreeds'
 import MasterChefABI from 'config/abi/masterchef.json'
-import { getHappyCowAddress, getNftFarmingAddress, getCowTokenAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import {
+  getHappyCowAddress,
+  getNftFarmingAddress,
+  getCowTokenAddress,
+  getMasterChefAddress,
+} from 'utils/addressHelpers'
 import StaticCard from './StaticCard'
 import StakedCowTokenCard from './StakedCowTokenCard'
 import CattleCard from './CattleCard'
@@ -26,51 +31,51 @@ import { LoadingContext } from 'contexts/LoadingContext'
 
 import useRewardAmountQuery from 'hooks/useRewardAmountQuery'
 type boxParam = {
-  index: string;
-};
+  index: string
+}
 
-const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false];
+const DEFAULT_HAPPYCOW_STATUS = [false, false, false, false, false]
 
 const StyledHero = styled.div`
-    border-bottom: 0px solid #e8e8e8;
-    margin-bottom: 20px;
-    background-color: rgb(11,51,75);
-    padding: 10px;
-    // width: 100%;
-    height: 30%;
-    display: flex;
-    overflow: hidden;
-    border-radius: 25px;
-    align-items: center;
-    @media (max-width: 768px) {
-      height: 10%;
-      // width: 90%;
-      min-width: 100px;
-      justify-content: space-around;
-    }
+  border-bottom: 0px solid #e8e8e8;
+  margin-bottom: 20px;
+  background-color: rgb(11, 51, 75);
+  padding: 10px;
+  // width: 100%;
+  height: 30%;
+  display: flex;
+  overflow: hidden;
+  border-radius: 25px;
+  align-items: center;
+  @media (max-width: 768px) {
+    height: 10%;
+    // width: 90%;
+    min-width: 100px;
+    justify-content: space-around;
+  }
 `
 const Blank = styled.div`
-    display: flex;
-    flex: auto
+  display: flex;
+  flex: auto;
 `
 const HomeButton = styled.div`
-    margin-left: 20px;
-    background-image: url(/images/farms/dashboard/buttons/botonmapgris.png);
-    background-repeat: no-repeat;
-    width: 80px;
-    height: 70px;
-    background-size: contain;
-    cursor:pointer;
-    &:hover {
-      background-image: url(/images/farms/dashboard/buttons/botonmapverde.png);
-    }
-    // height: 30%;
-    @media (max-width: 768px) {
-      height: 60px;
-      width: 70px;
-      margin-left:5px;
-      min-width: 10px;
-    }
+  margin-left: 20px;
+  background-image: url(/images/farms/dashboard/buttons/botonmapgris.png);
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 70px;
+  background-size: contain;
+  cursor: pointer;
+  &:hover {
+    background-image: url(/images/farms/dashboard/buttons/botonmapverde.png);
+  }
+  // height: 30%;
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 70px;
+    margin-left: 5px;
+    min-width: 10px;
+  }
 `
 
 const VideoContainer = styled.div`
@@ -80,7 +85,7 @@ const VideoContainer = styled.div`
   margin-left: 10px;
   @media (max-width: 768px) {
     height: 40px;
-    margin-left:2px;
+    margin-left: 2px;
     display: none;
   }
 `
@@ -97,7 +102,7 @@ const CardContainer = styled.div`
     margin: 0 8px;
     margin-bottom: 20px;
   }
-  `
+`
 
 const MobileCardContainer = styled.div`
   display: flex;
@@ -111,134 +116,134 @@ const MobileCardContainer = styled.div`
     margin: 0 8px;
     margin-bottom: 20px;
   }
-  `
+`
 
-
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(Web3.givenProvider)
 
 const FarmDashboard = () => {
   const { account, connect } = useWallet()
   const { setLoading } = useContext(LoadingContext)
-  const { index } = useParams<boxParam>();
-  const { isDark } = useTheme();
+  const { index } = useParams<boxParam>()
+  const { isDark } = useTheme()
   const [milkPower, setMilkPower] = useState(0)
   const [gameMilkPower, setGameMilkPower] = useState(0)
   const [landAmount, setLandAmount] = useState([])
   const [cowAmount, setCowAmount] = useState([])
   const [bullAmount, setBullAmount] = useState([])
-  const [cowTokenAmount, setCowTokenAmount] = useState("0")
+  const [cowTokenAmount, setCowTokenAmount] = useState('0')
   const [genesisNftStatus, setGenesisNftStatus] = useState(true)
   const [happyCowStatus, setHappyCowStatus] = useState(DEFAULT_HAPPYCOW_STATUS)
-  const [milkPerDay, setMilkPerDay] = useState(0);
-  const [milkReward, setMilkReward] = useState("0");
-  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress());
-  const history = useHistory();
+  const [milkPerDay, setMilkPerDay] = useState(0)
+  const [milkReward, setMilkReward] = useState('0')
+  const farmingContract = new web3.eth.Contract(NftFarmingV2.abi as AbiItem[], getNftFarmingAddress())
+  const history = useHistory()
 
-  const temporalFullTokenUriPrefix = "https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB"
+  const temporalFullTokenUriPrefix =
+    'https://cashcowprotocol.mypinata.cloud/ipfs/QmQNivyb2MZzxw1iJ2zUKMiLd4grG5KnzDkd8f5Be7R5hB'
 
   const happyCowOriginalBreeds = [
     {
-      "id": 0,
-      "name": "holstein"
+      id: 0,
+      name: 'holstein',
     },
     {
-      "id": 1,
-      "name": "highland"
+      id: 1,
+      name: 'highland',
     },
     {
-      "id": 2,
-      "name": "hereford"
+      id: 2,
+      name: 'hereford',
     },
     {
-      "id": 3,
-      "name": "brahman"
+      id: 3,
+      name: 'brahman',
     },
     {
-      "id": 4,
-      "name": "angus"
-    }
+      id: 4,
+      name: 'angus',
+    },
   ]
 
-  const userReward = useRewardAmountQuery({ account });
+  const userReward = useRewardAmountQuery({ account })
 
-  const { innerWidth: width, innerHeight: height } = window;
+  const { innerWidth: width, innerHeight: height } = window
 
   console.log(userReward)
 
   useEffect(() => {
     async function fetchInfo() {
       try {
-        setLoading(true);
+        setLoading(true)
         console.log('Fetching info..')
-        const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress());
-        const vMilkPower = await farmingContract.methods.milkPowerOf(account).call({ from: account });
-        const vGameMilkPower = await farmingContract.methods.totalMilkPower().call();
+        const masterChefContract = new web3.eth.Contract(MasterChefABI as AbiItem[], getMasterChefAddress())
+        const vMilkPower = await farmingContract.methods.milkPowerOf(account).call({ from: account })
+        const vGameMilkPower = await farmingContract.methods.totalMilkPower().call()
         // FIXME: Updated function dev@topospec
         // const vGameMilkPower = 0;
-        const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call();
-        const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call();
+        const landTokenIds = await farmingContract.methods.landTokenIdsOf(account).call()
+        const cowNFTIds = await farmingContract.methods.cowTokenIdsOf(account).call()
         console.log(cowNFTIds)
-        const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call();
-        setMilkPower(vMilkPower);
-        setGameMilkPower(vGameMilkPower);
+        const bullNFTIds = await farmingContract.methods.bullTokenIdsOf(account).call()
+        setMilkPower(vMilkPower)
+        setGameMilkPower(vGameMilkPower)
         if (vGameMilkPower != 0) {
-          const _dailyAmount = await farmingContract.methods.getUserDailyMilk().call({ from: account });
+          const _dailyAmount = await farmingContract.methods.getUserDailyMilk().call({ from: account })
           console.log('daily milk: ', fromWei(_dailyAmount))
-          setMilkPerDay(parseInt(fromWei(_dailyAmount)));
+          setMilkPerDay(parseInt(fromWei(_dailyAmount)))
           console.log('Updating..')
         }
-        const userCowStaked = await farmingContract.methods.stakedCowOf(account).call({ from: account });
-        setCowTokenAmount((userCowStaked / 10 ** 9).toFixed(1));
+        const userCowStaked = await farmingContract.methods.stakedCowOf(account).call({ from: account })
+        setCowTokenAmount((userCowStaked / 10 ** 9).toFixed(1))
         // Fetch Happy Cow Status
-        await fetchUserHappyCows();
+        await fetchUserHappyCows()
         // Fetch Genesis Status
-        await fetchUserGenesis();
-        setCowAmount(cowNFTIds);
-        setBullAmount(bullNFTIds);
+        await fetchUserGenesis()
+        setCowAmount(cowNFTIds)
+        setBullAmount(bullNFTIds)
         if (landTokenIds) {
-          setLandAmount(landTokenIds);
+          setLandAmount(landTokenIds)
         }
-        setLoading(false);
+        setLoading(false)
       } catch (error) {
         console.log(error)
-        setLoading(false);
+        setLoading(false)
       }
     }
 
-    fetchInfo();
+    fetchInfo()
   }, [account])
 
   const fetchUserHappyCows = async () => {
     // Fetch Staked Happy Cows dev@topospec
     try {
-      const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call();
+      const userHappyCows = await farmingContract.methods.happyCowTokenIdsOf(account).call()
       // Itero alrededor de los UserHappyCows dev@topospec
-      userHappyCows.forEach(async element => {
+      userHappyCows.forEach(async (element) => {
         const tokenUri = `${temporalFullTokenUriPrefix}/${element}.json`
         // console.log('Full token URI: ', tokenUri)
-        const fullTokenData = await fetchIndividualHappyCow(tokenUri);
-        const breed = await fullTokenData.attributes[1].value;
+        const fullTokenData = await fetchIndividualHappyCow(tokenUri)
+        const breed = await fullTokenData.attributes[1].value
         // console.log('Breed: ', fullTokenData.attributes[1].value)
-        let editedHappyCowStatus = happyCowStatus;
+        let editedHappyCowStatus = happyCowStatus
         switch (breed) {
-          case "Holstein":
-            editedHappyCowStatus[0] = true;
-            break;
-          case "Highland":
-            editedHappyCowStatus[1] = true;
-            break;
-          case "Hereford":
-            editedHappyCowStatus[2] = true;
-            break;
-          case "Brahman":
-            editedHappyCowStatus[3] = true;
-            break;
-          case "Angus":
-            editedHappyCowStatus[4] = true;
-            break;
+          case 'Holstein':
+            editedHappyCowStatus[0] = true
+            break
+          case 'Highland':
+            editedHappyCowStatus[1] = true
+            break
+          case 'Hereford':
+            editedHappyCowStatus[2] = true
+            break
+          case 'Brahman':
+            editedHappyCowStatus[3] = true
+            break
+          case 'Angus':
+            editedHappyCowStatus[4] = true
+            break
         }
-        setHappyCowStatus(editedHappyCowStatus);
-      });
+        setHappyCowStatus(editedHappyCowStatus)
+      })
     } catch (error) {
       console.log('error :', error)
     }
@@ -246,13 +251,13 @@ const FarmDashboard = () => {
 
   const fetchUserGenesis = async () => {
     try {
-      const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call();
+      const userGenesis = await farmingContract.methods.genesisTokenIdsOf(account).call()
       if (userGenesis.length > 0) {
-        console.log('Genesis Tokens ', userGenesis);
-        setGenesisNftStatus(true);
+        console.log('Genesis Tokens ', userGenesis)
+        setGenesisNftStatus(true)
       } else {
-        console.log('No Genesis Staked');
-        setGenesisNftStatus(false);
+        console.log('No Genesis Staked')
+        setGenesisNftStatus(false)
       }
     } catch (e) {
       console.log(e)
@@ -263,41 +268,63 @@ const FarmDashboard = () => {
     try {
       const response = await fetch(tokenUri)
       const json = await response.json()
-      return json;
+      return json
     } catch (e) {
       console.log('error fetching: ', e)
-      return e;
+      return e
     }
   }
 
   return (
-    <Page style={{
-      backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-    }}
+    <Page
+      style={{
+        backgroundImage: isDark ? `url(/images/farm_background_dark.png)` : `url(/images/farm_background.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       <StyledHero>
-        <HomeButton onClick={e => history.push('/farm/map')} />
+        <HomeButton onClick={(e) => history.push('/farm/map')} />
         <VideoContainer>
-          <video autoPlay style={{ width: '100%', height: '100%' }} muted loop src='/images/farms/dashboard/illustrations/DASHBOARD.mp4'></video>
+          <video
+            autoPlay
+            style={{ width: '100%', height: '100%' }}
+            muted
+            loop
+            src="/images/farms/dashboard/illustrations/DASHBOARD.mp4"
+          ></video>
         </VideoContainer>
-        <Harvest title="MILK REWARD" value={userReward.data ? userReward.data.toString() : "0"} />
+        <Harvest title="MILK REWARD" value={userReward.data ? userReward.data.toString() : '0'} />
       </StyledHero>
-      
-      <CardContainer>
-        <StaticCard title='My MilkPower' value={milkPower.toString()} image="/images/farms/dashboard/illustrations/milkpowrazul.png" />
-        <StaticCard title='Total MilkPower' value={gameMilkPower.toString()} image="/images/farms/dashboard/illustrations/milkpowrmorado.png" />
-        <StaticCard title='My $MILK / Day' value={milkPerDay.toString()} image="/images/farms/dashboard/illustrations/tokensmilkfondo.png" />
-        <LandCard title='My Lands' value={landAmount.length.toString()} tokenIds={landAmount} />
-        <CattleCard title='My Cows' value={cowAmount.length.toString()} tokenIds={cowAmount} isCowNFT={true} />
-        <CattleCard title='My Bulls' value={bullAmount.length.toString()} tokenIds={bullAmount} isCowNFT={false} />
-        <GenesisCard title='Genesis NFT' hasGenesisNft={genesisNftStatus} />
-        <HappyCowCard title='Happy Cows' value={happyCowStatus} />
-        <StakedCowTokenCard title='$COW Staked' value={cowTokenAmount} image="/images/farms/dashboard/illustrations/tokenscowfondo.png" />
-      </CardContainer>
 
+      <CardContainer>
+        <StaticCard
+          title="My MilkPower"
+          value={milkPower.toString()}
+          image="/images/farms/dashboard/illustrations/milkpowrazul.png"
+        />
+        <StaticCard
+          title="Total MilkPower"
+          value={gameMilkPower.toString()}
+          image="/images/farms/dashboard/illustrations/milkpowrmorado.png"
+        />
+        <StaticCard
+          title="My $MILK / Day"
+          value={milkPerDay.toString()}
+          image="/images/farms/dashboard/illustrations/tokensmilkfondo.png"
+        />
+        <LandCard title="My Lands" value={landAmount.length.toString()} tokenIds={landAmount} />
+        <CattleCard title="My Cows" value={cowAmount.length.toString()} tokenIds={cowAmount} isCowNFT={true} />
+        <CattleCard title="My Bulls" value={bullAmount.length.toString()} tokenIds={bullAmount} isCowNFT={false} />
+        <GenesisCard title="Genesis NFT" hasGenesisNft={genesisNftStatus} />
+        <HappyCowCard title="Happy Cows" value={happyCowStatus} />
+        <StakedCowTokenCard
+          title="$COW Staked"
+          value={cowTokenAmount}
+          image="/images/farms/dashboard/illustrations/tokenscowfondo.png"
+        />
+      </CardContainer>
     </Page>
   )
 }
