@@ -147,7 +147,7 @@ const BoxBuyDetailComponent = () => {
     <div>
       <BoxTitle style={{ color: isDark ? 'white' : '' }}>Common Pack</BoxTitle>
       <RemainingAmount style={{ color: isDark ? 'white' : '' }}>
-        <p>Max 100K</p>
+        <p>Max Supply 62300</p>
         <p>1 Common Cow + 1 Common Bull + 1 Land</p>
       </RemainingAmount>
       <BoxPrice
