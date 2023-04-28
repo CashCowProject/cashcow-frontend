@@ -148,7 +148,7 @@ const BoxBuyDetailComponent = () => {
       <BoxTitle style={{ color: isDark ? 'white' : '' }}>UNCOMMON PACK</BoxTitle>
       <RemainingAmount style={{ color: isDark ? 'white' : '' }}>
         <p>MAX 10K</p>
-        <p>5 UNCOMMON COW + 1 UNCOMMON BULL + 1 LAND</p>
+        <p>1 UNCOMMON COW + 1 UNCOMMON BULL + 1 LAND</p>
       </RemainingAmount>
       <BoxPrice
         style={{
