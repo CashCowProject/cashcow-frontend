@@ -37,10 +37,7 @@ const BlindBoxDetailInfo = () => {
       <BoxInfoContainer>
         <BoxInfoRulesContainer style={{ color: isDark ? 'white' : '' }}>Blind Box Rules</BoxInfoRulesContainer>
         <BoxInfoMainContainer style={{ color: isDark ? 'white' : '' }}>
-          <p style={{ lineHeight: 1.2, margin: '7px 0' }}>Only wallets that hold 1 $cow or more Or top 100k holders.</p>
-          <p style={{ lineHeight: 1.2, margin: '7px 0' }}>
-            Only 1 pack of each kind will be allowed per wallet address.
-          </p>
+          <p style={{ lineHeight: 1.2, margin: '7px 0' }}>Only wallets that hold 1 $cow or more and belong top 100k holders.</p>
         </BoxInfoMainContainer>
       </BoxInfoContainer>
     </BoxInfo>
