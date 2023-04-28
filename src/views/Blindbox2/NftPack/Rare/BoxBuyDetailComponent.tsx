@@ -147,7 +147,7 @@ const BoxBuyDetailComponent = () => {
 
   return (
     <div>
-      <BoxTitle style={{ color: isDark ? 'white' : '' }}>RARE PACK</BoxTitle>
+      <BoxTitle style={{ color: isDark ? 'white' : '' }}>Rare Pack</BoxTitle>
       <RemainingAmount style={{ color: isDark ? 'white' : '' }}>
         <p>Max Supply 2200</p>
         <p>1 Rare Cow + 1 Rare Bull + 1 Land</p>
