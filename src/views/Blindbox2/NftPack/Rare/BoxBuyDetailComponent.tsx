@@ -150,7 +150,7 @@ const BoxBuyDetailComponent = () => {
       <BoxTitle style={{ color: isDark ? 'white' : '' }}>RARE PACK</BoxTitle>
       <RemainingAmount style={{ color: isDark ? 'white' : '' }}>
         <p>MAX 1500</p>
-        <p>1 RARE COW + 1 RARE BULL + 1 LAND</p>
+        <p>1 Rare Cow + 1 Rare Bull + 1 Land</p>
       </RemainingAmount>
       <BoxPrice
         style={{
