@@ -246,7 +246,7 @@ const FarmBreeding = () => {
         <HomeButton onClick={(e) => history.push('/farm/map')} />
       </StyledHero>
       <Heading as="h1" size="no" color="primary" mb="20px" style={{ color: isDark ? 'white' : '' }}>
-        TOTAL BREEDING FEES : 90 MILK
+        TOTAL BREEDING FEES :100.000 MILK
       </Heading>
 
       <BreedingContainer>
