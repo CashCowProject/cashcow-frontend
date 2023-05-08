@@ -38,7 +38,7 @@ const BlindBoxDetailInfo = () => {
         <BoxInfoRulesContainer style={{ color: isDark ? 'white' : '' }}>Blind Box Rules</BoxInfoRulesContainer>
         <BoxInfoMainContainer style={{ color: isDark ? 'white' : '' }}>
           <p style={{ lineHeight: 1.2, margin: '7px 0' }}>
-            Only the top 1000 $COW holders or holders of a CashCow Collectible NFT.
+            Only whitelisted addresses are authorized to mint packs.
           </p>
         </BoxInfoMainContainer>
       </BoxInfoContainer>
