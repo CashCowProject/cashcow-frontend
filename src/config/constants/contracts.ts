@@ -27,6 +27,10 @@ export default {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
     97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
   },
+  usdt: {
+    56: '0x55d398326f99059fF775485246999027B3197955',
+    97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
+  },
   cow: {
     56: '0x8b6fa031c7d2e60fbfe4e663ec1b8f37df1ba483',
     97: '0x562d2BFc80FD1afF3bF5e4Bd8Fa5312E65305C14',
