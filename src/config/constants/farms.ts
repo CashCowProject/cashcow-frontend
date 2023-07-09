@@ -145,8 +145,8 @@ const farms: FarmConfig[] = [
       97: '',
       56: '0xe5bd6C5b1c2Df8f499847a545838C09E45f4A262', // MILK
     },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
+    quoteTokenSymbol: QuoteToken.USDT,
+    quoteTokenAdresses: contracts.usdt,
   }, 
   
 ]
