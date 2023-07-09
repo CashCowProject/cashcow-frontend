@@ -130,6 +130,25 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BNB,
     quoteTokenAdresses: contracts.wbnb,
   },
+
+ {
+    pid: 7, 
+    risk: 3,
+    isTokenOnly: false,
+    lpSymbol: 'MILK-USDT LP',
+    lpAddresses: {
+      97: '',
+      56: '0x3d7E155A22beEB31eD1076Af3C17Df22c787cE48', // MILK-USDT GLP
+    },
+    tokenSymbol: 'MILK-USDT',
+    tokenAddresses: {
+      97: '',
+      56: '0xe5bd6C5b1c2Df8f499847a545838C09E45f4A262', // MILK
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  }, 
+  
 ]
 
 export default farms
