@@ -41,7 +41,7 @@ export default {
     97: '0x3eFA66aB2b1690e9BE8e82784EDfF2cF2dc150e0',
   },
   market: {
-    56: '0xaBdAEf681D34923184Cba8C0dD8f6ea9B6473f89',
+    56: '0x4bf737F60A0A2574d29435Adb8674D910E95d461',
     97: '0x590576D878a5CD2c68E9B1f25df3eE6EEc4e80c6',
   },
   happycow: {
